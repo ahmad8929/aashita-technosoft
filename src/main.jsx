@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { ChakraProvider } from '@chakra-ui/react'
+import { Toaster } from 'react-hot-toast'
 
 // component
 import App from './App.jsx'
@@ -17,6 +18,7 @@ createRoot(document.getElementById('root')).render(
       <Router>
         <ChakraProvider>
           <App />
+          <Toaster position='top-right' />
         </ChakraProvider>
       </Router>
     </Provider>

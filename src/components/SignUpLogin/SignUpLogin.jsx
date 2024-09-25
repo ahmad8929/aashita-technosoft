@@ -1,6 +1,7 @@
 // src/Components/SignUpLogin/SignUpLogin.jsx
 
-import React, { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 import './SignUpLogin.css';
@@ -22,19 +23,20 @@ import registerImage from '../../assets/register.png';
 
 const SignUpLogin = () => {
 
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
 
     const postSubmit = () => {
-        dispatch(setAuthState(true))
+        // dispatch(setAuthState(true))
+        console.log(formData);
 
-        navigate("/landing")
+        // navigate("/landing")
     }
 
-    const handleForgotPassword = () => {
-        navigate("/forgot-password");
-    };
+    // const handleForgotPassword = () => {
+    //     navigate("/forgot-password");
+    // };
 
     useEffect(() => {
         const signInBtn = document.querySelector("#sign-in-btn");
@@ -42,10 +44,12 @@ const SignUpLogin = () => {
         const container = document.querySelector(".container");
 
         signUpBtn.addEventListener("click", () => {
+            setFormData(Object.create(null));
             container.classList.add("sign-up-mode");
         });
 
         signInBtn.addEventListener("click", () => {
+            setFormData(Object.create(null));
             container.classList.remove("sign-up-mode");
         });
 
@@ -55,6 +59,36 @@ const SignUpLogin = () => {
         };
     }, []);
 
+    const [formData, setFormData] = useState(Object.create(null));
+
+    const handleFormInput = (e) => setFormData({
+        ...formData,
+        [e.target.name]: e.target.value
+    });
+
+    const handleRegister = async () => {
+        try {
+            const { data: createAccountResponse } = await axios.post(`${process.env.BACKEND_URL}/signup`, {
+                ...formData,
+            });
+            toast.success("Account created successfully!");
+        } catch (error) {
+            toast.error(error?.message || "Failed to create account");
+        }
+    }
+
+    const handleLogin = async () => {
+        try {
+            const { data: loginResponse } = await axios.post(`${process.env.BACKEND_URL}/login`, {
+                email: formData.email,
+                password: formData.password,
+            });
+            toast.success("User logged in successfully!");
+        } catch (error) {
+            toast.error(error?.message || "Failed to login into account");
+        }
+    }
+
     return (
         <div className="container">
             <div className="forms-container">
@@ -63,11 +97,11 @@ const SignUpLogin = () => {
                         <h2 className="title">Sign in</h2>
                         <div className="input-field">
                             <i className="fas fa-user"></i>
-                            <input type="text" placeholder="Username" />
+                            <input type="text" name="username" onChange={handleFormInput} placeholder="Username" />
                         </div>
                         <div className="input-field">
                             <i className="fas fa-lock"></i>
-                            <input type="password" placeholder="Password" />
+                            <input type="password" name="password" onChange={handleFormInput} placeholder="Password" />
                         </div>
 
                         <div className="button-container">
@@ -112,23 +146,23 @@ const SignUpLogin = () => {
 
                         <div className="input-field">
                             <i className="fas fa-user"></i>
-                            <input type="text" placeholder="Name" />
+                            <input type="text" name="name" onChange={handleFormInput} placeholder="Name" />
                         </div>
                         <div className="input-field">
                             <i className="fas fa-user"></i>
-                            <input type="text" placeholder="Username" />
+                            <input type="text" name="u" onChange={handleFormInput} placeholder="Username" />
                         </div>
                         <div className="input-field">
                             <i className="fas fa-phone"></i>
-                            <input type="number" placeholder="Mobile No." />
+                            <input type="number" name="mobile" onChange={handleFormInput} placeholder="Mobile No." />
                         </div>
                         <div className="input-field">
                             <i className="fas fa-envelope"></i>
-                            <input type="email" placeholder="Email" />
+                            <input type="email" name="email" onChange={handleFormInput} placeholder="Email" />
                         </div>
                         <div className="input-field">
                             <i className="fas fa-lock"></i>
-                            <input type="password" placeholder="Password" />
+                            <input type="password" name="password" onChange={handleFormInput} placeholder="Password" />
                         </div>
 
                         <input type="button" onClick={postSubmit} className="btn" value="Sign up" />

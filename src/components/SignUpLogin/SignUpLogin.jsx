@@ -1,8 +1,10 @@
+/* eslint-disable no-unused-vars */
 // src/Components/SignUpLogin/SignUpLogin.jsx
 
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import axios from 'axios';
 
 import './SignUpLogin.css';
 
@@ -68,7 +70,7 @@ const SignUpLogin = () => {
 
     const handleRegister = async () => {
         try {
-            const { data: createAccountResponse } = await axios.post(`${process.env.BACKEND_URL}/signup`, {
+            const { data: createAccountResponse } = await axios.post(`${import.meta.env.BACKEND_URL}/signup`, {
                 ...formData,
             });
             toast.success("Account created successfully!");
@@ -79,7 +81,7 @@ const SignUpLogin = () => {
 
     const handleLogin = async () => {
         try {
-            const { data: loginResponse } = await axios.post(`${process.env.BACKEND_URL}/login`, {
+            const { data: loginResponse } = await axios.post(`${import.meta.env.BACKEND_URL}/login`, {
                 email: formData.email,
                 password: formData.password,
             });
@@ -97,7 +99,7 @@ const SignUpLogin = () => {
                         <h2 className="title">Sign in</h2>
                         <div className="input-field">
                             <i className="fas fa-user"></i>
-                            <input type="text" name="username" onChange={handleFormInput} placeholder="Username" />
+                            <input type="email" name="email" onChange={handleFormInput} placeholder="Email" />
                         </div>
                         <div className="input-field">
                             <i className="fas fa-lock"></i>
@@ -107,7 +109,7 @@ const SignUpLogin = () => {
                         <div className="button-container">
                             <input
                                 type="button"
-                                onClick={postSubmit}
+                                onClick={handleLogin}
                                 value="Login"
                                 className="btn solid login-btn"
                             />
@@ -146,15 +148,12 @@ const SignUpLogin = () => {
 
                         <div className="input-field">
                             <i className="fas fa-user"></i>
-                            <input type="text" name="name" onChange={handleFormInput} placeholder="Name" />
+                            <input type="name" name="companyName" onChange={handleFormInput} placeholder="Company Name" />
                         </div>
-                        <div className="input-field">
-                            <i className="fas fa-user"></i>
-                            <input type="text" name="u" onChange={handleFormInput} placeholder="Username" />
-                        </div>
+
                         <div className="input-field">
                             <i className="fas fa-phone"></i>
-                            <input type="number" name="mobile" onChange={handleFormInput} placeholder="Mobile No." />
+                            <input type="number" name="phoneNumber" onChange={handleFormInput} placeholder="Mobile No." />
                         </div>
                         <div className="input-field">
                             <i className="fas fa-envelope"></i>
@@ -164,8 +163,21 @@ const SignUpLogin = () => {
                             <i className="fas fa-lock"></i>
                             <input type="password" name="password" onChange={handleFormInput} placeholder="Password" />
                         </div>
+                        <div className="input-field">
+                            <i className="fas fa-lock"></i>
+                            <select name="licenseType" onChange={handleFormInput} defaultValue="">
+                                <option value="" disabled>
+                                    Choose License
+                                </option>
+                                <option value="diamond">Diamond</option>
+                                <option value="premium">Premium</option>
+                                <option value="silver">Silver</option>
+                            </select>
+                        </div>
 
-                        <input type="button" onClick={postSubmit} className="btn" value="Sign up" />
+
+
+                        <input type="button" onClick={handleRegister} className="btn" value="Sign up" />
                         <p className="social-text">Or Sign up with social platforms</p>
                         <div className="social-media">
                             <a href="#" className="social-icon">

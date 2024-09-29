@@ -70,8 +70,12 @@ const SignUpLogin = () => {
 
     const handleRegister = async () => {
         try {
-            const { data: createAccountResponse } = await axios.post(`${import.meta.env.BACKEND_URL}/signup`, {
+            const { data: createAccountResponse } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/signup`, {
                 ...formData,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             });
             toast.success("Account created successfully!");
         } catch (error) {
@@ -81,7 +85,7 @@ const SignUpLogin = () => {
 
     const handleLogin = async () => {
         try {
-            const { data: loginResponse } = await axios.post(`${import.meta.env.BACKEND_URL}/login`, {
+            const { data: loginResponse } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/login`, {
                 email: formData.email,
                 password: formData.password,
             });

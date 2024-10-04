@@ -1,8 +1,5 @@
-// slices
+// redux/slices/index.js
 
-// export const combinedSlices = {};
-
-// Import createSlice from Redux Toolkit
 import { createSlice } from "@reduxjs/toolkit";
 
 // Initial state for the user slice
@@ -18,13 +15,14 @@ const userSlice = createSlice({
   reducers: {
     setUser: (state, action) => {
       state.user = action.payload;
+      state.isLoggedIn = true;  // Set login state to true when user data is set
     },
     setAuthState: (state, action) => {
       state.isLoggedIn = action.payload;
     },
     clearUser: (state) => {
       state.user = null;
-      state.isLoggedIn = false;
+      state.isLoggedIn = false;  // Clear user and set login state to false
     },
   },
 });

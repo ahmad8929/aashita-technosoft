@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import {
     Box,
@@ -10,16 +11,28 @@ import {
     SimpleGrid,
     GridItem,
     Textarea,
-    Heading,
     Flex,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    useDisclosure,
 } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import axios from 'axios';
 import Navbar from '../components/Navbar';
 
 const Landing = () => {
+    const navigate = useNavigate();
+
     // Form state
     const [formData, setFormData] = useState({
-        fromDate: 'YYYY-MM-DD',
-        toDate: 'YYYY-MM-DD',
+        fromDate: '',
+        toDate: '',
         country: 'IN',
         inOut: 'import',
         buyerName: 'AASHITA',
@@ -28,10 +41,15 @@ const Landing = () => {
         originCountry: '',
         proDesc: '',
         billNo: '',
+        email: 'test@example.com', // Set this constant or allow user input as needed
     });
 
-    // Handle form change
-    const handleChange = (e) => {
+    // Modal control hooks
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [modalMessage, setModalMessage] = useState('');
+
+    // Handle form input
+    const handleFormInput = (e) => {
         const { name, value } = e.target;
         setFormData({
             ...formData,
@@ -40,10 +58,64 @@ const Landing = () => {
     };
 
     // Handle form submission
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
-        // Perform search operation or form submission logic here
+
+        // Prepare data for API request
+        const postData = {
+            email: formData.email,
+            from_date: formData.fromDate,
+            to_date: formData.toDate,
+            country: formData.country,
+            in_out: formData.inOut.charAt(0).toUpperCase() + formData.inOut.slice(1),
+            buyer_name: formData.buyerName,
+            hs_code: formData.hsCode,
+            supplier_name: formData.supplierName,
+            origin_country: formData.originCountry,
+            pro_desc: formData.proDesc,
+            bill_no: formData.billNo,
+        };
+
+        try {
+            const sessionToken = localStorage.getItem('sessionToken'); // Ensure token is retrieved correctly
+
+            if (!sessionToken) {
+                toast.error('Session token is missing.');
+                return;
+            }
+
+            // API request with session token
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/search`, postData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${sessionToken}`, // Send the token with the request
+                },
+            });
+
+            const messageCode = response.data.messageCode; // Adjust based on your API response structure
+
+            // Handle success response and open modal
+            setModalMessage(`Request received! Processing status: ${messageCode}`);
+            onOpen(); // Open the modal
+
+            // Optionally, you can navigate to a different page if needed after displaying the modal
+            // navigate('/search-results', { state: { results: response.data } });
+
+        } catch (error) {
+            // Handle errors based on the response
+            if (error.response) {
+                if (error.response.status === 400) {
+                    toast.error('Invalid search parameters.');
+                } else if (error.response.status === 401) {
+                    toast.error('Unauthorized. Please log in again.');
+                } else {
+                    toast.error('Failed to submit search. Please try again later.');
+                }
+            } else {
+                toast.error('Network error. Please check your connection.');
+            }
+            console.error('Error submitting search:', error);
+        }
     };
 
     return (
@@ -69,15 +141,14 @@ const Landing = () => {
                     boxShadow="lg"
                 >
                     <SimpleGrid columns={{ base: 1, md: 3 }} m={6} spacing={6} spacingX={24}>
-                        {/* First Row: From, To, Country */}
                         <GridItem>
                             <FormControl>
-                                <FormLabel fontSize="sm" fontWeight="medium">From</FormLabel>
+                                <FormLabel fontSize="sm" fontWeight="medium">From Date</FormLabel>
                                 <Input
                                     type="date"
                                     name="fromDate"
                                     value={formData.fromDate}
-                                    onChange={handleChange}
+                                    onChange={handleFormInput}
                                     size="md"
                                     bg="gray.50"
                                     _hover={{ borderColor: 'blue.400' }}
@@ -88,12 +159,12 @@ const Landing = () => {
 
                         <GridItem>
                             <FormControl>
-                                <FormLabel fontSize="sm" fontWeight="medium">To</FormLabel>
+                                <FormLabel fontSize="sm" fontWeight="medium">To Date</FormLabel>
                                 <Input
                                     type="date"
                                     name="toDate"
                                     value={formData.toDate}
-                                    onChange={handleChange}
+                                    onChange={handleFormInput}
                                     size="md"
                                     bg="gray.50"
                                     _hover={{ borderColor: 'blue.400' }}
@@ -108,25 +179,25 @@ const Landing = () => {
                                 <Select
                                     name="country"
                                     value={formData.country}
-                                    onChange={handleChange}
+                                    onChange={handleFormInput}
                                     size="md"
                                     bg="gray.50"
                                     _hover={{ borderColor: 'blue.400' }}
                                     fontSize="sm"
                                 >
                                     <option value="IN">India (IN)</option>
+                                    {/* Add more options if necessary */}
                                 </Select>
                             </FormControl>
                         </GridItem>
 
-                        {/* Second Row: In/Out, Buyer Name, HS Code */}
                         <GridItem>
                             <FormControl>
                                 <FormLabel fontSize="sm" fontWeight="medium">In/Out</FormLabel>
                                 <Select
                                     name="inOut"
                                     value={formData.inOut}
-                                    onChange={handleChange}
+                                    onChange={handleFormInput}
                                     size="md"
                                     bg="gray.50"
                                     _hover={{ borderColor: 'blue.400' }}
@@ -145,7 +216,7 @@ const Landing = () => {
                                     type="text"
                                     name="buyerName"
                                     value={formData.buyerName}
-                                    onChange={handleChange}
+                                    onChange={handleFormInput}
                                     size="md"
                                     bg="gray.50"
                                     _hover={{ borderColor: 'blue.400' }}
@@ -162,7 +233,7 @@ const Landing = () => {
                                     type="text"
                                     name="hsCode"
                                     value={formData.hsCode}
-                                    onChange={handleChange}
+                                    onChange={handleFormInput}
                                     size="md"
                                     bg="gray.50"
                                     _hover={{ borderColor: 'blue.400' }}
@@ -172,7 +243,6 @@ const Landing = () => {
                             </FormControl>
                         </GridItem>
 
-                        {/* Third Row: Supplier Name, Origin Country, Bill No */}
                         <GridItem>
                             <FormControl>
                                 <FormLabel fontSize="sm" fontWeight="medium">Supplier Name</FormLabel>
@@ -180,7 +250,7 @@ const Landing = () => {
                                     type="text"
                                     name="supplierName"
                                     value={formData.supplierName}
-                                    onChange={handleChange}
+                                    onChange={handleFormInput}
                                     size="md"
                                     bg="gray.50"
                                     _hover={{ borderColor: 'blue.400' }}
@@ -197,7 +267,7 @@ const Landing = () => {
                                     type="text"
                                     name="originCountry"
                                     value={formData.originCountry}
-                                    onChange={handleChange}
+                                    onChange={handleFormInput}
                                     size="md"
                                     bg="gray.50"
                                     _hover={{ borderColor: 'blue.400' }}
@@ -214,7 +284,7 @@ const Landing = () => {
                                     type="text"
                                     name="billNo"
                                     value={formData.billNo}
-                                    onChange={handleChange}
+                                    onChange={handleFormInput}
                                     size="md"
                                     bg="gray.50"
                                     _hover={{ borderColor: 'blue.400' }}
@@ -224,7 +294,6 @@ const Landing = () => {
                             </FormControl>
                         </GridItem>
 
-                        {/* Fourth Row: Product Description and Search Button in one row */}
                         <GridItem colSpan={{ base: 1, md: 3 }}>
                             <Flex>
                                 <FormControl flex="2" mr={4}>
@@ -232,7 +301,7 @@ const Landing = () => {
                                     <Textarea
                                         name="proDesc"
                                         value={formData.proDesc}
-                                        onChange={handleChange}
+                                        onChange={handleFormInput}
                                         size="md"
                                         bg="gray.50"
                                         _hover={{ borderColor: 'blue.400' }}
@@ -249,14 +318,9 @@ const Landing = () => {
                                         size="lg"
                                         w="auto"
                                         mt={4}
-                                        position="absolute"
-                                        right={0}
-                                        bottom={0}
                                         bg="blue.500"
                                         _hover={{ bg: 'blue.600' }}
                                         _active={{ bg: 'blue.700' }}
-                                        fontSize="md"
-
                                     >
                                         Search
                                     </Button>
@@ -265,6 +329,23 @@ const Landing = () => {
                         </GridItem>
                     </SimpleGrid>
                 </Box>
+
+                {/* Modal for showing the message */}
+                <Modal isOpen={isOpen} onClose={onClose}>
+                    <ModalOverlay />
+                    <ModalContent>
+                        <ModalHeader>Request Received</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody>
+                            {modalMessage}
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button colorScheme="blue" mr={3} onClick={onClose}>
+                                Close
+                            </Button>
+                        </ModalFooter>
+                    </ModalContent>
+                </Modal>
             </Box>
         </>
     );

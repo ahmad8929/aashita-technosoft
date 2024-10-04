@@ -1,13 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { Box, Flex, IconButton, Button, Menu, MenuButton, MenuList, MenuItem, Avatar, Text, HStack } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import { clearUser } from '../redux/slices/index'; // Import the clearUser action
 
 const Navbar = () => {
+    const dispatch = useDispatch();
+
     // Select isLoggedIn and userName from Redux store
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-    const userName = useSelector((state) => state.user.user?.name || "Ahmad");
+    const userName = useSelector((state) => state.user.user?.name || "User");
+
+    // Handle logout
+    const handleLogout = () => {
+        dispatch(clearUser()); // Clear user data and set isLoggedIn to false
+    };
 
     return (
         <Box bg="gray.100" px={4} py={3} boxShadow="md" position="sticky" top={0} zIndex={100}>
@@ -23,10 +31,10 @@ const Navbar = () => {
                     <Link to="/products" style={{ textDecoration: "none" }}>
                         <Text fontSize="md" fontWeight="medium" color="gray.700" _hover={{ color: "blue.500" }}>Products</Text>
                     </Link>
-                    <Link to="/" style={{ textDecoration: "none" }}>
+                    <Link to="/about" style={{ textDecoration: "none" }}>
                         <Text fontSize="md" fontWeight="medium" color="gray.700" _hover={{ color: "blue.500" }}>About</Text>
                     </Link>
-                    <Link to="/" style={{ textDecoration: "none" }}>
+                    <Link to="/contact" style={{ textDecoration: "none" }}>
                         <Text fontSize="md" fontWeight="medium" color="gray.700" _hover={{ color: "blue.500" }}>Contact</Text>
                     </Link>
                 </HStack>
@@ -54,10 +62,10 @@ const Navbar = () => {
                             <ChevronDownIcon />
                         </MenuButton>
                         <MenuList>
-                            <MenuItem as={Link} to="/">Past Requests</MenuItem>
+                            <MenuItem as={Link} to="/past-requests">Past Requests</MenuItem>
                             <MenuItem as={Link} to="/tokens">My Tokens</MenuItem>
                             <MenuItem as={Link} to="/upgrade">Upgrade</MenuItem>
-                            <MenuItem as={Link} to="/">Signout</MenuItem>
+                            <MenuItem onClick={handleLogout}>Sign Out</MenuItem> {/* Handle logout */}
                         </MenuList>
                     </Menu>
                 )}

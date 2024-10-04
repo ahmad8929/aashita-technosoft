@@ -1,44 +1,79 @@
-/* eslint-disable no-unused-vars */
-// src/Components/SignUpLogin/SignUpLogin.jsx
-
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import axios from 'axios';
-
 import './SignUpLogin.css';
-
-import {
-    Flex,
-    Link as ChakraLink,
-} from "@chakra-ui/react";
-
+import { Flex, Link as ChakraLink } from "@chakra-ui/react";
 import { useDispatch } from 'react-redux';
-import { setAuthState } from '../../redux/slices/index'
-
+import { setAuthState } from '../../redux/slices/index';
 import { useNavigate, Link } from 'react-router-dom';
-
-
 import logImage from '../../assets/log.png';
 import registerImage from '../../assets/register.png';
 
-
 const SignUpLogin = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-    // const navigate = useNavigate();
+    const [formData, setFormData] = useState({
+        email: '',
+        password: '',
+        companyName: '',
+        phoneNumber: '',
+        licenseType: ''
+    });
 
-    // const dispatch = useDispatch();
+    const handleFormInput = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
 
-    const postSubmit = () => {
-        // dispatch(setAuthState(true))
-        console.log(formData);
+    const handleRegister = async () => {
+        try {
+            const { data: createAccountResponse } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/signup`, {
+                email: formData.email,
+                password: formData.password,
+                companyName: formData.companyName,
+                phoneNumber: formData.phoneNumber,
+                licenseType: formData.licenseType
+            });
 
-        // navigate("/landing")
-    }
+            toast.success("Account created successfully!");
+            handleLogin(); // Automatically log in after registration
+        } catch (error) {
+            if (error.response && error.response.status === 400) {
+                toast.error("Email already exists");
+            } else {
+                toast.error(error?.message || "Failed to create account");
+            }
+        }
+    };
 
-    // const handleForgotPassword = () => {
-    //     navigate("/forgot-password");
-    // };
+    const handleLogin = async () => {
+        try {
+            const { data: loginResponse } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/login`, {
+                email: formData.email,
+                password: formData.password,
+            });
+
+            const token = loginResponse.token; // Assuming the token is in the response
+            localStorage.setItem('sessionToken', token); // Store the token
+            toast.success("User logged in successfully!");
+
+            dispatch(setAuthState(true));
+            navigate("/landing"); // Redirect to landing page
+        } catch (error) {
+            console.error("Login error:", error.response || error.message);
+            if (error.response && error.response.status === 500) {
+                toast.error("Server error, please try again later.");
+            } else if (error.response && error.response.status === 401) {
+                toast.error("Invalid email or password.");
+            } else {
+                toast.error("Failed to login.");
+            }
+        }
+    };
 
     useEffect(() => {
         const signInBtn = document.querySelector("#sign-in-btn");
@@ -46,12 +81,24 @@ const SignUpLogin = () => {
         const container = document.querySelector(".container");
 
         signUpBtn.addEventListener("click", () => {
-            setFormData(Object.create(null));
+            setFormData({
+                email: '',
+                password: '',
+                companyName: '',
+                phoneNumber: '',
+                licenseType: ''
+            });
             container.classList.add("sign-up-mode");
         });
 
         signInBtn.addEventListener("click", () => {
-            setFormData(Object.create(null));
+            setFormData({
+                email: '',
+                password: '',
+                companyName: '',
+                phoneNumber: '',
+                licenseType: ''
+            });
             container.classList.remove("sign-up-mode");
         });
 
@@ -60,40 +107,6 @@ const SignUpLogin = () => {
             signUpBtn.removeEventListener("click", () => { });
         };
     }, []);
-
-    const [formData, setFormData] = useState(Object.create(null));
-
-    const handleFormInput = (e) => setFormData({
-        ...formData,
-        [e.target.name]: e.target.value
-    });
-
-    const handleRegister = async () => {
-        try {
-            const { data: createAccountResponse } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/signup`, {
-                ...formData,
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            toast.success("Account created successfully!");
-        } catch (error) {
-            toast.error(error?.message || "Failed to create account");
-        }
-    }
-
-    const handleLogin = async () => {
-        try {
-            const { data: loginResponse } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/login`, {
-                email: formData.email,
-                password: formData.password,
-            });
-            toast.success("User logged in successfully!");
-        } catch (error) {
-            toast.error(error?.message || "Failed to login into account");
-        }
-    }
 
     return (
         <div className="container">
@@ -109,7 +122,6 @@ const SignUpLogin = () => {
                             <i className="fas fa-lock"></i>
                             <input type="password" name="password" onChange={handleFormInput} placeholder="Password" />
                         </div>
-
                         <div className="button-container">
                             <input
                                 type="button"
@@ -129,8 +141,6 @@ const SignUpLogin = () => {
                                 </ChakraLink>
                             </Flex>
                         </div>
-
-
                         <p className="social-text">Or Sign in with social platforms</p>
                         <div className="social-media">
                             <a href="#" className="social-icon">
@@ -147,14 +157,13 @@ const SignUpLogin = () => {
                             </a>
                         </div>
                     </form>
+
                     <form className="sign-up-form">
                         <h2 className="title">Sign up</h2>
-
                         <div className="input-field">
                             <i className="fas fa-user"></i>
                             <input type="name" name="companyName" onChange={handleFormInput} placeholder="Company Name" />
                         </div>
-
                         <div className="input-field">
                             <i className="fas fa-phone"></i>
                             <input type="number" name="phoneNumber" onChange={handleFormInput} placeholder="Mobile No." />
@@ -178,8 +187,6 @@ const SignUpLogin = () => {
                                 <option value="silver">Silver</option>
                             </select>
                         </div>
-
-
 
                         <input type="button" onClick={handleRegister} className="btn" value="Sign up" />
                         <p className="social-text">Or Sign up with social platforms</p>
@@ -205,7 +212,6 @@ const SignUpLogin = () => {
                 <div className="panel left-panel">
                     <div className="content">
                         <h3>Join Us Today!</h3>
-
                         <p>
                             Welcome to Aashita Technosoft!
                         </p>
@@ -213,21 +219,18 @@ const SignUpLogin = () => {
                             Sign up
                         </button>
                     </div>
-
                     <img src={logImage} className="image" alt="Log" />
                 </div>
                 <div className="panel right-panel">
                     <div className="content">
                         <h3>Welcome Back!</h3>
                         <p>
-                            It&rsquo;s great to see you again at Aashita Technosoft.
+                            It’s great to see you again at Aashita Technosoft.
                         </p>
-
                         <button className="btn transparent" id="sign-in-btn">
                             Sign in
                         </button>
                     </div>
-
                     <img src={registerImage} className="image" alt="Register" />
                 </div>
             </div>
@@ -236,5 +239,3 @@ const SignUpLogin = () => {
 };
 
 export default SignUpLogin;
-
-

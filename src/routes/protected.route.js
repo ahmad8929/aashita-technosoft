@@ -1,6 +1,6 @@
 // routes
 import Landing from "../pages/Landing";
-import Tokens from "../pages/Tokens";
+import Queries from "../pages/Queries";
 import Upgrade from "../pages/Upgrade/cards";
 import Payments from "../pages/Upgrade/payment";
 import ForgotPassword from "../components/SignUpLogin/forgotPassword";
@@ -22,9 +22,9 @@ export const protectedRoute = [
     component: Payments,
   },
   {
-    title: "tokens",
-    path: "/tokens",
-    component: Tokens,
+    title: "queries",
+    path: "/queries",
+    component: Queries,
   },
   {
     title: "ForgotPassword",

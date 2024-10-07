@@ -57,7 +57,7 @@ const SignUpLogin = () => {
                 password: formData.password,
             });
 
-            const token = loginResponse.token; // Assuming the token is in the response
+            const token = loginResponse.sessionToken; // Assuming the token is in the response
             localStorage.setItem('sessionToken', token); // Store the token
             toast.success("User logged in successfully!");
 
@@ -74,6 +74,8 @@ const SignUpLogin = () => {
             }
         }
     };
+
+
 
     useEffect(() => {
         const signInBtn = document.querySelector("#sign-in-btn");

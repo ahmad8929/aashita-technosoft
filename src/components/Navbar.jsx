@@ -31,10 +31,10 @@ const Navbar = () => {
                     <Link to="/products" style={{ textDecoration: "none" }}>
                         <Text fontSize="md" fontWeight="medium" color="gray.700" _hover={{ color: "blue.500" }}>Products</Text>
                     </Link>
-                    <Link to="/about" style={{ textDecoration: "none" }}>
+                    <Link to="/" style={{ textDecoration: "none" }}>
                         <Text fontSize="md" fontWeight="medium" color="gray.700" _hover={{ color: "blue.500" }}>About</Text>
                     </Link>
-                    <Link to="/contact" style={{ textDecoration: "none" }}>
+                    <Link to="/" style={{ textDecoration: "none" }}>
                         <Text fontSize="md" fontWeight="medium" color="gray.700" _hover={{ color: "blue.500" }}>Contact</Text>
                     </Link>
                 </HStack>

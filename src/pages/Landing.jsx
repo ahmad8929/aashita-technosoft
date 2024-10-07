@@ -77,9 +77,9 @@ const Landing = () => {
         };
 
         try {
-            const sessionToken = localStorage.getItem('sessionToken'); // Ensure token is retrieved correctly
+            const session_token = localStorage.getItem('sessionToken'); // Ensure token is retrieved correctly
 
-            if (!sessionToken) {
+            if (!session_token) {
                 toast.error('Session token is missing.');
                 return;
             }
@@ -88,7 +88,7 @@ const Landing = () => {
             const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/search`, postData, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${sessionToken}`, // Send the token with the request
+                    'Authorization': `Bearer ${session_token}`, // Send the token with the request
                 },
             });
 
@@ -277,7 +277,24 @@ const Landing = () => {
                             </FormControl>
                         </GridItem>
 
-                        <GridItem>
+                        {/* <GridItem>
+                              <FormControl flex="2" mr={4}>
+                                    <FormLabel fontSize="sm" fontWeight="medium">Product Description</FormLabel>
+                                    <Textarea
+                                        name="proDesc"
+                                        value={formData.proDesc}
+                                        onChange={handleFormInput}
+                                        size="md"
+                                        bg="gray.50"
+                                        _hover={{ borderColor: 'blue.400' }}
+                                        fontSize="sm"
+                                        placeholder="Enter product description"
+                                        resize="vertical"
+                                    />
+                                </FormControl>
+                        </GridItem> */}
+
+                        {/* <GridItem>
                             <FormControl>
                                 <FormLabel fontSize="sm" fontWeight="medium">Bill No</FormLabel>
                                 <Input
@@ -292,7 +309,7 @@ const Landing = () => {
                                     placeholder="Enter bill number"
                                 />
                             </FormControl>
-                        </GridItem>
+                        </GridItem> */}
 
                         <GridItem colSpan={{ base: 1, md: 3 }}>
                             <Flex>

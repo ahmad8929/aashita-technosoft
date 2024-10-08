@@ -62,8 +62,8 @@ const Navbar = () => {
                             <ChevronDownIcon />
                         </MenuButton>
                         <MenuList>
-                            <MenuItem as={Link} to="/past-requests">Past Requests</MenuItem>
-                            <MenuItem as={Link} to="/queries">My Tokens</MenuItem>
+                            <MenuItem as={Link} to="/queries">Past Requests</MenuItem>
+                            <MenuItem as={Link} to="/tokens">My Tokens</MenuItem>
                             <MenuItem as={Link} to="/upgrade">Upgrade</MenuItem>
                             <MenuItem onClick={handleLogout}>Sign Out</MenuItem> {/* Handle logout */}
                         </MenuList>

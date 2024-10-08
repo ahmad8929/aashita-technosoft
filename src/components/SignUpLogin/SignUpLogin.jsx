@@ -57,6 +57,8 @@ const SignUpLogin = () => {
                 password: formData.password,
             });
 
+
+
             const token = loginResponse.sessionToken; // Assuming the token is in the response
             localStorage.setItem('sessionToken', token); // Store the token
             toast.success("User logged in successfully!");
@@ -74,6 +76,72 @@ const SignUpLogin = () => {
             }
         }
     };
+
+    // const handleLogin = async () => {
+    //     try {
+    //         console.log("Starting login process...");
+
+    //         const dataLogin = JSON.stringify({
+    //             email: formData.email,
+    //             password: formData.password,
+    //         });
+
+    //         // Making the login request using fetch
+    //         const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login`, {
+    //             method: "POST",
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //             },
+    //             body: dataLogin,
+    //         });
+
+    //         // Checking if the response was successful
+    //         if (!response.ok) {
+    //             console.error("Failed to login:", response.statusText);
+    //             if (response.status === 500) {
+    //                 toast.error("Server error, please try again later.");
+    //             } else if (response.status === 401) {
+    //                 toast.error("Invalid email or password.");
+    //             } else {
+    //                 toast.error("Failed to login.");
+    //             }
+    //             return;
+    //         }
+
+    //         // Parsing the response data
+    //         const data = await response.json();
+    //         console.log("Login response data:", data);
+
+    //         // Logging headers to inspect them
+    //         console.log("Response headers:", response.headers);
+
+    //         console.log("data:", data);
+
+    //         console.log(response.headers.get('user_id'));
+
+    //         // Accessing the token from headers (e.g., Authorization)
+    //         const token = response.headers.get('Authorization') || response.headers.get('session_token');
+
+    //         if (token) {
+    //             console.log("Session token:", token);
+
+    //             // Storing the token in localStorage
+    //             localStorage.setItem('sessionToken', token);
+    //             toast.success("User logged in successfully!");
+
+    //             // Set auth state and navigate to landing page
+    //             dispatch(setAuthState(true));
+    //             navigate("/landing");
+    //         } else {
+    //             console.error("Token not found in headers.");
+    //             toast.error("Failed to retrieve session token.");
+    //         }
+
+    //     } catch (error) {
+    //         console.error("Login error:", error.message || error);
+    //         toast.error("An error occurred during login.");
+    //     }
+    // };
 
 
 

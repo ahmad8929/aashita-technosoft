@@ -22,8 +22,10 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
-import DatePicker from 'react-datepicker'; // Import DatePicker
-import 'react-datepicker/dist/react-datepicker.css'; // Import date picker styles
+
+import DatePicker from 'react-datepicker'; // This should be correct
+import 'react-datepicker/dist/react-datepicker.css'; // Ensure this import is correct as well
+
 
 import countries from 'country-list'; // Add this line to import country-list
 
@@ -238,7 +240,7 @@ const Landing = () => {
 
                         <GridItem>
                             <FormControl>
-                                <FormLabel fontSize="sm" fontWeight="medium">In/Out</FormLabel>
+                                <FormLabel fontSize="sm" fontWeight="medium">Import / Export</FormLabel>
                                 <Select
                                     name="inOut"
                                     value={formData.inOut}

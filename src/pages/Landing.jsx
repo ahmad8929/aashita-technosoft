@@ -1,17 +1,13 @@
-/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import {
     Box,
     Button,
-    Input,
-    Stack,
     Select,
     FormLabel,
     FormControl,
     SimpleGrid,
     GridItem,
     Textarea,
-    Flex,
     Modal,
     ModalOverlay,
     ModalContent,
@@ -20,19 +16,25 @@ import {
     ModalBody,
     ModalCloseButton,
     useDisclosure,
+    Input,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
+import DatePicker from 'react-datepicker'; // Import DatePicker
+import 'react-datepicker/dist/react-datepicker.css'; // Import date picker styles
+
+import countries from 'country-list'; // Add this line to import country-list
+
 
 const Landing = () => {
     const navigate = useNavigate();
 
     // Form state
     const [formData, setFormData] = useState({
-        fromDate: '',
-        toDate: '',
+        fromDate: null,
+        toDate: null,
         country: 'IN',
         inOut: 'import',
         buyerName: 'AASHITA',
@@ -41,7 +43,7 @@ const Landing = () => {
         originCountry: '',
         proDesc: '',
         billNo: '',
-        email: 'test@example.com', // Set this constant or allow user input as needed
+        email: 'test@example.com',
     });
 
     // Modal control hooks
@@ -55,6 +57,21 @@ const Landing = () => {
             ...formData,
             [name]: value,
         });
+    };
+
+    // Handle date changes
+    const handleFromDateChange = (date) => {
+        setFormData((prev) => ({
+            ...prev,
+            fromDate: date,
+        }));
+    };
+
+    const handleToDateChange = (date) => {
+        setFormData((prev) => ({
+            ...prev,
+            toDate: date,
+        }));
     };
 
     // Handle form submission
@@ -77,32 +94,26 @@ const Landing = () => {
         };
 
         try {
-            const session_token = localStorage.getItem('sessionToken'); // Ensure token is retrieved correctly
+            const session_token = localStorage.getItem('sessionToken');
 
             if (!session_token) {
                 toast.error('Session token is missing.');
                 return;
             }
 
-            // API request with session token
             const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/search`, postData, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${session_token}`, // Send the token with the request
+                    'Authorization': `Bearer ${session_token}`,
                 },
             });
 
-            const messageCode = response.data.messageCode; // Adjust based on your API response structure
+            const messageCode = response.data.messageCode;
 
-            // Handle success response and open modal
             setModalMessage(`Request received! Processing status: ${messageCode}`);
-            onOpen(); // Open the modal
-
-            // Optionally, you can navigate to a different page if needed after displaying the modal
-            // navigate('/search-results', { state: { results: response.data } });
+            onOpen();
 
         } catch (error) {
-            // Handle errors based on the response
             if (error.response) {
                 if (error.response.status === 400) {
                     toast.error('Invalid search parameters.');
@@ -117,6 +128,10 @@ const Landing = () => {
             console.error('Error submitting search:', error);
         }
     };
+    const countryOptions = countries.getData().map((country) => ({
+        value: country.code,
+        label: `${country.name} (${country.code})`,
+    })); // Add this to generate country options
 
     return (
         <>
@@ -144,15 +159,23 @@ const Landing = () => {
                         <GridItem>
                             <FormControl>
                                 <FormLabel fontSize="sm" fontWeight="medium">From Date</FormLabel>
-                                <Input
-                                    type="date"
-                                    name="fromDate"
-                                    value={formData.fromDate}
-                                    onChange={handleFormInput}
-                                    size="md"
-                                    bg="gray.50"
-                                    _hover={{ borderColor: 'blue.400' }}
-                                    fontSize="sm"
+                                <DatePicker
+                                    selected={formData.fromDate}
+                                    onChange={handleFromDateChange}
+                                    dateFormat="yyyy/MM/dd"
+                                    customInput={
+                                        <Input
+                                            placeholder="Select a date"
+                                            size="md"
+                                            bg="gray.50"
+                                            _hover={{ borderColor: 'blue.400' }}
+                                            fontSize="sm"
+                                        />
+                                    }
+                                    placeholderText="Select a date"
+                                    filterDate={(date) => {
+                                        return !formData.toDate || date <= formData.toDate;
+                                    }}
                                 />
                             </FormControl>
                         </GridItem>
@@ -160,15 +183,23 @@ const Landing = () => {
                         <GridItem>
                             <FormControl>
                                 <FormLabel fontSize="sm" fontWeight="medium">To Date</FormLabel>
-                                <Input
-                                    type="date"
-                                    name="toDate"
-                                    value={formData.toDate}
-                                    onChange={handleFormInput}
-                                    size="md"
-                                    bg="gray.50"
-                                    _hover={{ borderColor: 'blue.400' }}
-                                    fontSize="sm"
+                                <DatePicker
+                                    selected={formData.toDate}
+                                    onChange={handleToDateChange}
+                                    dateFormat="yyyy/MM/dd"
+                                    customInput={
+                                        <Input
+                                            placeholder="Select a date"
+                                            size="md"
+                                            bg="gray.50"
+                                            _hover={{ borderColor: 'blue.400' }}
+                                            fontSize="sm"
+                                        />
+                                    }
+                                    placeholderText="Select a date"
+                                    filterDate={(date) => {
+                                        return !formData.fromDate || date >= formData.fromDate;
+                                    }}
                                 />
                             </FormControl>
                         </GridItem>
@@ -176,7 +207,7 @@ const Landing = () => {
                         <GridItem>
                             <FormControl>
                                 <FormLabel fontSize="sm" fontWeight="medium">Country</FormLabel>
-                                <Select
+                                {/* <Select
                                     name="country"
                                     value={formData.country}
                                     onChange={handleFormInput}
@@ -186,8 +217,22 @@ const Landing = () => {
                                     fontSize="sm"
                                 >
                                     <option value="IN">India (IN)</option>
-                                    {/* Add more options if necessary */}
+                                </Select> */}
+
+                                <Select
+                                    name="country"
+                                    value={formData.country}
+                                    onChange={(e) => handleFormInput({ target: { name: 'country', value: e.target.value } })} // Update this line
+                                    size="md"
+                                    bg="gray.50"
+                                    _hover={{ borderColor: 'blue.400' }}
+                                    fontSize="sm"
+                                >
+                                    {countryOptions.map(option => (
+                                        <option key={option.value} value={option.value}>{option.label}</option> // Replace existing options with dynamic ones
+                                    ))}
                                 </Select>
+
                             </FormControl>
                         </GridItem>
 
@@ -277,73 +322,39 @@ const Landing = () => {
                             </FormControl>
                         </GridItem>
 
-                        {/* <GridItem>
-                              <FormControl flex="2" mr={4}>
-                                    <FormLabel fontSize="sm" fontWeight="medium">Product Description</FormLabel>
-                                    <Textarea
-                                        name="proDesc"
-                                        value={formData.proDesc}
-                                        onChange={handleFormInput}
-                                        size="md"
-                                        bg="gray.50"
-                                        _hover={{ borderColor: 'blue.400' }}
-                                        fontSize="sm"
-                                        placeholder="Enter product description"
-                                        resize="vertical"
-                                    />
-                                </FormControl>
-                        </GridItem> */}
-
-                        {/* <GridItem>
+                        {/* Product Description field spans 2 columns */}
+                        <GridItem colSpan={{ base: 1, md: 2 }}>
                             <FormControl>
-                                <FormLabel fontSize="sm" fontWeight="medium">Bill No</FormLabel>
-                                <Input
-                                    type="text"
-                                    name="billNo"
-                                    value={formData.billNo}
+                                <FormLabel fontSize="sm" fontWeight="medium">Product Description</FormLabel>
+                                <Textarea
+                                    name="proDesc"
+                                    value={formData.proDesc}
                                     onChange={handleFormInput}
                                     size="md"
                                     bg="gray.50"
                                     _hover={{ borderColor: 'blue.400' }}
                                     fontSize="sm"
-                                    placeholder="Enter bill number"
+                                    placeholder="Enter product description"
+                                    resize="vertical"
                                 />
                             </FormControl>
-                        </GridItem> */}
-
-                        <GridItem colSpan={{ base: 1, md: 3 }}>
-                            <Flex>
-                                <FormControl flex="2" mr={4}>
-                                    <FormLabel fontSize="sm" fontWeight="medium">Product Description</FormLabel>
-                                    <Textarea
-                                        name="proDesc"
-                                        value={formData.proDesc}
-                                        onChange={handleFormInput}
-                                        size="md"
-                                        bg="gray.50"
-                                        _hover={{ borderColor: 'blue.400' }}
-                                        fontSize="sm"
-                                        placeholder="Enter product description"
-                                        resize="vertical"
-                                    />
-                                </FormControl>
-
-                                <FormControl flex="1" alignSelf="flex-end">
-                                    <Button
-                                        type="submit"
-                                        colorScheme="blue"
-                                        size="lg"
-                                        w="auto"
-                                        mt={4}
-                                        bg="blue.500"
-                                        _hover={{ bg: 'blue.600' }}
-                                        _active={{ bg: 'blue.700' }}
-                                    >
-                                        Search
-                                    </Button>
-                                </FormControl>
-                            </Flex>
                         </GridItem>
+
+                        {/* Button occupies the third column */}
+                        <GridItem colSpan={{ base: 1, md: 1 }} textAlign="center">
+                            <Button
+                                type="submit"
+                                colorScheme="blue"
+                                size="lg"
+                                mt={4}
+                                bg="blue.500"
+                                _hover={{ bg: 'blue.600' }}
+                                _active={{ bg: 'blue.700' }}
+                            >
+                                Search
+                            </Button>
+                        </GridItem>
+
                     </SimpleGrid>
                 </Box>
 

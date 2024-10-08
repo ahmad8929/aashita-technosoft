@@ -11,26 +11,21 @@ import {
     Heading,
     Stack,
     Spinner,
-    Stepper,
-    Step,
-    StepIndicator,
-    StepStatus,
-    StepIcon,
-    StepTitle,
-    FormErrorMessage,
+    Select,
     Text,
-    RadioGroup,
-    Radio,
     HStack,
     useToast,
     Link as ChakraLink,
+    IconButton,
+    InputGroup,
+    InputRightElement,
 } from "@chakra-ui/react";
 import { useBreakpointValue } from "@chakra-ui/media-query";
 import { useNavigate, Link } from "react-router-dom";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"; // Importing icons for password visibility
 
 const Register = () => {
     const screens = useBreakpointValue({ base: "Mobile", md: "Desktop" });
-    const [currentStep, setCurrentStep] = useState(0);
     const [formValues, setFormValues] = useState({
         fullName: "",
         email: "",
@@ -40,10 +35,12 @@ const Register = () => {
         companyName: "",
         gstNumber: "",
         address: "",
-        plan: "", // Added plan selection
+        plan: "",
     });
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const navigate = useNavigate();
     const toast = useToast();
 
@@ -133,16 +130,6 @@ const Register = () => {
         });
     };
 
-    const onNext = () => {
-        if (validateForm()) {
-            setLoading(true);
-            setTimeout(() => {
-                setCurrentStep(currentStep + 1);
-                setLoading(false);
-            }, 500);
-        }
-    };
-
     const handleRegister = async () => {
         try {
             const { data: createAccountResponse } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/signup`, {
@@ -160,7 +147,7 @@ const Register = () => {
                 duration: 4000,
                 isClosable: true,
             });
-            navigate("/landing"); // Redirect to the landing page after successful registration
+            navigate("/login"); // Redirect to the login page after successful registration
         } catch (error) {
             if (error.response && error.response.status === 400) {
                 toast({
@@ -191,34 +178,19 @@ const Register = () => {
     };
 
     return (
-        <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
-            <Card p={6} w={screens === "Mobile" ? "100%" : "600px"} boxShadow="lg">
+        <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" overflow="hidden">
+            <Card p={6} w={screens === "Mobile" ? "100%" : "700px"} boxShadow="lg">
                 <Heading as="h2" size="lg" textAlign="center" mb={6}>
                     Now, tell us a bit about yourself
                 </Heading>
-
-                <Stepper index={currentStep} mb={6}>
-                    <Step>
-                        <StepIndicator>
-                            <StepStatus complete={<StepIcon />} />
-                        </StepIndicator>
-                        <StepTitle>Basic Details</StepTitle>
-                    </Step>
-                    <Step>
-                        <StepIndicator>
-                            <StepStatus complete={<StepIcon />} />
-                        </StepIndicator>
-                        <StepTitle>More Details</StepTitle>
-                    </Step>
-                </Stepper>
 
                 {loading ? (
                     <Spinner size="lg" />
                 ) : (
                     <form>
-                        {currentStep === 0 && (
-                            <Stack spacing={4}>
-                                <FormControl isRequired isInvalid={!!errors.fullName}>
+                        <Stack spacing={6}>
+                            <HStack spacing={4}>
+                                <FormControl isRequired isInvalid={!!errors.fullName} flex="1">
                                     <FormLabel>Full Name</FormLabel>
                                     <Input
                                         name="fullName"
@@ -227,11 +199,11 @@ const Register = () => {
                                         onChange={handleInputChange}
                                     />
                                     {errors.fullName && (
-                                        <FormErrorMessage>{errors.fullName}</FormErrorMessage>
+                                        <Text color="red.500">{errors.fullName}</Text>
                                     )}
                                 </FormControl>
 
-                                <FormControl isRequired isInvalid={!!errors.email}>
+                                <FormControl isRequired isInvalid={!!errors.email} flex="1">
                                     <FormLabel>Email</FormLabel>
                                     <Input
                                         type="email"
@@ -241,11 +213,13 @@ const Register = () => {
                                         onChange={handleInputChange}
                                     />
                                     {errors.email && (
-                                        <FormErrorMessage>{errors.email}</FormErrorMessage>
+                                        <Text color="red.500">{errors.email}</Text>
                                     )}
                                 </FormControl>
+                            </HStack>
 
-                                <FormControl isRequired isInvalid={!!errors.mobileNumber}>
+                            <HStack spacing={4}>
+                                <FormControl isRequired isInvalid={!!errors.mobileNumber} flex="1">
                                     <FormLabel>Mobile Number</FormLabel>
                                     <Input
                                         type="tel"
@@ -255,61 +229,38 @@ const Register = () => {
                                         onChange={handleInputChange}
                                     />
                                     {errors.mobileNumber && (
-                                        <FormErrorMessage>{errors.mobileNumber}</FormErrorMessage>
+                                        <Text color="red.500">{errors.mobileNumber}</Text>
                                     )}
                                 </FormControl>
 
-                                <FormControl isRequired isInvalid={!!errors.password}>
+                                <FormControl isRequired isInvalid={!!errors.password} flex="1">
                                     <FormLabel>Password</FormLabel>
-                                    <Input
-                                        type="password"
-                                        name="password"
-                                        placeholder="Enter your password"
-                                        value={formValues.password}
-                                        onChange={handleInputChange}
-                                    />
+                                    <InputGroup>
+                                        <Input
+                                            type={showPassword ? "text" : "password"}
+                                            name="password"
+                                            placeholder="Enter your password"
+                                            value={formValues.password}
+                                            onChange={handleInputChange}
+                                        />
+                                        <InputRightElement>
+                                            <IconButton
+                                                variant="link"
+                                                aria-label={showPassword ? "Hide password" : "Show password"}
+                                                icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
+                                                onClick={() => setShowPassword(!showPassword)}
+                                            />
+                                        </InputRightElement>
+                                    </InputGroup>
                                     {errors.password && (
-                                        <FormErrorMessage>{errors.password}</FormErrorMessage>
+                                        <Text color="red.500">{errors.password}</Text>
                                     )}
                                 </FormControl>
+                            </HStack>
 
-                                <FormControl isRequired isInvalid={!!errors.confirmPassword}>
-                                    <FormLabel>Confirm Password</FormLabel>
-                                    <Input
-                                        type="password"
-                                        name="confirmPassword"
-                                        placeholder="Confirm your password"
-                                        value={formValues.confirmPassword}
-                                        onChange={handleInputChange}
-                                    />
-                                    {errors.confirmPassword && (
-                                        <FormErrorMessage>{errors.confirmPassword}</FormErrorMessage>
-                                    )}
-                                </FormControl>
+                            <HStack spacing={4}>
 
-                                <FormControl isRequired isInvalid={!!errors.plan}>
-                                    <FormLabel>Select a Plan</FormLabel>
-                                    <RadioGroup
-                                        name="plan"
-                                        value={formValues.plan}
-                                        onChange={handlePlanChange}
-                                    >
-                                        <HStack spacing={4}>
-                                            <Radio value="Silver">Silver</Radio>
-                                            <Radio value="Gold">Gold</Radio>
-                                            <Radio value="Premium">Premium</Radio>
-                                        </HStack>
-                                    </RadioGroup>
-                                    {errors.plan && (
-                                        <FormErrorMessage>{errors.plan}</FormErrorMessage>
-                                    )}
-                                </FormControl>
-                            </Stack>
-                        )}
-
-                        {currentStep === 1 && (
-                            <Stack spacing={4}>
-                                <FormControl isRequired>
+                                <FormControl isRequired flex="1">
                                     <FormLabel>Company Name</FormLabel>
                                     <Input
                                         name="companyName"
@@ -319,7 +270,39 @@ const Register = () => {
                                     />
                                 </FormControl>
 
-                                <FormControl isRequired>
+
+                                <FormControl isRequired isInvalid={!!errors.confirmPassword} flex="1">
+                                    <FormLabel>Confirm Password</FormLabel>
+                                    <InputGroup>
+                                        <Input
+                                            type={showConfirmPassword ? "text" : "password"}
+                                            name="confirmPassword"
+                                            placeholder="Confirm your password"
+                                            value={formValues.confirmPassword}
+                                            onChange={handleInputChange}
+                                        />
+                                        <InputRightElement>
+                                            <IconButton
+                                                variant="link"
+                                                aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                                                icon={showConfirmPassword ? <ViewOffIcon /> : <ViewIcon />}
+                                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                            />
+                                        </InputRightElement>
+                                    </InputGroup>
+
+                                    {errors.confirmPassword && (
+                                        <Text color="red.500">{errors.confirmPassword}</Text>
+                                    )}
+                                </FormControl>
+
+
+                            </HStack>
+
+                            <HStack spacing={4}>
+
+
+                                <FormControl flex="1">
                                     <FormLabel>GST Number</FormLabel>
                                     <Input
                                         name="gstNumber"
@@ -329,48 +312,51 @@ const Register = () => {
                                     />
                                 </FormControl>
 
-                                <FormControl isRequired>
-                                    <FormLabel>Address</FormLabel>
-                                    <Input
-                                        name="address"
-                                        placeholder="Enter your address"
-                                        value={formValues.address}
-                                        onChange={handleInputChange}
-                                    />
+                                <FormControl isRequired isInvalid={!!errors.plan} flex="1">
+                                    <FormLabel>Select a Plan</FormLabel>
+                                    <Select
+                                        name="plan"
+                                        placeholder="Select a plan"
+                                        value={formValues.plan}
+                                        onChange={(e) => handlePlanChange(e.target.value)}
+                                    >
+                                        <option value="Silver">Silver</option>
+                                        <option value="Gold">Gold</option>
+                                        <option value="Premium">Premium</option>
+                                    </Select>
+                                    {errors.plan && (
+                                        <Text color="red.500">{errors.plan}</Text>
+                                    )}
                                 </FormControl>
-                            </Stack>
-                        )}
+                            </HStack>
 
-                        <Stack direction="row" spacing={4} mt={6} justifyContent="center">
-                            {currentStep > 0 && (
-                                <Button onClick={() => setCurrentStep(currentStep - 1)}>
-                                    Previous
-                                </Button>
-                            )}
-                            {currentStep < 1 && (
-                                <Button colorScheme="teal" onClick={onNext}>
-                                    Next
-                                </Button>
-                            )}
-                            {currentStep === 1 && (
-                                <Button colorScheme="teal" onClick={onFinish}>
-                                    Submit
-                                </Button>
-                            )}
-                        </Stack>
 
-                        {currentStep === 0 && (
+
+                            <FormControl>
+                                <FormLabel>Address</FormLabel>
+                                <Input
+                                    name="address"
+                                    placeholder="Enter your address"
+                                    value={formValues.address}
+                                    onChange={handleInputChange}
+                                />
+                            </FormControl>
+
+                            <Button colorScheme="teal" onClick={onFinish}>
+                                Submit
+                            </Button>
+
                             <Text mt={4} textAlign="center">
                                 Already have an account?{" "}
                                 <ChakraLink as={Link} to="/login" color="blue.500" fontWeight="bold">
                                     Log In
                                 </ChakraLink>
                             </Text>
-                        )}
+                        </Stack>
                     </form>
                 )}
             </Card>
-        </Box>
+        </Box >
     );
 };
 

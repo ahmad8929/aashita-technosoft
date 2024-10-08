@@ -1,18 +1,19 @@
 // routes
-import Products from "../pages/Products";
-import LoginSignup from "../components/SignUpLogin/SignUpLogin";
+import Login from "../components/SignUpLogin/login";
+import Signup from "../components/SignUpLogin/signup";
 import forgot from "../components/SignUpLogin/forgotPassword";
 
 export const publicRoutes = [
+
   {
-    title: "Product",
-    path: "/products",
-    component: Products,
+    title: "login",
+    path: "/login",
+    component: Login,
   },
   {
-    title: "loginSignp",
-    path: "/login",
-    component: LoginSignup,
+    title: "signup",
+    path: "/signup",
+    component: Signup,
   },
   {
     title: "Forgot-Password",

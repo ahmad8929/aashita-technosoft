@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Box, Flex, IconButton, Button, Menu, MenuButton, MenuList, MenuItem, Avatar, Text, HStack } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
 import { ChevronDownIcon } from "@chakra-ui/icons";
@@ -8,13 +8,16 @@ import { clearUser } from '../redux/slices/index'; // Import the clearUser actio
 const Navbar = () => {
     const dispatch = useDispatch();
 
+    const navigate = useNavigate();
+
     // Select isLoggedIn and userName from Redux store
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
     const userName = useSelector((state) => state.user.user?.name || "User");
 
     // Handle logout
     const handleLogout = () => {
-        dispatch(clearUser()); // Clear user data and set isLoggedIn to false
+        dispatch(clearUser());
+        navigate("/");
     };
 
     return (
@@ -25,16 +28,10 @@ const Navbar = () => {
                 </Link>
 
                 <HStack as="nav" spacing={8} display={{ base: "none", md: "flex" }}>
-                    <Link to="/" style={{ textDecoration: "none" }}>
+                    <Link to="/landing" style={{ textDecoration: "none" }}>
                         <Text fontSize="md" fontWeight="medium" color="gray.700" _hover={{ color: "blue.500" }}>Home</Text>
                     </Link>
-                    <Link to="/products" style={{ textDecoration: "none" }}>
-                        <Text fontSize="md" fontWeight="medium" color="gray.700" _hover={{ color: "blue.500" }}>Products</Text>
-                    </Link>
-                    <Link to="/" style={{ textDecoration: "none" }}>
-                        <Text fontSize="md" fontWeight="medium" color="gray.700" _hover={{ color: "blue.500" }}>About</Text>
-                    </Link>
-                    <Link to="/" style={{ textDecoration: "none" }}>
+                    <Link to="/contact" style={{ textDecoration: "none" }}>
                         <Text fontSize="md" fontWeight="medium" color="gray.700" _hover={{ color: "blue.500" }}>Contact</Text>
                     </Link>
                 </HStack>

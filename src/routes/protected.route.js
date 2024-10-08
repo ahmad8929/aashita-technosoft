@@ -2,6 +2,7 @@
 import Landing from "../pages/Landing";
 import Queries from "../pages/Queries";
 import Tokens from "../pages/Tokens";
+import Contact from "../pages/Contact";
 import Upgrade from "../pages/Upgrade/cards";
 import Payments from "../pages/Upgrade/payment";
 import ForgotPassword from "../components/SignUpLogin/forgotPassword";
@@ -31,6 +32,11 @@ export const protectedRoute = [
     title: "tokens",
     path: "/tokens",
     component: Tokens,
+  },
+  {
+    title: "contact",
+    path: "/contact",
+    component: Contact,
   },
   {
     title: "ForgotPassword",

@@ -140,6 +140,8 @@ const Register = () => {
                 licenseType: formValues.plan,
             });
 
+            localStorage.setItem('accessToken', createAccountResponse?.accessToken); // change this if response is wrong
+
             toast({
                 title: "Account created successfully!",
                 description: `You have selected the ${formValues.plan} plan.`,

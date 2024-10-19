@@ -6,12 +6,12 @@ const getAccessToken = () => {
     return localStorage.getItem(config.accessTokenFieldName);
 }
 
-const setAccessToken = () => {
-    return localStorage.setItem(config.accessTokenFieldName);
+const setAccessToken = (token) => {
+    return localStorage.setItem(config.accessTokenFieldName, token);
 }
 
 export default {
-    accessToken: {
+    sessionToken: {
         getter: getAccessToken,
         setter: setAccessToken
     }

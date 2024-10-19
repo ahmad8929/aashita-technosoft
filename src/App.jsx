@@ -1,11 +1,11 @@
 // lib
 import { Fragment } from "react";
 import { Routes, Route } from "react-router-dom";
+
 // routes
 import routes from "./routes";
 
 function App() {
-
   return (
     <Routes>
       {routes.publicRoutes.map((route) => (

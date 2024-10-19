@@ -1,6 +1,7 @@
 import { Fragment, useEffect } from "react"
 import { Helmet } from "react-helmet";
 import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
 
 // utils 
 import sessionUtils from "../utils/session";
@@ -13,7 +14,7 @@ const AppPage = ({ title, description = "", keywords = [], isProtected, includeN
     const location = useLocation();
 
   useEffect(() => {
-    const token = sessionUtils.accessToken.getter();
+    const token = sessionUtils.sessionToken.getter();
     // TODO!  check for validation as well
 
     if (!token && isProtected) {
@@ -21,7 +22,6 @@ const AppPage = ({ title, description = "", keywords = [], isProtected, includeN
       navigate("/login");
     }
   }, [location.pathname]);
-
 
     return (
         <Fragment>

@@ -13,13 +13,11 @@ import {
 } from '@chakra-ui/react';
 import { PhoneIcon, EmailIcon } from '@chakra-ui/icons';
 import { FaMapMarkerAlt } from 'react-icons/fa'; // for the address icon
-import Navbar from '../components/Navbar';
+import AppPage from '../layouts/AppPage';
 
 const Contact = () => {
     return (
-        <>
-            <Navbar />
-
+        <AppPage title="Contact" description="" keywords={[]} isProtected={true}>
             <Flex direction={{ base: 'column', md: 'row' }} p={8} justify="center">
                 {/* Left side - Contact Form */}
                 <Box
@@ -111,7 +109,7 @@ const Contact = () => {
                     </Box>
                 </Box>
             </Flex>
-        </>
+        </AppPage>
     );
 };
 

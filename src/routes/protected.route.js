@@ -3,14 +3,13 @@ import Landing from "../pages/Landing";
 import Queries from "../pages/Queries";
 import Tokens from "../pages/Tokens";
 import Contact from "../pages/Contact";
-import Upgrade from "../pages/Upgrade/cards";
-import Payments from "../pages/Upgrade/payment";
-import ForgotPassword from "../components/SignUpLogin/forgotPassword";
+import Upgrade from "../pages/cards";
+import Payments from "../pages/payment";
 
 export const protectedRoute = [
   {
-    title: "landing",
-    path: "/landing",
+    title: "Home",
+    path: "/",
     component: Landing,
   },
   {
@@ -37,10 +36,5 @@ export const protectedRoute = [
     title: "contact",
     path: "/contact",
     component: Contact,
-  },
-  {
-    title: "ForgotPassword",
-    path: "/forgot-password",
-    component: ForgotPassword,
   },
 ];

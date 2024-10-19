@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
-
 import {
     Box,
     Button,
@@ -14,17 +12,18 @@ import {
     Select,
     Text,
     HStack,
-    useToast,
     Link as ChakraLink,
     IconButton,
     InputGroup,
     InputRightElement,
 } from "@chakra-ui/react";
 import { useBreakpointValue } from "@chakra-ui/media-query";
-import { useNavigate, Link } from "react-router-dom";
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"; // Importing icons for password visibility
+import { Link } from "react-router-dom";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { useSignupMutation } from "../redux/api/auth/slice";
 
 const Register = () => {
+    const [handleSignup, { isLoading }] = useSignupMutation();
     const screens = useBreakpointValue({ base: "Mobile", md: "Desktop" });
     const [formValues, setFormValues] = useState({
         fullName: "",
@@ -38,144 +37,48 @@ const Register = () => {
         plan: "",
     });
     const [errors, setErrors] = useState({});
-    const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const navigate = useNavigate();
-    const toast = useToast();
-
-    const validateField = (name, value) => {
-        let error = "";
-        if (name === "fullName" && !value) {
-            error = "Please input your full name!";
-        }
-        if (name === "email" && !value) {
-            error = "Please enter your email!";
-        }
-        if (name === "mobileNumber" && (!value || !/^\d{10}$/.test(value))) {
-            error = "Please enter a valid 10-digit phone number!";
-        }
-        if (
-            name === "password" &&
-            (value.length < 8 ||
-                !/[A-Z]/.test(value) ||
-                !/[a-z]/.test(value) ||
-                !/\d/.test(value) ||
-                !/[!@#$%^&*]/.test(value))
-        ) {
-            error =
-                "Password must be at least 8 characters long and contain an uppercase letter, a lowercase letter, a number, and a special character!";
-        }
-        if (name === "confirmPassword" && value !== formValues.password) {
-            error = "Passwords do not match!";
-        }
-        if (name === "plan" && !value) {
-            error = "Please select a plan!";
-        }
-        return error;
-    };
-
-    const validateForm = () => {
-        let errors = {};
-        if (!formValues.fullName) {
-            errors.fullName = "Please input your full name!";
-        }
-        if (!formValues.email) {
-            errors.email = "Please enter your email!";
-        }
-        if (!formValues.mobileNumber || !/^\d{10}$/.test(formValues.mobileNumber)) {
-            errors.mobileNumber = "Please enter a valid 10-digit phone number!";
-        }
-        if (
-            !formValues.password ||
-            formValues.password.length < 8 ||
-            !/[A-Z]/.test(formValues.password) ||
-            !/[a-z]/.test(formValues.password) ||
-            !/\d/.test(formValues.password) ||
-            !/[!@#$%^&*]/.test(formValues.password)
-        ) {
-            errors.password =
-                "Password must be at least 8 characters long and contain an uppercase letter, a lowercase letter, a number, and a special character!";
-        }
-        if (formValues.password !== formValues.confirmPassword) {
-            errors.confirmPassword = "Passwords do not match!";
-        }
-        if (!formValues.plan) {
-            errors.plan = "Please select a plan!";
-        }
-        setErrors(errors);
-        return Object.keys(errors).length === 0;
-    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormValues({
-            ...formValues,
-            [name]: value,
-        });
-        setErrors({
-            ...errors,
-            [name]: validateField(name, value),
-        });
+        setFormValues((prev) => ({ ...prev, [name]: value }));
     };
 
     const handlePlanChange = (value) => {
-        setFormValues({
-            ...formValues,
-            plan: value,
-        });
-        setErrors({
-            ...errors,
-            plan: validateField("plan", value),
-        });
+        setFormValues((prev) => ({ ...prev, plan: value }));
     };
 
-    const handleRegister = async () => {
-        try {
-            const { data: createAccountResponse } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/signup`, {
-                email: formValues.email,
-                password: formValues.password,
-                companyName: formValues.companyName,
-                phoneNumber: formValues.mobileNumber,
-                licenseType: formValues.plan,
-            });
-
-            localStorage.setItem('accessToken', createAccountResponse?.accessToken); // change this if response is wrong
-
-            toast({
-                title: "Account created successfully!",
-                description: `You have selected the ${formValues.plan} plan.`,
-                status: "success",
-                duration: 4000,
-                isClosable: true,
-            });
-            navigate("/login"); // Redirect to the login page after successful registration
-        } catch (error) {
-            if (error.response && error.response.status === 400) {
-                toast({
-                    title: "Email already exists.",
-                    status: "error",
-                    duration: 4000,
-                    isClosable: true,
-                });
-            } else {
-                toast({
-                    title: "Failed to create account.",
-                    description: error?.message || "Something went wrong!",
-                    status: "error",
-                    duration: 4000,
-                    isClosable: true,
-                });
-            }
-        } finally {
-            setLoading(false);
+    const validateForm = () => {
+        const newErrors = {};
+        if (!formValues.fullName) newErrors.fullName = "Full Name is required.";
+        if (!formValues.email) newErrors.email = "Email is required.";
+        if (!formValues.mobileNumber) newErrors.mobileNumber = "Mobile Number is required.";
+        if (!formValues.password) newErrors.password = "Password is required.";
+        if (formValues.password !== formValues.confirmPassword) {
+            newErrors.confirmPassword = "Passwords do not match.";
         }
+        if (!formValues.plan) newErrors.plan = "Plan selection is required.";
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
     };
 
-    const onFinish = () => {
+    const submitSignupForm = async (e) => {
+        e.preventDefault(); // Prevent default form submission
         if (validateForm()) {
-            setLoading(true);
-            handleRegister(); // Call the API to register the user
+            try {
+                await handleSignup({
+                    email: formValues.email,
+                    phoneNumber: formValues.mobileNumber,
+                    password: formValues.password,
+                    companyName: formValues.companyName,
+                    licenseType: formValues.plan,
+                }).unwrap();
+                // Optionally, handle successful signup (e.g., redirect, show message)
+            } catch (error) {
+                // Handle error here (e.g., show error message)
+                console.error("Signup failed", error);
+            }
         }
     };
 
@@ -186,10 +89,10 @@ const Register = () => {
                     Now, tell us a bit about yourself
                 </Heading>
 
-                {loading ? (
+                {isLoading ? (
                     <Spinner size="lg" />
                 ) : (
-                    <form>
+                    <form onSubmit={submitSignupForm}>
                         <Stack spacing={6}>
                             <HStack spacing={4}>
                                 <FormControl isRequired isInvalid={!!errors.fullName} flex="1">
@@ -261,7 +164,6 @@ const Register = () => {
                             </HStack>
 
                             <HStack spacing={4}>
-
                                 <FormControl isRequired flex="1">
                                     <FormLabel>Company Name</FormLabel>
                                     <Input
@@ -271,7 +173,6 @@ const Register = () => {
                                         onChange={handleInputChange}
                                     />
                                 </FormControl>
-
 
                                 <FormControl isRequired isInvalid={!!errors.confirmPassword} flex="1">
                                     <FormLabel>Confirm Password</FormLabel>
@@ -292,18 +193,13 @@ const Register = () => {
                                             />
                                         </InputRightElement>
                                     </InputGroup>
-
                                     {errors.confirmPassword && (
                                         <Text color="red.500">{errors.confirmPassword}</Text>
                                     )}
                                 </FormControl>
-
-
                             </HStack>
 
                             <HStack spacing={4}>
-
-
                                 <FormControl flex="1">
                                     <FormLabel>GST Number</FormLabel>
                                     <Input
@@ -332,8 +228,6 @@ const Register = () => {
                                 </FormControl>
                             </HStack>
 
-
-
                             <FormControl>
                                 <FormLabel>Address</FormLabel>
                                 <Input
@@ -344,7 +238,7 @@ const Register = () => {
                                 />
                             </FormControl>
 
-                            <Button colorScheme="teal" onClick={onFinish}>
+                            <Button colorScheme="teal" type="submit">
                                 Submit
                             </Button>
 
@@ -358,7 +252,7 @@ const Register = () => {
                     </form>
                 )}
             </Card>
-        </Box >
+        </Box>
     );
 };
 

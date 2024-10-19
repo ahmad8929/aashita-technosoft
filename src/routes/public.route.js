@@ -1,7 +1,7 @@
 // routes
-import Login from "../components/SignUpLogin/login";
-import Signup from "../components/SignUpLogin/signup";
-import forgot from "../components/SignUpLogin/forgotPassword";
+import Login from "../pages/login";
+import Signup from "../pages/signup";
+import forgot from "../pages/forgotPassword";
 
 export const publicRoutes = [
 

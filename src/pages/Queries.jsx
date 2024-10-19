@@ -5,6 +5,7 @@ import {
 import Navbar from '../components/Navbar';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import AppPage from '../layouts/AppPage';
 
 const Queries = () => {
     // State to hold query data
@@ -83,8 +84,7 @@ const Queries = () => {
     };
 
     return (
-        <>
-            <Navbar />
+        <AppPage title="Queries" description="" keywords={[]} isProtected={true} >
             <Box p={8} bg="gray.100" minH="100vh">
                 <VStack spacing={6} align="stretch" maxW="1200px" mx="auto"> {/* Increased maxW for wider container */}
                     <Heading size="lg" textAlign="center">Recent Queries</Heading>
@@ -156,7 +156,7 @@ const Queries = () => {
                     </Box>
                 </VStack>
             </Box>
-        </>
+        </AppPage>
     );
 };
 

@@ -16,7 +16,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { setAuthState } from "../../redux/slices/index";
+import { setAuthState } from "../redux/slices/user";
+import AppPage from "../layouts/AppPage";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -156,75 +157,77 @@ const Login = () => {
 
 
     return (
-        <Flex height="100vh" alignItems="center" justifyContent="center">
-            <Box
-                w="100%"
-                maxW="500px"
-                p="6"
-                boxShadow="lg"
-                border="2px"
-                borderColor="gray.200"
-                borderRadius="8px"
-                position="relative"
-            >
-                {loading && <Spinner size="xl" position="absolute" top="50%" left="50%" />}
+        <AppPage title="Login" isProtected={false} includeNavbar={false}>
+            <Flex height="100vh" alignItems="center" justifyContent="center">
+                <Box
+                    w="100%"
+                    maxW="500px"
+                    p="6"
+                    boxShadow="lg"
+                    border="2px"
+                    borderColor="gray.200"
+                    borderRadius="8px"
+                    position="relative"
+                >
+                    {loading && <Spinner size="xl" position="absolute" top="50%" left="50%" />}
 
-                <Heading as="h2" size="lg" textAlign="center" mb={6}>
-                    LOG IN
-                </Heading>
+                    <Heading as="h2" size="lg" textAlign="center" mb={6}>
+                        LOG IN
+                    </Heading>
 
-                <VStack as="form" onSubmit={handleLogin} spacing={4} w="100%">
-                    <FormControl id="email" isRequired isInvalid={error.email}>
-                        <FormLabel>Email ID</FormLabel>
-                        <Input
-                            name="email"
-                            type="email"
-                            placeholder="Enter your email"
-                            value={formData.email}
-                            onChange={handleChange}
-                        />
-                        {error.email && (
-                            <Text color="red.500" fontSize="sm">
-                                Email is required
-                            </Text>
-                        )}
-                    </FormControl>
+                    <VStack as="form" onSubmit={handleLogin} spacing={4} w="100%">
+                        <FormControl id="email" isRequired isInvalid={error.email}>
+                            <FormLabel>Email ID</FormLabel>
+                            <Input
+                                name="email"
+                                type="email"
+                                placeholder="Enter your email"
+                                value={formData.email}
+                                onChange={handleChange}
+                            />
+                            {error.email && (
+                                <Text color="red.500" fontSize="sm">
+                                    Email is required
+                                </Text>
+                            )}
+                        </FormControl>
 
-                    <FormControl id="password" isRequired isInvalid={error.password}>
-                        <FormLabel>Password</FormLabel>
-                        <Input
-                            name="password"
-                            type="password"
-                            placeholder="Enter your password"
-                            value={formData.password}
-                            onChange={handleChange}
-                        />
-                        {error.password && (
-                            <Text color="red.500" fontSize="sm">
-                                Password is required
-                            </Text>
-                        )}
-                    </FormControl>
+                        <FormControl id="password" isRequired isInvalid={error.password}>
+                            <FormLabel>Password</FormLabel>
+                            <Input
+                                name="password"
+                                type="password"
+                                placeholder="Enter your password"
+                                value={formData.password}
+                                onChange={handleChange}
+                            />
+                            {error.password && (
+                                <Text color="red.500" fontSize="sm">
+                                    Password is required
+                                </Text>
+                            )}
+                        </FormControl>
 
-                    <Flex w="100%" justify="flex-end">
-                        <ChakraLink as={Link} to="/forgot-password" color="blue.500" fontSize="sm">
-                            Forgot Password?
+                        <Flex w="100%" justify="flex-end">
+                            <ChakraLink as={Link} to="/forgot-password" color="blue.500" fontSize="sm">
+                                Forgot Password?
+                            </ChakraLink>
+                        </Flex>
+
+                        <Button type="submit" colorScheme="teal" width="100%" mt={4} isLoading={loading}>
+                            Log In
+                        </Button>
+                    </VStack>
+
+                    <Text textAlign="center" mt={4}>
+                        Don&apos;t have an account?{" "}
+                        <ChakraLink as={Link} to="/signup" color="blue.500" fontWeight="bold">
+                            Register
                         </ChakraLink>
-                    </Flex>
-
-                    <Button type="submit" colorScheme="teal" width="100%" mt={4} isLoading={loading}>
-                        Log In
-                    </Button>
-                </VStack>
-
-                <Text textAlign="center" mt={4}>
-                    Don&apos;t have an account?{" "}
-                    <ChakraLink as={Link} to="/signup" color="blue.500" fontWeight="bold">
-                        Register
-                    </ChakraLink>
-                </Text>
-            </Box>
-        </Flex>
+                    </Text>
+                </Box>
+            </Flex>
+        </AppPage>
     );
 };
 

@@ -26,6 +26,7 @@ import DatePicker from 'react-datepicker'; // Import DatePicker
 import 'react-datepicker/dist/react-datepicker.css'; // Import date picker styles
 
 import countries from 'country-list'; // Add this line to import country-list
+import AppPage from '../layouts/AppPage';
 
 
 const Landing = () => {
@@ -134,8 +135,7 @@ const Landing = () => {
     })); // Add this to generate country options
 
     return (
-        <>
-            <Navbar />
+        <AppPage title="Home" description="" keywords={[]}  isProtected={true}>
             <Box
                 display="flex"
                 flexDirection="column"
@@ -375,7 +375,7 @@ const Landing = () => {
                     </ModalContent>
                 </Modal>
             </Box>
-        </>
+        </AppPage>
     );
 };
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Box, VStack, SimpleGrid, Card, CardHeader, CardBody, CardFooter, Heading, Text, Button } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../../components/Navbar';
 
 const Cards = () => {
     const navigate = useNavigate();
@@ -11,9 +10,7 @@ const Cards = () => {
     };
 
     return (
-        <>
-            <Navbar />
-
+        <AppPage title="Cards" description="" keywords={[]} isProtected={true}>
             <Box p={8} bg="gray.100" minH="calc(100vh - 14vh)" display="flex" alignItems="center" justifyContent="center">
                 <VStack spacing={10} align="stretch" maxW="800px" width="100%">
                     <SimpleGrid spacing={6} templateColumns='repeat(auto-fill, minmax(250px, 1fr))'>
@@ -76,7 +73,7 @@ const Cards = () => {
                     </SimpleGrid>
                 </VStack>
             </Box>
-        </>
+        </AppPage>
     );
 }
 

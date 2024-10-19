@@ -3,7 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { Box, Flex, IconButton, Button, Menu, MenuButton, MenuList, MenuItem, Avatar, Text, HStack } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { clearUser } from '../redux/slices/index'; // Import the clearUser action
+import { clearUser } from '../../redux/slices/user'; // Import the clearUser action
+
+import MenuItems from "./menuItem";
 
 const Navbar = () => {
     const dispatch = useDispatch();
@@ -28,12 +30,13 @@ const Navbar = () => {
                 </Link>
 
                 <HStack as="nav" spacing={8} display={{ base: "none", md: "flex" }}>
-                    <Link to="/landing" style={{ textDecoration: "none" }}>
-                        <Text fontSize="md" fontWeight="medium" color="gray.700" _hover={{ color: "blue.500" }}>Home</Text>
-                    </Link>
-                    <Link to="/contact" style={{ textDecoration: "none" }}>
-                        <Text fontSize="md" fontWeight="medium" color="gray.700" _hover={{ color: "blue.500" }}>Contact</Text>
-                    </Link>
+                    {
+                        MenuItems.map((item) => (
+                            <Link key={item.href} to={item.href} style={{ textDecoration: "none" }}>
+                                <Text fontSize="md" fontWeight="medium" color="gray.700" _hover={{ color: "blue.500" }}>{item.title}</Text>
+                            </Link>
+                        ))
+                    }
                 </HStack>
 
                 {!isLoggedIn ? (

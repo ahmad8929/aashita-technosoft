@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Text, VStack, Heading, Divider } from '@chakra-ui/react';
-import Navbar from '../components/Navbar';
-import axios from 'axios';
 import toast from 'react-hot-toast';
+import axios from 'axios';
+
+// components
+import Navbar from '../components/Navbar';
+import AppPage from '../layouts/AppPage';
 
 const Tokens = () => {
     // State to hold token data
@@ -24,8 +27,7 @@ const Tokens = () => {
     }, []);
 
     return (
-        <>
-            <Navbar />
+        <AppPage title="Tokens" description="" keywords={[]} isProtected={true}>
             <Box p={8} bg="gray.100" minH="100vh">
                 <VStack spacing={6} align="stretch" maxW="800px" mx="auto">
                     <Heading size="lg" textAlign="center">Your Tokens</Heading>
@@ -40,7 +42,7 @@ const Tokens = () => {
                     </Box>
                 </VStack>
             </Box>
-        </>
+        </AppPage>
     );
 };
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, VStack, SimpleGrid, Card, CardHeader, CardBody, CardFooter, Heading, Text, Button } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+import AppPage from '../layouts/AppPage';
 
 const Cards = () => {
     const navigate = useNavigate();

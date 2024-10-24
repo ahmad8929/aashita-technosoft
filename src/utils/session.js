@@ -1,5 +1,5 @@
 const config = {
-    accessTokenFieldName: 'accessToken',
+    accessTokenFieldName: 'session',
 }
 
 const getAccessToken = () => {

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import axios from 'axios';
 import {
     Box,
     Button,
@@ -16,13 +17,14 @@ import { useDispatch } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import AppPage from "../layouts/AppPage";
 
-import { useLoginMutation } from "../redux/api/auth/slice";
+import { setUser, setAuthState } from "../redux/slices/user";
 
 const Login = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const [handleLogin, { isLoading }] = useLoginMutation();
+    // const [handleLogin, { isLoading }] = useLoginMutation();
+    const [isLoading, setLoading] = useState(false);
 
     // Form state
     const [formData, setFormData] = useState({
@@ -43,12 +45,32 @@ const Login = () => {
         });
     };
 
-    const handleLoginClick = (e) => {
+    const handleLoginClick = async (e) => {
         e.preventDefault();
-        handleLogin({
-            email: formData.email,
-            password: formData.password
-        });
+        setLoading(true);
+        try {
+            const { data: responseData } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/login`, {
+                ...formData,
+            });
+
+            console.log({ responseData })
+
+            if (!responseData) {
+                console.error(error);
+                return;
+            }
+
+            window.localStorage.setItem('session', JSON.stringify(responseData));
+
+            dispatch(setUser(responseData));
+            dispatch(setAuthState(true));
+
+            navigate("/");
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (

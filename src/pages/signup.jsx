@@ -20,10 +20,10 @@ import {
 import { useBreakpointValue } from "@chakra-ui/media-query";
 import { Link } from "react-router-dom";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-import { useSignupMutation } from "../redux/api/auth/slice";
+// import { useSignupMutation } from "../redux/api/auth/slice";
 
 const Register = () => {
-    const [handleSignup, { isLoading }] = useSignupMutation();
+    // const [handleSignup, { isLoading }] = useSignupMutation();
     const screens = useBreakpointValue({ base: "Mobile", md: "Desktop" });
     const [formValues, setFormValues] = useState({
         fullName: "",
@@ -66,19 +66,19 @@ const Register = () => {
     const submitSignupForm = async (e) => {
         e.preventDefault(); // Prevent default form submission
         if (validateForm()) {
-            try {
-                await handleSignup({
-                    email: formValues.email,
-                    phoneNumber: formValues.mobileNumber,
-                    password: formValues.password,
-                    companyName: formValues.companyName,
-                    licenseType: formValues.plan,
-                }).unwrap();
-                // Optionally, handle successful signup (e.g., redirect, show message)
-            } catch (error) {
-                // Handle error here (e.g., show error message)
-                console.error("Signup failed", error);
-            }
+            // try {
+            //     await handleSignup({
+            //         email: formValues.email,
+            //         phoneNumber: formValues.mobileNumber,
+            //         password: formValues.password,
+            //         companyName: formValues.companyName,
+            //         licenseType: formValues.plan,
+            //     }).unwrap();
+            //     // Optionally, handle successful signup (e.g., redirect, show message)
+            // } catch (error) {
+            //     // Handle error here (e.g., show error message)
+            //     console.error("Signup failed", error);
+            // }
         }
     };
 

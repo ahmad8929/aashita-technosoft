@@ -4,7 +4,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 // Initial state for the user slice
 const initialState = {
-  user: null,
+  userId: null,
+  sessionToken: null,
+  session_exp_time: null,
   isLoggedIn: false,
 };
 
@@ -14,15 +16,18 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action) => {
-      state.user = action.payload;
-      state.isLoggedIn = true;  // Set login state to true when user data is set
+      state.userId = action.payload.user_id;
+      state.sessionToken = action.payload.session_token;
+      state.session_exp_time = action.payload.session_exp_time;
     },
     setAuthState: (state, action) => {
       state.isLoggedIn = action.payload;
     },
     clearUser: (state) => {
-      state.user = null;
-      state.isLoggedIn = false;  // Clear user and set login state to false
+      state.userId = null;
+      state.isLoggedIn = null;
+      state.sessionToken = null;
+      state.session_exp_time = null;
     },
   },
 });

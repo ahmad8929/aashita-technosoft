@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
     Box,
     Button,
@@ -21,16 +21,17 @@ import {
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import axios from 'axios';
-import Navbar from '../components/Navbar';
 import DatePicker from 'react-datepicker'; // Import DatePicker
 import 'react-datepicker/dist/react-datepicker.css'; // Import date picker styles
 
 import countries from 'country-list'; // Add this line to import country-list
 import AppPage from '../layouts/AppPage';
+import { useSelector } from 'react-redux';
 
 
 const Landing = () => {
     const navigate = useNavigate();
+    const user = useSelector((state) => state.user);
 
     // Form state
     const [formData, setFormData] = useState({
@@ -75,6 +76,17 @@ const Landing = () => {
         }));
     };
 
+    useEffect(() => {
+        const sessionToken = user.sessionToken;
+
+        axios.interceptors.request.use((config) => {
+            config.headers['session-token'] = sessionToken;
+
+            return config;
+        });
+
+    }, []);
+
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -95,19 +107,7 @@ const Landing = () => {
         };
 
         try {
-            const session_token = localStorage.getItem('sessionToken');
-
-            if (!session_token) {
-                toast.error('Session token is missing.');
-                return;
-            }
-
-            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/search`, postData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${session_token}`,
-                },
-            });
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/search`, postData);
 
             const messageCode = response.data.messageCode;
 
@@ -115,17 +115,6 @@ const Landing = () => {
             onOpen();
 
         } catch (error) {
-            if (error.response) {
-                if (error.response.status === 400) {
-                    toast.error('Invalid search parameters.');
-                } else if (error.response.status === 401) {
-                    toast.error('Unauthorized. Please log in again.');
-                } else {
-                    toast.error('Failed to submit search. Please try again later.');
-                }
-            } else {
-                toast.error('Network error. Please check your connection.');
-            }
             console.error('Error submitting search:', error);
         }
     };
@@ -135,7 +124,8 @@ const Landing = () => {
     })); // Add this to generate country options
 
     return (
-        <AppPage title="Home" description="" keywords={[]}  isProtected={true}>
+        <AppPage title="Home" description="" keywords={[]} isProtected={true}>
+            <h1>User logged in with session: {user.userId}</h1>
             <Box
                 display="flex"
                 flexDirection="column"

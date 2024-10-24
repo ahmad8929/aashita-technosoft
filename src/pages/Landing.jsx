@@ -35,8 +35,8 @@ const Landing = () => {
 
     // Form state
     const [formData, setFormData] = useState({
-        fromDate: null,
-        toDate: null,
+        from_date: '',
+        to_date: '',
         country: 'IN',
         inOut: 'import',
         buyerName: 'AASHITA',
@@ -91,20 +91,21 @@ const Landing = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Prepare data for API request
         const postData = {
             email: formData.email,
-            from_date: formData.fromDate,
-            to_date: formData.toDate,
+            from_date: formData.fromDate ? formData.fromDate.toISOString().split('T')[0] : '',
+            to_date: formData.toDate ? formData.toDate.toISOString().split('T')[0] : '',
             country: formData.country,
-            in_out: formData.inOut.charAt(0).toUpperCase() + formData.inOut.slice(1),
+            is_export: formData.inOut === 'import',
             buyer_name: formData.buyerName,
             hs_code: formData.hsCode,
             supplier_name: formData.supplierName,
             origin_country: formData.originCountry,
             pro_desc: formData.proDesc,
             bill_no: formData.billNo,
+            number_of_records: formData.number_of_records,
         };
+
 
         try {
             const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/search`, postData);
@@ -197,18 +198,6 @@ const Landing = () => {
                         <GridItem>
                             <FormControl>
                                 <FormLabel fontSize="sm" fontWeight="medium">Country</FormLabel>
-                                {/* <Select
-                                    name="country"
-                                    value={formData.country}
-                                    onChange={handleFormInput}
-                                    size="md"
-                                    bg="gray.50"
-                                    _hover={{ borderColor: 'blue.400' }}
-                                    fontSize="sm"
-                                >
-                                    <option value="IN">India (IN)</option>
-                                </Select> */}
-
                                 <Select
                                     name="country"
                                     value={formData.country}
@@ -308,6 +297,23 @@ const Landing = () => {
                                     _hover={{ borderColor: 'blue.400' }}
                                     fontSize="sm"
                                     placeholder="Enter origin country"
+                                />
+                            </FormControl>
+                        </GridItem>
+
+                        <GridItem>
+                            <FormControl>
+                                <FormLabel fontSize="sm" fontWeight="medium">Number of Records</FormLabel>
+                                <Input
+                                    type="text"
+                                    name="number_of_records"
+                                    value={formData.number_of_records}
+                                    onChange={handleFormInput}
+                                    size="md"
+                                    bg="gray.50"
+                                    _hover={{ borderColor: 'blue.400' }}
+                                    fontSize="sm"
+                                    placeholder="Number of Records"
                                 />
                             </FormControl>
                         </GridItem>

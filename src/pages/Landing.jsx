@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Box, Button, Select, FormLabel, FormControl, SimpleGrid, GridItem, Textarea, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input } from '@chakra-ui/react';
 
 import axios from 'axios';
@@ -54,19 +54,24 @@ const Landing = () => {
         }));
     };
 
-    useEffect(() => {
-        const sessionToken = user.sessionToken;
+    // useEffect(() => {
+    //     const sessionToken = user.sessionToken;
 
-        axios.interceptors.request.use((config) => {
-            config.headers['session-token'] = sessionToken;
-            return config;
-        });
+    //     axios.interceptors.request.use((config) => {
+    //         config.headers['session-token'] = sessionToken;
+    //         return config;
+    //     });
 
-    }, []);
+    // }, []);
 
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+
+        const sessionToken = user.sessionToken;
+
+        console.log(sessionToken);
 
         const postData = {
             email: formData.email,
@@ -84,11 +89,15 @@ const Landing = () => {
         };
 
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/search`, postData);
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/search`, postData, {
+                headers: {
+                    'Session-Token': sessionToken,  // Include session token in the request
+                },
+            });
 
-            const messageCode = response.data.messageCode;
-
-            setModalMessage(`Request received! Processing status: ${messageCode}`);
+            const messageCode = response.data.message;
+            console.log(messageCode)
+            setModalMessage(`Request received! ${messageCode}`);
             onOpen();
 
         } catch (error) {

@@ -1,39 +1,17 @@
 import { useEffect, useState } from 'react';
-import {
-    Box,
-    Button,
-    Select,
-    FormLabel,
-    FormControl,
-    SimpleGrid,
-    GridItem,
-    Textarea,
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
-    useDisclosure,
-    Input,
-} from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
-import axios from 'axios';
-import DatePicker from 'react-datepicker'; // Import DatePicker
-import 'react-datepicker/dist/react-datepicker.css'; // Import date picker styles
+import { Box, Button, Select, FormLabel, FormControl, SimpleGrid, GridItem, Textarea, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input } from '@chakra-ui/react';
 
-import countries from 'country-list'; // Add this line to import country-list
+import axios from 'axios';
 import AppPage from '../layouts/AppPage';
 import { useSelector } from 'react-redux';
 
+import DatePicker from 'react-datepicker'; // Import DatePicker
+import 'react-datepicker/dist/react-datepicker.css'; // Import date picker styles
+import countries from 'country-list'; // Add this line to import country-list
 
 const Landing = () => {
-    const navigate = useNavigate();
     const user = useSelector((state) => state.user);
 
-    // Form state
     const [formData, setFormData] = useState({
         from_date: '',
         to_date: '',
@@ -48,7 +26,7 @@ const Landing = () => {
         email: 'test@example.com',
     });
 
-    // Modal control hooks
+    // Modal control 
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [modalMessage, setModalMessage] = useState('');
 
@@ -81,7 +59,6 @@ const Landing = () => {
 
         axios.interceptors.request.use((config) => {
             config.headers['session-token'] = sessionToken;
-
             return config;
         });
 
@@ -105,7 +82,6 @@ const Landing = () => {
             bill_no: formData.billNo,
             number_of_records: formData.number_of_records,
         };
-
 
         try {
             const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/search`, postData);

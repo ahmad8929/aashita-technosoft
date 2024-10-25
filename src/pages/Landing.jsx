@@ -97,7 +97,7 @@ const Landing = () => {
 
             const messageCode = response.data.message;
             console.log(messageCode)
-            setModalMessage(`Request received! ${messageCode}`);
+            setModalMessage(`Request received! You will receive an email`);
             onOpen();
 
         } catch (error) {
@@ -111,7 +111,7 @@ const Landing = () => {
 
     return (
         <AppPage title="Home" description="" keywords={[]} isProtected={true}>
-            <h1>User logged in with session: {user.userId}</h1>
+            {/* <h1>User logged in with session: {user.userId}</h1> */}
             <Box
                 display="flex"
                 flexDirection="column"

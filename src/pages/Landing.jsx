@@ -1,17 +1,16 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Button, Select, FormLabel, FormControl, SimpleGrid, GridItem, Textarea, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input } from '@chakra-ui/react';
-
 import axios from 'axios';
 import AppPage from '../layouts/AppPage';
 import { useSelector } from 'react-redux';
-
-import DatePicker from 'react-datepicker'; // Import DatePicker
-import 'react-datepicker/dist/react-datepicker.css'; // Import date picker styles
-import countries from 'country-list'; // Add this line to import country-list
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import countries from 'country-list';
+import toast from 'react-hot-toast';
 
 const Landing = () => {
     const user = useSelector((state) => state.user);
-
+    const [tokensData, setTokensData] = useState(0); // State to hold the remaining tokens
     const [formData, setFormData] = useState({
         from_date: '',
         to_date: '',
@@ -24,59 +23,69 @@ const Landing = () => {
         proDesc: '',
         billNo: '',
         email: 'test@example.com',
+        number_of_records: ''
     });
 
-    // Modal control 
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [modalMessage, setModalMessage] = useState('');
 
-    // Handle form input
+    // Fetch token data on component mount
+    useEffect(() => {
+        const fetchTokenData = async () => {
+            const sessionToken = user.sessionToken;
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/tokens`, {
+                    headers: {
+                        'Session-Token': sessionToken,
+                    },
+                });
+                setTokensData(response.data.tokens); // Update remaining tokens
+            } catch (error) {
+                toast.error("Failed to fetch token data");
+                console.error("Error fetching token data:", error);
+            }
+        };
+
+        fetchTokenData();
+    }, [user.sessionToken]);
+
     const handleFormInput = (e) => {
         const { name, value } = e.target;
-        setFormData({
-            ...formData,
+        setFormData((prevData) => ({
+            ...prevData,
             [name]: value,
-        });
+        }));
     };
 
-    // Handle date changes
     const handleFromDateChange = (date) => {
         setFormData((prev) => ({
             ...prev,
-            fromDate: date,
+            from_date: date,
         }));
     };
 
     const handleToDateChange = (date) => {
         setFormData((prev) => ({
             ...prev,
-            toDate: date,
+            to_date: date,
         }));
     };
 
-    // useEffect(() => {
-    //     const sessionToken = user.sessionToken;
-
-    //     axios.interceptors.request.use((config) => {
-    //         config.headers['session-token'] = sessionToken;
-    //         return config;
-    //     });
-
-    // }, []);
-
-    // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-
         const sessionToken = user.sessionToken;
 
-        console.log(sessionToken);
+        // Check if number of records exceeds remaining tokens
+        if (parseInt(formData.number_of_records) > tokensData) {
+            setModalMessage("Number of records cannot be more than remaining tokens.");
+            onOpen();
+            return;
+        }
 
         const postData = {
             email: formData.email,
-            from_date: formData.fromDate ? formData.fromDate.toISOString().split('T')[0] : '',
-            to_date: formData.toDate ? formData.toDate.toISOString().split('T')[0] : '',
+            from_date: formData.from_date ? formData.from_date.toISOString().split('T')[0] : '',
+            to_date: formData.to_date ? formData.to_date.toISOString().split('T')[0] : '',
             country: formData.country,
             is_export: formData.inOut === 'import',
             buyer_name: formData.buyerName,
@@ -91,27 +100,31 @@ const Landing = () => {
         try {
             const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/search`, postData, {
                 headers: {
-                    'Session-Token': sessionToken,  // Include session token in the request
+                    'Session-Token': sessionToken,
                 },
             });
 
             const messageCode = response.data.message;
-            console.log(messageCode)
-            setModalMessage(`Request received! You will receive an email`);
+            setModalMessage(`Request received! You will receive an email.`);
             onOpen();
 
         } catch (error) {
-            console.error('Error submitting search:', error);
+            if (error.response && error.response.status === 429) {
+                setModalMessage("You have reached the limit of requests. Please try again later.");
+            } else {
+                setModalMessage("An unexpected error occurred. Please try again.");
+            }
+            onOpen();
         }
     };
+
     const countryOptions = countries.getData().map((country) => ({
         value: country.code,
         label: `${country.name} (${country.code})`,
-    })); // Add this to generate country options
+    }));
 
     return (
         <AppPage title="Home" description="" keywords={[]} isProtected={true}>
-            {/* <h1>User logged in with session: {user.userId}</h1> */}
             <Box
                 display="flex"
                 flexDirection="column"
@@ -136,7 +149,7 @@ const Landing = () => {
                             <FormControl>
                                 <FormLabel fontSize="sm" fontWeight="medium">From Date</FormLabel>
                                 <DatePicker
-                                    selected={formData.fromDate}
+                                    selected={formData.from_date}
                                     onChange={handleFromDateChange}
                                     dateFormat="yyyy/MM/dd"
                                     customInput={
@@ -150,7 +163,7 @@ const Landing = () => {
                                     }
                                     placeholderText="Select a date"
                                     filterDate={(date) => {
-                                        return !formData.toDate || date <= formData.toDate;
+                                        return !formData.to_date || date <= formData.to_date;
                                     }}
                                 />
                             </FormControl>
@@ -160,7 +173,7 @@ const Landing = () => {
                             <FormControl>
                                 <FormLabel fontSize="sm" fontWeight="medium">To Date</FormLabel>
                                 <DatePicker
-                                    selected={formData.toDate}
+                                    selected={formData.to_date}
                                     onChange={handleToDateChange}
                                     dateFormat="yyyy/MM/dd"
                                     customInput={
@@ -174,7 +187,7 @@ const Landing = () => {
                                     }
                                     placeholderText="Select a date"
                                     filterDate={(date) => {
-                                        return !formData.fromDate || date >= formData.fromDate;
+                                        return !formData.from_date || date >= formData.from_date;
                                     }}
                                 />
                             </FormControl>
@@ -186,17 +199,16 @@ const Landing = () => {
                                 <Select
                                     name="country"
                                     value={formData.country}
-                                    onChange={(e) => handleFormInput({ target: { name: 'country', value: e.target.value } })} // Update this line
+                                    onChange={(e) => handleFormInput({ target: { name: 'country', value: e.target.value } })}
                                     size="md"
                                     bg="gray.50"
                                     _hover={{ borderColor: 'blue.400' }}
                                     fontSize="sm"
                                 >
                                     {countryOptions.map(option => (
-                                        <option key={option.value} value={option.value}>{option.label}</option> // Replace existing options with dynamic ones
+                                        <option key={option.value} value={option.value}>{option.label}</option>
                                     ))}
                                 </Select>
-
                             </FormControl>
                         </GridItem>
 
@@ -303,7 +315,6 @@ const Landing = () => {
                             </FormControl>
                         </GridItem>
 
-                        {/* Product Description field spans 2 columns */}
                         <GridItem colSpan={{ base: 1, md: 2 }}>
                             <FormControl>
                                 <FormLabel fontSize="sm" fontWeight="medium">Product Description</FormLabel>
@@ -321,7 +332,6 @@ const Landing = () => {
                             </FormControl>
                         </GridItem>
 
-                        {/* Button occupies the third column */}
                         <GridItem colSpan={{ base: 1, md: 1 }} textAlign="center">
                             <Button
                                 type="submit"
@@ -335,15 +345,13 @@ const Landing = () => {
                                 Search
                             </Button>
                         </GridItem>
-
                     </SimpleGrid>
                 </Box>
 
-                {/* Modal for showing the message */}
                 <Modal isOpen={isOpen} onClose={onClose}>
                     <ModalOverlay />
                     <ModalContent>
-                        <ModalHeader>Request Received</ModalHeader>
+                        <ModalHeader>Request Status</ModalHeader>
                         <ModalCloseButton />
                         <ModalBody>
                             {modalMessage}

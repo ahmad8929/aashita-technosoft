@@ -40,6 +40,7 @@ const Landing = () => {
                     },
                 });
                 setTokensData(response.data.tokens); // Update remaining tokens
+                console.log("Remaining Tokens:", response.data.tokens);
             } catch (error) {
                 toast.error("Failed to fetch token data");
                 console.error("Error fetching token data:", error);

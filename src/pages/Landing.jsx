@@ -16,7 +16,7 @@ const Landing = () => {
         to_date: '',
         country: 'IN',
         inOut: 'import',
-        buyerName: 'AASHITA',
+        buyerName: '',
         hsCode: '',
         supplierName: '',
         originCountry: '',
@@ -82,13 +82,13 @@ const Landing = () => {
             onOpen();
             return;
         }
-
+        const countryName = countries.getName(formData.country); 
         const postData = {
             email: formData.email,
             from_date: formData.from_date ? formData.from_date.toISOString().split('T')[0] : '',
             to_date: formData.to_date ? formData.to_date.toISOString().split('T')[0] : '',
-            country: formData.country,
-            is_export: formData.inOut === 'import',
+            country: countryName,
+            is_export: formData.inOut === 'export',
             buyer_name: formData.buyerName,
             hs_code: formData.hsCode,
             supplier_name: formData.supplierName,
@@ -122,6 +122,7 @@ const Landing = () => {
     const countryOptions = countries.getData().map((country) => ({
         value: country.code,
         label: `${country.name} (${country.code})`,
+        // label: `${country.name}`,
     }));
 
     return (
@@ -215,7 +216,7 @@ const Landing = () => {
 
                         <GridItem>
                             <FormControl>
-                                <FormLabel fontSize="sm" fontWeight="medium">In/Out</FormLabel>
+                                <FormLabel fontSize="sm" fontWeight="medium">Import/Export</FormLabel>
                                 <Select
                                     name="inOut"
                                     value={formData.inOut}

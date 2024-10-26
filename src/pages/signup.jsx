@@ -317,8 +317,8 @@ const Register = () => {
                                         onChange={(e) => handlePlanChange(e.target.value)}
                                     >
                                         <option value="Silver">Silver</option>
-                                        <option value="Gold">Gold</option>
-                                        <option value="Premium">Premium</option>
+                                        <option value="Gold">Diamond</option>
+                                        <option value="Premium">Trial</option>
                                     </Select>
                                     {errors.plan && (
                                         <Text color="red.500">{errors.plan}</Text>

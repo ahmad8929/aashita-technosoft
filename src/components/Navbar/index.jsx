@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Box, Flex, IconButton, Button, Menu, MenuButton, MenuList, MenuItem, Avatar, Text, HStack } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
@@ -24,11 +24,13 @@ const Navbar = () => {
         navigate("/");
     };
 
+    useEffect(() => console.log(user), [user])
+
     return (
         <Box bg="gray.100" px={4} py={3} boxShadow="md" position="sticky" top={0} zIndex={100}>
             <Flex h={16} alignItems="center" justifyContent="space-between">
                 <Link to="/" style={{ textDecoration: "none" }}>
-                    <Text fontSize="xl" fontWeight="bold" color="blue.500">{user.userId.split('@')[0]}</Text>
+                    <Text fontSize="xl" fontWeight="bold" color="blue.500">{user?.userId?.split('@')[0]}</Text>
                 </Link>
 
                 <HStack as="nav" spacing={8} display={{ base: "none", md: "flex" }}>

@@ -126,7 +126,7 @@ const Landing = () => {
 
     return (
         <AppPage title="Home" description="" keywords={[]} isProtected={true}>
-            <h1>{user.userId}</h1>
+            {/* <h1>{user.userId}</h1> */}
             <Box
                 display="flex"
                 flexDirection="column"

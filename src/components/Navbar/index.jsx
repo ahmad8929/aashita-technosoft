@@ -3,13 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { Box, Flex, IconButton, Button, Menu, MenuButton, MenuList, MenuItem, Avatar, Text, HStack } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { clearUser } from '../../redux/slices/user'; // Import the clearUser action
+import { clearUser, setAuthState } from '../../redux/slices/user'; // Import the clearUser action
 
 import MenuItems from "./menuItem";
 
 const Navbar = () => {
+    const user = useSelector(state => state.user);
     const dispatch = useDispatch();
-
     const navigate = useNavigate();
 
     // Select isLoggedIn and userName from Redux store
@@ -19,6 +19,8 @@ const Navbar = () => {
     // Handle logout
     const handleLogout = () => {
         dispatch(clearUser());
+        window.localStorage.removeItem('session');
+        dispatch(setAuthState(false));
         navigate("/");
     };
 
@@ -26,7 +28,7 @@ const Navbar = () => {
         <Box bg="gray.100" px={4} py={3} boxShadow="md" position="sticky" top={0} zIndex={100}>
             <Flex h={16} alignItems="center" justifyContent="space-between">
                 <Link to="/" style={{ textDecoration: "none" }}>
-                    <Text fontSize="xl" fontWeight="bold" color="blue.500">Aashita Enterprises</Text>
+                    <Text fontSize="xl" fontWeight="bold" color="blue.500">{user.userId.split('@')[0]}</Text>
                 </Link>
 
                 <HStack as="nav" spacing={8} display={{ base: "none", md: "flex" }}>

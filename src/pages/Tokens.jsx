@@ -48,16 +48,16 @@ const Tokens = () => {
         <AppPage title="Tokens" description="" keywords={[]} isProtected={true}>
             <Box p={8} bg="gray.100" minH="100vh">
                 <VStack spacing={6} align="stretch" maxW="800px" mx="auto">
-                    <Heading size="lg" textAlign="center">Your Tokens</Heading>
+                    <Heading size="lg" textAlign="center">Todays Record</Heading>
                     <Divider />
                     <Box bg="white" p={6} borderRadius="md" shadow="md">
-                        <Text fontSize="xl" mb={4}>Remaining Tokens</Text>
+                        <Text fontSize="xl" mb={4}>Remaining Records</Text>
                         <Text fontSize="2xl" fontWeight="bold">{tokensData.totalTokens}</Text>
                     </Box>
-                    {/* <Box bg="white" p={6} borderRadius="md" shadow="md">
-                        <Text fontSize="xl" mb={4}>User ID</Text>
-                        <Text fontSize="2xl" fontWeight="bold">{tokensData.userId}</Text>
-                    </Box> */}
+                    <Box bg="white" p={6} borderRadius="md" shadow="md">
+                        <Text fontSize="xl" mb={4}>Used Record for Today</Text>
+                        <Text fontSize="2xl" fontWeight="bold">{5000 - tokensData.totalTokens}</Text>
+                    </Box>
                     {/* <Box bg="white" p={6} borderRadius="md" shadow="md">
                         <Text fontSize="xl" mb={4}>Start Time</Text>
                         <Text fontSize="2xl" fontWeight="bold">{tokensData.startTime}</Text>

@@ -41,6 +41,7 @@ const Register = () => {
     const [isLoading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [selectedCountryCode, setSelectedCountryCode] = useState("+1");
     const navigate = useNavigate();
     const toast = useToast();
 
@@ -52,20 +53,20 @@ const Register = () => {
         if (name === "email" && !value) {
             error = "Please enter your email!";
         }
-        if (name === "mobileNumber" && (!value || !/^\d{10}$/.test(value))) {
-            error = "Please enter a valid 10-digit phone number!";
-        }
-        if (
-            name === "password" &&
-            (value.length < 8 ||
-                !/[A-Z]/.test(value) ||
-                !/[a-z]/.test(value) ||
-                !/\d/.test(value) ||
-                !/[!@#$%^&*]/.test(value))
-        ) {
-            error =
-                "Password must be at least 8 characters long and contain an uppercase letter, a lowercase letter, a number, and a special character!";
-        }
+        // if (name === "mobileNumber" && (!value || !/^\d{10}$/.test(value))) {
+        //     error = "Please enter a valid 10-digit phone number!";
+        // }
+        // if (
+        //     name === "password" &&
+        //     (value.length < 8 ||
+        //         !/[A-Z]/.test(value) ||
+        //         !/[a-z]/.test(value) ||
+        //         !/\d/.test(value) ||
+        //         !/[!@#$%^&*]/.test(value))
+        // ) {
+        //     error =
+        //         "Password must be at least 8 characters long and contain an uppercase letter, a lowercase letter, a number, and a special character!";
+        // }
         if (name === "confirmPassword" && value !== formValues.password) {
             error = "Passwords do not match!";
         }
@@ -86,17 +87,17 @@ const Register = () => {
         if (!formValues.mobileNumber || !/^\d{10}$/.test(formValues.mobileNumber)) {
             errors.mobileNumber = "Please enter a valid 10-digit phone number!";
         }
-        if (
-            !formValues.password ||
-            formValues.password.length < 8 ||
-            !/[A-Z]/.test(formValues.password) ||
-            !/[a-z]/.test(formValues.password) ||
-            !/\d/.test(formValues.password) ||
-            !/[!@#$%^&*]/.test(formValues.password)
-        ) {
-            errors.password =
-                "Password must be at least 8 characters long and contain an uppercase letter, a lowercase letter, a number, and a special character!";
-        }
+        // if (
+        //     !formValues.password ||
+        //     formValues.password.length < 8 ||
+        //     !/[A-Z]/.test(formValues.password) ||
+        //     !/[a-z]/.test(formValues.password) ||
+        //     !/\d/.test(formValues.password) ||
+        //     !/[!@#$%^&*]/.test(formValues.password)
+        // ) {
+        //     errors.password =
+        //         "Password must be at least 8 characters long and contain an uppercase letter, a lowercase letter, a number, and a special character!";
+        // }
         if (formValues.password !== formValues.confirmPassword) {
             errors.confirmPassword = "Passwords do not match!";
         }
@@ -179,6 +180,23 @@ const Register = () => {
         }
     };
 
+    const countryCodes = [
+        { code: "+1", country: "USA" },
+        { code: "+91", country: "India" },
+        { code: "+86", country: "China" },
+        { code: "+81", country: "Japan" },
+        { code: "+44", country: "UK" },
+        { code: "+82", country: "South Korea" },
+        { code: "+49", country: "Germany" },
+        { code: "+33", country: "France" },
+        { code: "+55", country: "Brazil" },
+        { code: "+61", country: "Australia" }
+    ];
+    
+
+    const handleCountryCodeChange = (e) => {
+        setSelectedCountryCode(e.target.value);
+    };
 
     return (
         <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" overflow="hidden">
@@ -222,19 +240,33 @@ const Register = () => {
                             </HStack>
 
                             <HStack spacing={4}>
+
                                 <FormControl isRequired isInvalid={!!errors.mobileNumber} flex="1">
                                     <FormLabel>Mobile Number</FormLabel>
-                                    <Input
-                                        type="tel"
-                                        name="mobileNumber"
-                                        placeholder="Enter your 10-digit phone number"
-                                        value={formValues.mobileNumber}
-                                        onChange={handleInputChange}
-                                    />
-                                    {errors.mobileNumber && (
-                                        <Text color="red.500">{errors.mobileNumber}</Text>
-                                    )}
+                                    <InputGroup>
+                                        <Select
+                                            w="28"
+                                            value={selectedCountryCode}
+                                            onChange={handleCountryCodeChange}
+                                        >
+                                            {countryCodes.map((country) => (
+                                                <option key={country.code} value={country.code}>
+                                                    {country.code} ({country.country})
+                                                </option>
+                                            ))}
+                                        </Select>
+                                        <Input
+                                            type="tel"
+                                            name="mobileNumber"
+                                            placeholder="Enter your phone number"
+                                            value={formValues.mobileNumber}
+                                            onChange={handleInputChange}
+                                            ml={2}
+                                        />
+                                    </InputGroup>
+                                    {errors.mobileNumber && <Text color="red.500">{errors.mobileNumber}</Text>}
                                 </FormControl>
+
 
                                 <FormControl isRequired isInvalid={!!errors.password} flex="1">
                                     <FormLabel>Password</FormLabel>

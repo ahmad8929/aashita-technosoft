@@ -4,6 +4,7 @@ import axios from "axios";
 import {
     Box,
     Button,
+    Checkbox,
     Card,
     FormControl,
     FormLabel,
@@ -76,6 +77,8 @@ const Register = () => {
         return error;
     };
 
+
+
     const validateForm = () => {
         let errors = {};
         if (!formValues.fullName) {
@@ -83,6 +86,9 @@ const Register = () => {
         }
         if (!formValues.email) {
             errors.email = "Please enter your email!";
+        }
+        if (!formValues.agreeTerms) {
+            errors.agreeTerms = "You must agree to the terms and conditions.";
         }
         if (!formValues.mobileNumber || !/^\d{10}$/.test(formValues.mobileNumber)) {
             errors.mobileNumber = "Please enter a valid 10-digit phone number!";
@@ -181,7 +187,6 @@ const Register = () => {
     };
 
     const countryCodes = [
-        { code: "+1", country: "USA" },
         { code: "+91", country: "India" },
         { code: "+86", country: "China" },
         { code: "+81", country: "Japan" },
@@ -192,7 +197,7 @@ const Register = () => {
         { code: "+55", country: "Brazil" },
         { code: "+61", country: "Australia" }
     ];
-    
+
 
     const handleCountryCodeChange = (e) => {
         setSelectedCountryCode(e.target.value);
@@ -366,6 +371,16 @@ const Register = () => {
                                     value={formValues.address}
                                     onChange={handleInputChange}
                                 />
+                            </FormControl>
+                            <FormControl isRequired isInvalid={!!errors.agreeTerms}>
+                                <Checkbox
+                                    name="agreeTerms"
+                                    isChecked={formValues.agreeTerms}
+                                    onChange={(e) => setFormValues({ ...formValues, agreeTerms: e.target.checked })}
+                                >
+                                    I agree to the terms and conditions
+                                </Checkbox>
+                                {errors.agreeTerms && <Text color="red.500">{errors.agreeTerms}</Text>}
                             </FormControl>
 
                             <Button colorScheme="teal" type="submit">

@@ -34,6 +34,7 @@ const Navbar = () => {
                 </Link>
 
                 <HStack as="nav" spacing={8} display={{ base: "none", md: "flex" }}>
+
                     {
                         MenuItems.map((item) => (
                             <Link key={item.href} to={item.href} style={{ textDecoration: "none" }}>
@@ -56,7 +57,7 @@ const Navbar = () => {
                         Log In
                     </Button>
                 ) : (
-                    <Menu>
+                    <Menu display={{ base: "none", md: "block" }}>
                         <MenuButton
                             as={IconButton}
                             icon={<Avatar size="sm" name={userName} bg="blue.500" color="white" />}

@@ -37,7 +37,7 @@ export const protectedRoute = [
     title: "contact",
     path: "/contact",
     component: Contact,
-  }, 
+  },
   {
     title: "about",
     path: "/about",

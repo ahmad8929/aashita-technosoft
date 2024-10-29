@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Flex, Text, Stack, Heading } from '@chakra-ui/react';
+import { Box, Flex, Text, Stack, Heading, List, ListItem } from '@chakra-ui/react';
 import AppPage from '../layouts/AppPage';
 
 const About = () => {
@@ -8,41 +8,46 @@ const About = () => {
             <Flex direction="column" p={8} align="center">
                 <Box w={{ base: '100%', md: '80%' }} p={8} boxShadow="md" borderRadius="md" bg="white">
                     <Heading as="h1" size="xl" mb={6} textAlign="center">
-                        About Aashita Enterprises
+                        About ImpexInfo.com
                     </Heading>
 
                     <Text fontSize="lg" mb={6} textAlign="center">
-                        At Aashita Enterprises, we pride ourselves on our commitment to quality, reliability, and exceptional service. Our team works tirelessly to bring you the best solutions tailored to meet your needs.
+                        We are part of Aashita Enterprises, a B2B consultancy firm dedicated to helping organizations grow their business by analyzing data to optimize purchase prices for buyers and sales prices for sellers.
                     </Text>
 
-                    <Stack spacing={8}>
-                        <Box>
-                            <Heading as="h2" size="md" mb={4}>
-                                Our Mission
-                            </Heading>
-                            <Text fontSize="md">
-                                Our mission is to provide top-notch products and services that empower our customers to achieve their goals. We believe in building long-term partnerships and ensuring that every experience with us exceeds expectations.
-                            </Text>
-                        </Box>
+                    <Text fontSize="md" mb={4}>
+                        ImpexInfo.com provides deeper insights into export-import business and supply chain opportunities. With our research data, you can:
+                    </Text>
 
-                        <Box>
-                            <Heading as="h2" size="md" mb={4}>
-                                Our Vision
-                            </Heading>
-                            <Text fontSize="md">
-                                We aim to be the leading service provider in our industry, known for our dedication to innovation and customer satisfaction. Through sustainable practices and continuous improvement, we strive to make a positive impact in our community and beyond.
-                            </Text>
-                        </Box>
+                    <List spacing={3} pl={6} fontSize="md">
+                        <ListItem>1. Transform export-import intelligence data into actionable insights and knowledge.</ListItem>
+                        <ListItem>2. Make confident business decisions with our ready-to-use reports, which uniquely include accurate Customs Duty and IGST details separately for imports, along with landed prices.</ListItem>
+                        <ListItem>3. Uncover new insights such as:</ListItem>
+                        <List pl={4} styleType="disc" fontSize="md">
+                            <ListItem>• Finding reliable buyers and suppliers</ListItem>
+                            <ListItem>• Discovering new markets and promising products</ListItem>
+                            <ListItem>• Tracking competitors  moves</ListItem>
+                            <ListItem>• Analyzing demand and supply trends</ListItem>
+                            <ListItem>• Determining optimal product prices</ListItem>
+                            <ListItem>• Saving on custom duties</ListItem>
+                            <ListItem>• Gaining strategic information for a competitive edge</ListItem>
+                        </List>
+                    </List>
 
-                        <Box>
-                            <Heading as="h2" size="md" mb={4}>
-                                Our Values
-                            </Heading>
-                            <Text fontSize="md">
-                                Integrity, quality, and teamwork are the core values that drive us. We are committed to upholding these principles in every aspect of our business, fostering a culture of respect and inclusivity.
-                            </Text>
-                        </Box>
-                    </Stack>
+                    <Box mt={8}>
+                        <Text fontSize="md" fontWeight="bold" mb={2}>Disclaimer</Text>
+                        <Text fontSize="md">
+                            Our Export & Import Trade Intelligence reports are gathered from available online and offline sources. We do not guarantee the authenticity or originality of this data. Clients are advised to use our research data at their own discretion. We are not responsible for any profit or loss resulting from the use of our reports.
+                        </Text>
+                    </Box>
+
+                    <Box mt={8}>
+                        <Text fontSize="md" fontWeight="bold">Contact Us</Text>
+                        <Text fontSize="md">
+                            Phone/WhatsApp: +91 9414075879 <br />
+                            Email: info@impexinfo.com
+                        </Text>
+                    </Box>
                 </Box>
             </Flex>
         </AppPage>

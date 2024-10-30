@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button, Select, FormLabel, FormControl, Flex, Text, Heading, List, ListItem, SimpleGrid, GridItem, Textarea, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input } from '@chakra-ui/react';
+import { Box, Button, Select, FormLabel, FormControl, useToast, Flex, Text, Heading, List, ListItem, SimpleGrid, GridItem, Textarea, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input } from '@chakra-ui/react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import AppPage from '../layouts/AppPage';
 import { useSelector } from 'react-redux';
 import DatePicker from 'react-datepicker';
@@ -8,8 +9,11 @@ import 'react-datepicker/dist/react-datepicker.css';
 import countries from 'country-list';
 
 const Landing = () => {
+    const navigate = useNavigate();
+
+    const toast = useToast(); // Initialize useToast
     const user = useSelector((state) => state.user);
-    const [tokensData, setTokensData] = useState(0); // State to hold the remaining tokens
+    const [tokensData, setTokensData] = useState(0);
     const [formData, setFormData] = useState({
         from_date: '',
         to_date: '',
@@ -72,6 +76,22 @@ const Landing = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!user.isLoggedIn) {
+            toast({
+                title: "Login Required",
+                description: "You must be logged in to perform a search.",
+                status: "error",
+                duration: 1000,
+                isClosable: true,
+                position: "top" // Positioning of the toast
+            });
+            setTimeout(() => {
+                navigate("/login");
+            }, 2000);
+            return;
+        }
+
         const sessionToken = user.sessionToken;
 
         // Check if number of records exceeds remaining tokens
@@ -115,6 +135,24 @@ const Landing = () => {
             }
             onOpen();
         }
+    };
+
+    const handleCloseModal = () => {
+        setFormData({
+            from_date: '',
+            to_date: '',
+            country: 'IN',
+            inOut: 'import',
+            buyerName: '',
+            hsCode: '',
+            supplierName: '',
+            originCountry: '',
+            proDesc: '',
+            billNo: '',
+            email: 'test@example.com',
+            number_of_records: ''
+        });
+        onClose();
     };
 
     const countryOptions = countries.getData().map((country) => ({
@@ -373,7 +411,7 @@ const Landing = () => {
                         {modalMessage}
                     </ModalBody>
                     <ModalFooter>
-                        <Button colorScheme="blue" mr={3} onClick={onClose}>
+                        <Button colorScheme="blue" mr={3} onClick={handleCloseModal}>
                             Close
                         </Button>
                     </ModalFooter>

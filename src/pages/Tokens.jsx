@@ -50,13 +50,14 @@ const Tokens = () => {
                 <VStack spacing={6} align="stretch" maxW="800px" mx="auto">
                     <Heading size="lg" textAlign="center">Todays Record</Heading>
                     <Divider />
-                    <Box bg="white" p={6} borderRadius="md" shadow="md">
-                        <Text fontSize="xl" mb={4}>Remaining Records</Text>
-                        <Text fontSize="2xl" fontWeight="bold">{tokensData.totalTokens}</Text>
-                    </Box>
+
                     <Box bg="white" p={6} borderRadius="md" shadow="md">
                         <Text fontSize="xl" mb={4}>Used Record for Today</Text>
                         <Text fontSize="2xl" fontWeight="bold">{5000 - tokensData.totalTokens}</Text>
+                    </Box>
+                    <Box bg="white" p={6} borderRadius="md" shadow="md">
+                        <Text fontSize="xl" mb={4}>Remaining Records</Text>
+                        <Text fontSize="2xl" fontWeight="bold">{tokensData.totalTokens}</Text>
                     </Box>
                     {/* <Box bg="white" p={6} borderRadius="md" shadow="md">
                         <Text fontSize="xl" mb={4}>Start Time</Text>

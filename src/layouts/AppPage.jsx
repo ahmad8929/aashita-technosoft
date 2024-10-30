@@ -21,10 +21,10 @@ const AppPage = ({ title, description = "", keywords = [], isProtected, includeN
     const token = sessionUtils.sessionToken.getter();
     // TODO!  check for validation as well
 
-    if (!token && isProtected) {
-      // if token not there or invalid token
-      navigate("/login");
-    }
+    // if (!token && isProtected) {
+    //   // if token not there or invalid token
+    //   navigate("/login");
+    // }
 
     if (token) {
       const tokenPayload = JSON.parse(token);

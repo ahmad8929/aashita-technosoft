@@ -5,7 +5,7 @@ import Tokens from "../pages/Tokens";
 import Contact from "../pages/Contact";
 import Upgrade from "../pages/cards";
 import Payments from "../pages/payment";
-import About from "../pages/aboutUs";
+import Policy from "../pages/policy";
 
 export const protectedRoute = [
   {
@@ -39,8 +39,8 @@ export const protectedRoute = [
     component: Contact,
   },
   {
-    title: "about",
-    path: "/about",
-    component: About,
+    title: "policy",
+    path: "/policy",
+    component: Policy,
   },
 ];

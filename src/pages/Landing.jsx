@@ -163,32 +163,12 @@ const Landing = () => {
 
     return (
         <AppPage title="Home" description="" keywords={[]} isProtected={true}>
-            {/* <h1>{user.userId}</h1> */}
-            {/* <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                justifyContent="center"
-                p={4}
-                bg="gray.100"
-                minH="calc(100vh - 14vh)"
-            > */}
-            {/* <Box
-                    as="form"
-                    onSubmit={handleSubmit}
-                    width="full"
-                    maxW="5xl"
-                    p={4}
-                    bg="white"
-                    borderRadius="lg"
-                    boxShadow="lg"
-                >
-                    <SimpleGrid columns={{ base: 1, md: 3 }} m={6} spacing={6} spacingX={24}> */}
 
-            <form onSubmit={handleSubmit} style={{ width: '100%', maxWidth: '5xl', padding: '1rem', backgroundColor: 'white', borderRadius: '0.5rem', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
-                {/* <SimpleGrid columns={{ base: 1, md: 3 }} m={6} spacing={6} spacingX={24}> */}
-                <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} m={6} spacing={6} spacingX={4}>
-
+            <form onSubmit={handleSubmit} style={{
+                width: '100%', maxWidth: '5xl', padding: '1rem', backgroundColor: 'white', borderRadius: '0.5rem',
+                paddingBottom: '0.5rem', marginBottom: '1rem', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+            }}>
+                <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} m={0} spacing={4} spacingX={2}>
                     <GridItem >
                         <FormControl>
                             <FormLabel fontSize="sm" fontWeight="medium">From Date</FormLabel>
@@ -203,7 +183,7 @@ const Landing = () => {
                                         bg="gray.50"
                                         _hover={{ borderColor: 'blue.400' }}
                                         fontSize="sm"
-                                        width={{ base: "100%", sm: "170%", md: "215%" }}
+                                        width={{ base: "100%", sm: "100%", md: "154%" }}
                                     />
                                 }
                                 placeholderText="Select a date"
@@ -228,7 +208,7 @@ const Landing = () => {
                                         bg="gray.50"
                                         _hover={{ borderColor: 'blue.400' }}
                                         fontSize="sm"
-                                        width={{ base: "100%", sm: "170%", md: "215%" }}
+                                        width={{ base: "100%", sm: "100%", md: "154%" }}
                                     />
                                 }
                                 placeholderText="Select a date"
@@ -373,7 +353,9 @@ const Landing = () => {
                                 _hover={{ borderColor: 'blue.400' }}
                                 fontSize="sm"
                                 placeholder="Enter product description"
-                                resize="vertical"
+                                // resize="none"
+                                rows={1}
+                                h="2.5rem"
                             />
                         </FormControl>
                     </GridItem>
@@ -424,8 +406,8 @@ const Landing = () => {
                     // boxShadow="md" borderRadius="md"
                     bg="white"> */}
 
-            <Flex direction="column" p={{ base: 4, md: 8 }} align="center">
-                <Box w={{ base: '100%', md: '90%', lg: '80%' }} p={{ base: 4, md: 8 }} bg="white">
+            <Flex direction="column"  pt={2} pb={4} align="center">
+                <Box w={{ base: '100%', md: '90%', lg: '80%' }}  bg="white">
 
                     <Heading as="h1" size="xl" mb={6} textAlign="center">
                         About ImpexInfo.com
@@ -461,13 +443,7 @@ const Landing = () => {
                         </Text>
                     </Box>
 
-                    <Box mt={8}>
-                        <Text fontSize="md" fontWeight="bold">Contact Us</Text>
-                        <Text fontSize="md">
-                            Phone/WhatsApp: +91 9414075879 <br />
-                            Email: info@impexinfo.com
-                        </Text>
-                    </Box>
+                   
                 </Box>
             </Flex>
 

@@ -64,11 +64,17 @@ const Policy = () => {
                                 +91 9414075879
                             </a>
                         </Text>
-                        <Text mb={4}>
+                        <Text mb={2}>
                             <strong>Email:</strong>
                             <a href="mailto:info@impexinfo.com" style={{ marginLeft: '5px' }}>
                                 info@impexinfo.com
                             </a>
+                        </Text>
+                        <Text mb={4}>
+                            <strong>Address: </strong>
+
+                            Aashita Enterprises, 149A, Jhotwara Industrial Area
+                            Jaipur - 302012
                         </Text>
                     </Box>
                 </Stack>

@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import countries from 'country-list';
+import SearchOTP from './SearchOTP';
 
 const Landing = () => {
     const navigate = useNavigate();
@@ -84,7 +85,7 @@ const Landing = () => {
                 status: "error",
                 duration: 1000,
                 isClosable: true,
-                position: "top" // Positioning of the toast
+                position: "top"
             });
             setTimeout(() => {
                 navigate("/login");
@@ -94,12 +95,34 @@ const Landing = () => {
 
         const sessionToken = user.sessionToken;
 
-        // Check if number of records exceeds remaining tokens
-        if (parseInt(formData.number_of_records) > tokensData) {
-            setModalMessage("Number of records cannot be more than remaining tokens.");
-            onOpen();
+        // Validate required fields
+        const requiredFields = ['from_date', 'to_date', 'country', 'buyerName', 'hsCode', 'supplierName', 'originCountry', 'number_of_records'];
+        const emptyFields = requiredFields.filter(field => !formData[field] && field !== 'proDesc');
+
+        if (emptyFields.length > 0) {
+            toast({
+                title: "Validation Error",
+                description: `Please fill in the following fields: ${emptyFields.join(', ')}`,
+                status: "error",
+                duration: 2000,
+                isClosable: true,
+                position: "top"
+            });
             return;
         }
+
+        if (parseInt(formData.number_of_records) > tokensData) {
+            toast({
+                title: "Token Limit Exceeded",
+                description: "Number of records cannot be more than remaining tokens.",
+                status: "error",
+                duration: 2000,
+                isClosable: true,
+                position: "top"
+            });
+            return;
+        }
+
         const countryName = countries.getName(formData.country);
         const postData = {
             email: formData.email,
@@ -123,19 +146,42 @@ const Landing = () => {
                 },
             });
 
-            const messageCode = response.data.message;
-            setModalMessage(`Request received! You will receive an email.`);
+
+            // Open the OTP modal after a successful request
             onOpen();
+
+            // toast({
+            //     title: "Request Received",
+            //     description: "You will receive an email.",
+            //     status: "success",
+            //     duration: 2000,
+            //     isClosable: true,
+            //     position: "top"
+            // });
 
         } catch (error) {
             if (error.response && error.response.status === 429) {
-                setModalMessage("You have reached the limit of requests. Please try again later.");
+                toast({
+                    title: "Request Limit Reached",
+                    description: "You have reached the limit of requests. Please try again later.",
+                    status: "error",
+                    duration: 2000,
+                    isClosable: true,
+                    position: "top"
+                });
             } else {
-                setModalMessage("An unexpected error occurred. Please try again.");
+                toast({
+                    title: "Unexpected Error",
+                    description: "An unexpected error occurred. Please try again.",
+                    status: "error",
+                    duration: 2000,
+                    isClosable: true,
+                    position: "top"
+                });
             }
-            onOpen();
         }
     };
+
 
     const handleCloseModal = () => {
         setFormData({
@@ -384,7 +430,7 @@ const Landing = () => {
 
             </form>
 
-            <Modal isOpen={isOpen} onClose={onClose}>
+            {/* <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>Request Status</ModalHeader>
@@ -398,7 +444,18 @@ const Landing = () => {
                         </Button>
                     </ModalFooter>
                 </ModalContent>
+            </Modal> */}
+
+            <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>Enter OTP</ModalHeader>
+                    <ModalCloseButton />
+                    <SearchOTP onClose={handleCloseModal} /> {/* Include the OTP component here */}
+                </ModalContent>
             </Modal>
+
+
             {/* </Box> */}
 
             {/* <Flex direction="column" p={8} align="center">
@@ -406,8 +463,8 @@ const Landing = () => {
                     // boxShadow="md" borderRadius="md"
                     bg="white"> */}
 
-            <Flex direction="column"  pt={2} pb={4} align="center">
-                <Box w={{ base: '100%', md: '90%', lg: '80%' }}  bg="white">
+            <Flex direction="column" pt={2} pb={4} align="center">
+                <Box w={{ base: '100%', md: '90%', lg: '80%' }} bg="white">
 
                     <Heading as="h1" size="xl" mb={6} textAlign="center">
                         About ImpexInfo.com
@@ -443,7 +500,7 @@ const Landing = () => {
                         </Text>
                     </Box>
 
-                   
+
                 </Box>
             </Flex>
 

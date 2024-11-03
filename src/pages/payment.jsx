@@ -1,46 +1,128 @@
-import React from 'react';
-import { Box, Heading, VStack, FormControl, FormLabel, Input, Button, Text, Stack } from '@chakra-ui/react';
+// Payment.jsx
+import React, { useState } from "react";
+import {
+    Box,
+    Button,
+    FormControl,
+    FormLabel,
+    Input,
+    Stack,
+    Text,
+    Grid,
+    GridItem,
+    Card,
+    CardHeader,
+    CardBody,
+    CardFooter,
+    Flex,
+    Divider,
+} from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
-const PaymentPage = () => {
+const Payment = () => {
+    const [paymentDetails, setPaymentDetails] = useState({
+        utnNo: "",
+        transactionId: "",
+        paymentDate: "",
+    });
+    const navigate = useNavigate();
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setPaymentDetails({
+            ...paymentDetails,
+            [name]: value,
+        });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log("Payment Details:", paymentDetails);
+        navigate("/login"); // Redirect to the login page after submission
+    };
+
     return (
-        <Box p={8} bg="gray.100" minH="100vh" display="flex" alignItems="center" justifyContent="center">
-            <VStack spacing={6} bg="white" p={8} borderRadius="md" boxShadow="lg" width="100%" maxW="500px">
-                <Heading size="lg" mb={6}>Payment Information</Heading>
 
-                <Stack spacing={4} width="100%">
-                    <FormControl id="cardName" isRequired>
-                        <FormLabel>Name</FormLabel>
-                        <Input placeholder="Name" />
-                    </FormControl>
-
-                    <FormControl id="cardNumber" isRequired>
-                        <FormLabel>Card Number</FormLabel>
-                        <Input placeholder="1234 5678 9101 1121" />
-                    </FormControl>
-
-                    <Stack direction={{ base: 'column', md: 'row' }} spacing={4}>
-                        <FormControl id="expiryDate" isRequired>
-                            <FormLabel>Expiry Date</FormLabel>
-                            <Input placeholder="MM/YY" />
-                        </FormControl>
-
-                        <FormControl id="cvv" isRequired>
-                            <FormLabel>CVV</FormLabel>
-                            <Input placeholder="... " />
-                        </FormControl>
-                    </Stack>
-                </Stack>
-
-                <Button colorScheme="blue" width="full" mt={6}>
-                    Pay Now
-                </Button>
-
-                <Text fontSize="sm" color="gray.500" mt={3}>
-                    Your payment details are securely processed.
-                </Text>
-            </VStack>
+        <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" bg="white">
+           <Grid templateColumns="repeat(2, 1fr)" gap={6} width="80%">
+                <GridItem>
+                    <Card bg="white" boxShadow="lg" borderRadius="md">
+                        <CardHeader>
+                            <Text fontSize="2xl" textAlign="center" color="teal.600">Payment Information</Text>
+                        </CardHeader>
+                        <CardBody>
+                            <Flex direction="column" alignItems="center">
+                                <Text fontWeight="bold" mb={2}>QR Code</Text>
+                                {/* Use a random QR code generator for demo */}
+                                <Box 
+                                    as="img"
+                                    src="https://api.qrserver.com/v1/create-qr-code/?data=example@upi&size=200x200"
+                                    alt="QR Code"
+                                    width="200px"
+                                    height="200px"
+                                    mb={4}
+                                    borderWidth="1px"
+                                    borderRadius="md"
+                                />
+                                <Text fontWeight="bold" mb={2}>UPI ID: <span style={{ color: 'teal.500' }}>example@upi</span></Text>
+                                <Divider />
+                                <Text fontWeight="bold" mt={4}>Bank Details</Text>
+                                <Box borderWidth="1px" borderRadius="md" p={4} mt={2} bg="gray.50">
+                                    <Text fontWeight="medium">Account No: <strong>123456789012</strong></Text>
+                                    <Text fontWeight="medium">IFSC Code: <strong>ABCD0123456</strong></Text>
+                                    <Text fontWeight="medium">Account Name: <strong>John Doe</strong></Text>
+                                </Box>
+                            </Flex>
+                        </CardBody>
+                    </Card>
+                </GridItem>
+                <GridItem>
+                    <Card bg="white" boxShadow="lg" borderRadius="md">
+                        <CardHeader>
+                            <Text fontSize="2xl" textAlign="center" color="teal.600" mb={4}>Fill Payment Details</Text>
+                        </CardHeader>
+                        <CardBody>
+                            <form onSubmit={handleSubmit}>
+                                <Stack spacing={4}>
+                                    <FormControl isRequired>
+                                        <FormLabel color="teal.600">UTN No.</FormLabel>
+                                        <Input
+                                            name="utnNo"
+                                            placeholder="Enter your UTN No."
+                                            value={paymentDetails.utnNo}
+                                            onChange={handleInputChange}
+                                            borderColor="teal.400"
+                                        />
+                                    </FormControl>
+                                    <FormControl isRequired>
+                                        <FormLabel color="teal.600">Transaction ID</FormLabel>
+                                        <Input
+                                            name="transactionId"
+                                            placeholder="Enter your transaction ID"
+                                            value={paymentDetails.transactionId}
+                                            onChange={handleInputChange}
+                                            borderColor="teal.400"
+                                        />
+                                    </FormControl>
+                                    <FormControl isRequired>
+                                        <FormLabel color="teal.600">Date of Payment</FormLabel>
+                                        <Input
+                                            type="date"
+                                            name="paymentDate"
+                                            value={paymentDetails.paymentDate}
+                                            onChange={handleInputChange}
+                                            borderColor="teal.400"
+                                        />
+                                    </FormControl>
+                                    <Button colorScheme="teal" type="submit" mt={4}>Submit Payment Details</Button>
+                                </Stack>
+                            </form>
+                        </CardBody>
+                    </Card>
+                </GridItem>
+            </Grid>
         </Box>
     );
-}
+};
 
-export default PaymentPage;
+export default Payment;

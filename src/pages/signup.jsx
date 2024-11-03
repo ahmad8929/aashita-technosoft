@@ -20,10 +20,16 @@ import {
     IconButton,
     InputGroup,
     InputRightElement,
+    ModalFooter,
+    ModalBody,
+    ModalHeader,
+    ModalOverlay, Modal,
+    ModalContent,
 } from "@chakra-ui/react";
 import { useBreakpointValue } from "@chakra-ui/media-query";
 import { useNavigate, Link } from "react-router-dom";
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"; // Importing icons for password visibility
+import { ViewIcon, ViewOffIcon, ModalCloseButton } from "@chakra-ui/icons"; // Importing icons for password visibility
+import PlanDetails from "./PlanDetails";
 
 const Register = () => {
     const screens = useBreakpointValue({ base: "Mobile", md: "Desktop" });
@@ -43,6 +49,7 @@ const Register = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [selectedCountryCode, setSelectedCountryCode] = useState("+1");
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
     const toast = useToast();
 
@@ -156,7 +163,7 @@ const Register = () => {
                 duration: 4000,
                 isClosable: true,
             });
-            navigate("/login"); // Redirect to the login page after successful registration
+            navigate("/payment"); // Redirect to the login page after successful registration
         } catch (error) {
             if (error.response && error.response.status === 400) {
                 toast({
@@ -202,6 +209,9 @@ const Register = () => {
     const handleCountryCodeChange = (e) => {
         setSelectedCountryCode(e.target.value);
     };
+
+    const openModal = () => setIsModalOpen(true); // Open modal
+    const closeModal = () => setIsModalOpen(false); // Close modal
 
     return (
         <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" overflow="hidden">
@@ -344,7 +354,20 @@ const Register = () => {
                                         onChange={handleInputChange}
                                     />
                                 </FormControl>
+                                <FormControl flex="1">
+                                    <FormLabel>Address</FormLabel>
+                                    <Input
+                                        name="address"
+                                        placeholder="Enter your address"
+                                        value={formValues.address}
+                                        onChange={handleInputChange}
+                                    />
+                                </FormControl>
 
+                            </HStack>
+
+
+                            <HStack spacing={4}>
                                 <FormControl isRequired isInvalid={!!errors.plan} flex="1">
                                     <FormLabel>Select a Plan</FormLabel>
                                     <Select
@@ -361,18 +384,17 @@ const Register = () => {
                                         <Text color="red.500">{errors.plan}</Text>
                                     )}
                                 </FormControl>
+                                <Button
+                                    colorScheme="teal"
+                                    variant="outline"
+                                    onClick={openModal} // Open modal on click
+                                >
+                                    View Plan Details
+                                </Button>
                             </HStack>
 
-                            <FormControl>
-                                <FormLabel>Address</FormLabel>
-                                <Input
-                                    name="address"
-                                    placeholder="Enter your address"
-                                    value={formValues.address}
-                                    onChange={handleInputChange}
-                                />
-                            </FormControl>
-                            <FormControl isRequired isInvalid={!!errors.agreeTerms}>
+                            
+                            <FormControl isRequired isInvalid={!!errors.agreeTerms} display="flex" justifyContent="Center">
                                 <Checkbox
                                     name="agreeTerms"
                                     isChecked={formValues.agreeTerms}
@@ -393,6 +415,25 @@ const Register = () => {
                                     Log In
                                 </ChakraLink>
                             </Text>
+
+
+                            <Modal isOpen={isModalOpen} onClose={closeModal}>
+                                <ModalOverlay />
+                                <ModalContent maxW="800px" maxH="700px">
+                                    <ModalHeader>Plan Details</ModalHeader>
+                                    <ModalCloseButton />
+                                    <ModalBody>
+                                        <PlanDetails /> {/* Using PlanDetails component here */}
+                                    </ModalBody>
+                                    <ModalFooter>
+                                        <Button colorScheme="teal" mr={3} onClick={closeModal}>
+                                            Close
+                                        </Button>
+                                    </ModalFooter>
+                                </ModalContent>
+                            </Modal>
+
+
                         </Stack>
                     </form>
                 )}

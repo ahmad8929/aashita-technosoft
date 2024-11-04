@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Text, Stack, Heading } from '@chakra-ui/react';
+import { Box, Text, Stack, Heading, Button } from '@chakra-ui/react';
 import AppPage from '../layouts/AppPage';
 
 const Policy = () => {
@@ -14,26 +14,11 @@ const Policy = () => {
                     {/* Terms and Conditions */}
                     <Box borderWidth={1} borderRadius="md" p={4}>
                         <Heading as="h2" size="lg" mb={3}>
-                            Terms and Conditions
+                            Terms & Conditions
                         </Heading>
                         <Text mb={4}>
-                            This website is operated by AASHITA ENTERPRISES. These Terms and Conditions govern your access to and use of our website and services. By accessing our site, you agree to be bound by these terms. If you do not agree, please refrain from using our services. You must be at least the age of majority in your jurisdiction to use our services and agree not to engage in any unlawful activities or violate any laws. Certain products or services may be available exclusively online and may have limited quantities, subject to return or exchange only according to our Return Policy.
-                        </Text>
-                        <Text mb={4}>
-                            We strive to provide accurate information regarding our products and services; however, we do not guarantee the authenticity or originality of any data, particularly concerning our Export & Import Trade Intelligence reports. Clients are advised to use this data based on their own judgment and discretion. We reserve the right to modify or discontinue our services at any time without notice, and prices and descriptions of products may change at our sole discretion. Additionally, we reserve the right to limit sales of our products or services to any individual, geographic region, or jurisdiction on a case-by-case basis.
-                        </Text>
-                        <Text mb={4}>
-                            Our services are provided "as is" without warranties of any kind. We do not guarantee that the quality of products or services will meet your expectations or that any errors in the service will be corrected. In no event shall AASHITA ENTERPRISES be liable for any direct or indirect damages arising from your use of our services. You agree to indemnify and hold AASHITA ENTERPRISES harmless from any claims arising from your violation of these terms. These terms shall be governed by the laws of India, with any disputes subject to the jurisdiction of Jaipur, Rajasthan. We reserve the right to modify these terms at any time, and your continued use of our services constitutes acceptance of any changes made.
-                        </Text>
-                    </Box>
-
-                    {/* Refund Policy */}
-                    <Box borderWidth={1} borderRadius="md" p={4}>
-                        <Heading as="h2" size="lg" mb={2}>
-                            Refund Policy
-                        </Heading>
-                        <Text mb={4}>
-                            Our services are provided for a specific subscription period and are non-refundable once payment is made. It is crucial to review the Terms and Conditions prior to making a payment. If services cannot be provided due to changes in policy or government regulations, the subscription fee will not be refundable.
+                            This document is an electronic record in accordance with the Information Technology Act, 2000 and does not require physical or digital signatures. Published under Rule 3 (1) of the Information Technology (Intermediaries guidelines) Rules, 2011, these terms govern the use of the Platform https://www.impexinfo.com/ owned by AASHITA ENTERPRISES, located at Jhotwara Industrial Area RIICO, Jaipur, India. By using our Platform, you agree to be bound by these terms and conditions, forming a legal agreement with AASHITA ENTERPRISES. The terms "you" or "user" refer to anyone accessing the Platform, while "we" or "us" refer to AASHITA ENTERPRISES. We expect users to provide accurate information and take responsibility for all actions conducted under their account. 
+                            Please be aware that our Platform may contain links to third-party websites, each governed by their own terms, which we do not control. Any unauthorized use of the Platform could result in action against you under these terms and applicable laws. By initiating any transaction through our Platform, you enter into a legally binding agreement with AASHITA ENTERPRISES. These terms and any disputes arising from them are subject to the jurisdiction of Jaipur, Rajasthan, and governed by the laws of India.
                         </Text>
                     </Box>
 
@@ -43,10 +28,8 @@ const Policy = () => {
                             Privacy Policy
                         </Heading>
                         <Text mb={4}>
-                            Your privacy is important to us. This Privacy Policy outlines how we collect, use, and protect your information when you use our services. We may collect personal information such as your name, email address, and payment details when you register or make a purchase. We do not sell or rent your personal information to third parties.
-                        </Text>
-                        <Text mb={4}>
-                            Your information is used to process transactions, improve our services, and communicate with you about your account or services. We implement a variety of security measures to maintain the safety of your personal information, and all sensitive information is transmitted via Secure Socket Layer (SSL) technology. We may update this Privacy Policy from time to time, and your continued use of the services after any changes indicates your acceptance of the new terms.
+                            This Privacy Policy outlines how we collect, use, and protect your personal information on our Platform. By accessing or using the Platform, you consent to these practices in accordance with Indian law. We collect information such as your name, contact details, and payment information, typically during account registration or transactions. This data enables us to provide the services you request, assist with orders, resolve any disputes, and offer marketing opportunities, from which you can opt out at any time. We may share your information within our group or with trusted third parties to support these services, comply with legal requirements, or for advertising purposes.
+                            We employ standard security practices to safeguard your data, although we cannot guarantee complete security during internet transmission. Users are encouraged to maintain the confidentiality of their login details to prevent unauthorized access. Your data will be retained only as long as necessary to fulfill service obligations or comply with legal standards. You can access and update your information through your account settings at any time. Continued use of our Platform after updates to this policy indicates your acceptance of the changes.
                         </Text>
                     </Box>
 
@@ -56,7 +39,7 @@ const Policy = () => {
                             Contact Us
                         </Heading>
                         <Text mb={4}>
-                            If you have any questions or concerns regarding our policies, please feel free to reach out to us. You can contact us at:
+                            If you have any questions or concerns regarding these terms and policies, feel free to reach out to us. We are available via phone, email, or at our office location for any inquiries you may have.
                         </Text>
                         <Text mb={2}>
                             <strong>Phone:</strong>
@@ -71,11 +54,14 @@ const Policy = () => {
                             </a>
                         </Text>
                         <Text mb={4}>
-                            <strong>Address: </strong>
-
-                            Aashita Enterprises, 149A, Jhotwara Industrial Area
-                            Jaipur - 302012
+                            <strong>Address:</strong>
+                            AASHITA ENTERPRISES, 149A, Jhotwara Industrial Area, Jaipur - 302012
                         </Text>
+                    </Box>
+                    
+                    {/* More Details Button */}
+                    <Box textAlign="center" mt={8}>
+                        For more details, <a href="https://docs.google.com/document/d/1TPLyMI1xM8r5xdUEIEgasRu8rroxS2AGg78etkAmoAI/edit?usp=sharing" target="_blank" style={{ color: 'teal', textDecoration: 'underline' }}>click here</a>.
                     </Box>
                 </Stack>
             </Box>

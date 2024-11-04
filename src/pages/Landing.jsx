@@ -466,7 +466,7 @@ const Landing = () => {
             <Flex direction="column" pt={2} pb={4} align="center">
                 <Box w={{ base: '100%', md: '90%', lg: '80%' }} bg="white">
 
-                    <Heading as="h1" size="xl" mb={6} textAlign="center">
+                    <Heading as="h1" size="xl" mb={6} textAlign="center" bg="gray.100">
                         About ImpexInfo.com
                     </Heading>
 

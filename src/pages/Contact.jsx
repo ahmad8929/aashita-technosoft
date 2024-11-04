@@ -96,6 +96,8 @@ const Contact = () => {
                             <Text>
                                 Aashita Enterprises, 149A, Road No. 12, Jhotwara Industrial Area
                                 Jaipur - 302012
+                                <h3> <span style={{ fontWeight: "bold" }}>Legal Name</span> : Aashita Enterprises</h3>
+                                
                             </Text>
                         </Flex>
                     </Stack>

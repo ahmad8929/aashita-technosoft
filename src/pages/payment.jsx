@@ -85,20 +85,29 @@ const Payment = () => {
                             <form onSubmit={handleSubmit}>
                                 <Stack spacing={4}>
                                     <FormControl isRequired>
-                                        <FormLabel color="teal.600">UTN No.</FormLabel>
+                                        <FormLabel color="teal.600">Enter Your Phone No</FormLabel>
                                         <Input
                                             name="utnNo"
-                                            placeholder="Enter your UTN No."
+                                            placeholder="Enter your Phone No."
+                                    
+                                            borderColor="teal.400"
+                                        />
+                                    </FormControl>
+                                    <FormControl isRequired>
+                                        <FormLabel color="teal.600">UTR No.</FormLabel>
+                                        <Input
+                                            name="utnNo"
+                                            placeholder="Enter your UTR No."
                                             value={paymentDetails.utnNo}
                                             onChange={handleInputChange}
                                             borderColor="teal.400"
                                         />
                                     </FormControl>
                                     <FormControl isRequired>
-                                        <FormLabel color="teal.600">Transaction ID</FormLabel>
+                                        <FormLabel color="teal.600">Email ID</FormLabel>
                                         <Input
                                             name="transactionId"
-                                            placeholder="Enter your transaction ID"
+                                            placeholder="Enter your email ID"
                                             value={paymentDetails.transactionId}
                                             onChange={handleInputChange}
                                             borderColor="teal.400"

@@ -9,6 +9,9 @@ const MenuItems = [
     },{
         title: "Policy",
         href: "/policy"
+    },{
+        title: "Plans",
+        href: "/upgrade"
     }
 ];
 

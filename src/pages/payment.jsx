@@ -68,9 +68,9 @@ const Payment = () => {
                                 <Divider />
                                 <Text fontWeight="bold" mt={4}>Bank Details</Text>
                                 <Box borderWidth="1px" borderRadius="md" p={4} mt={2} bg="gray.50">
-                                    <Text fontWeight="medium">Account No: <strong>123456789012</strong></Text>
-                                    <Text fontWeight="medium">IFSC Code: <strong>ABCD0123456</strong></Text>
-                                    <Text fontWeight="medium">Account Name: <strong>John Doe</strong></Text>
+                                    <Text fontWeight="medium">Account No: <strong>650014159285</strong></Text>
+                                    <Text fontWeight="medium">IFSC Code: <strong>INDB0000562</strong></Text>
+                                    <Text fontWeight="medium">Bank: <strong>INDUSIND BANK LTD</strong></Text>
                                 </Box>
                             </Flex>
                         </CardBody>

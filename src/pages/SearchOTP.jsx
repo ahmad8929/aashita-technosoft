@@ -74,14 +74,14 @@ const SearchOTP = ({ onClose }) => {
     // Verify OTP
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         try {
             const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/verify-otp`, { otp, phoneNumber }, {
                 headers: {
                     'Session-Token': user.sessionToken,
                 },
             });
-            if (response.data.success) {
+            if (response.status === 200 && response.data.message === "OTP verified") {
                 toast({
                     title: "OTP Verified",
                     description: "OTP verification successful!",
@@ -91,28 +91,31 @@ const SearchOTP = ({ onClose }) => {
                     position: "top"
                 });
                 onClose();
+            }
+        } catch (error) {
+            if (error.response && error.response.status === 400 && error.response.data.error === "Incorrect OTP") {
+                toast({
+                    title: "Incorrect OTP",
+                    description: "OTP didn't match. Please try again.",
+                    status: "error",
+                    duration: 2000,
+                    isClosable: true,
+                    position: "top"
+                });
             } else {
                 toast({
-                    title: "Invalid OTP",
-                    description: "The OTP entered is incorrect. Please try again.",
+                    title: "Verification Failed",
+                    description: "Failed to verify OTP. Please try again.",
                     status: "error",
                     duration: 2000,
                     isClosable: true,
                     position: "top"
                 });
             }
-        } catch (error) {
             console.error("Error verifying OTP:", error);
-            toast({
-                title: "Verification Failed",
-                description: "Failed to verify OTP. Please try again.",
-                status: "error",
-                duration: 2000,
-                isClosable: true,
-                position: "top"
-            });
         }
     };
+    
 
     return (
         <>

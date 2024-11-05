@@ -2,39 +2,51 @@
 import React, { useState, useEffect } from 'react';
 import { ModalBody, ModalFooter, Button, Input, FormControl, FormLabel, useToast } from '@chakra-ui/react';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const SearchOTP = ({ onClose }) => {
     const [otp, setOtp] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const toast = useToast();
+    const user = useSelector((state) => state.user);
 
-    // Fetch the user's phone number from /userinfo API
+    // Fetch phone number from userInfo API
     useEffect(() => {
         const fetchPhoneNumber = async () => {
             try {
-                const response = await axios.get('/userinfo');
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/userInfo`, {
+                    headers: {
+                        'Session-Token': user.sessionToken,
+                    },
+                });
                 setPhoneNumber(response.data.phoneNumber);
             } catch (error) {
-                console.error("Error fetching user info:", error);
                 toast({
-                    title: "Error Fetching User Info",
-                    description: "Could not retrieve phone number.",
+                    title: "Error fetching phone number",
+                    description: "Failed to retrieve your phone number. Please try again.",
                     status: "error",
                     duration: 2000,
                     isClosable: true,
                     position: "top"
                 });
+                console.error("Error fetching phone number:", error);
             }
         };
 
         fetchPhoneNumber();
-    }, [toast]);
+    }, [user.sessionToken, toast]);
 
     // Send OTP request to the backend
     useEffect(() => {
         const sendOtp = async () => {
+            // if (!phoneNumber) return;
+
             try {
-                await axios.post('/searchOTP', { phoneNumber });
+                await axios.post(`${import.meta.env.VITE_BACKEND_URL}/generate-otp`, { phoneNumber }, {
+                    headers: {
+                        'Session-Token': user.sessionToken,
+                    },
+                });
                 toast({
                     title: "OTP Sent",
                     description: "An OTP has been sent to your phone number.",
@@ -56,15 +68,50 @@ const SearchOTP = ({ onClose }) => {
             }
         };
 
-        if (phoneNumber) sendOtp();
+        sendOtp();
     }, [phoneNumber, toast]);
 
-    const handleSubmit = (e) => {
+    // Verify OTP
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Process submission to the backend for OTP verification (assumed backend handles this logic)
-        console.log('Submitting OTP:', otp);
-        onClose();
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/verify-otp`, { otp, phoneNumber }, {
+                headers: {
+                    'Session-Token': user.sessionToken,
+                },
+            });
+            if (response.data.success) {
+                toast({
+                    title: "OTP Verified",
+                    description: "OTP verification successful!",
+                    status: "success",
+                    duration: 2000,
+                    isClosable: true,
+                    position: "top"
+                });
+                onClose();
+            } else {
+                toast({
+                    title: "Invalid OTP",
+                    description: "The OTP entered is incorrect. Please try again.",
+                    status: "error",
+                    duration: 2000,
+                    isClosable: true,
+                    position: "top"
+                });
+            }
+        } catch (error) {
+            console.error("Error verifying OTP:", error);
+            toast({
+                title: "Verification Failed",
+                description: "Failed to verify OTP. Please try again.",
+                status: "error",
+                duration: 2000,
+                isClosable: true,
+                position: "top"
+            });
+        }
     };
 
     return (

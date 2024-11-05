@@ -163,7 +163,12 @@ const Register = () => {
                 duration: 4000,
                 isClosable: true,
             });
-            navigate("/payment"); // Redirect to the login page after successful registration
+            if (formValues.plan === "Trial") {
+                navigate("/login"); 
+            } else {
+                navigate("/payment");
+            }
+            
         } catch (error) {
             if (error.response && error.response.status === 400) {
                 toast({
@@ -377,8 +382,8 @@ const Register = () => {
                                         onChange={(e) => handlePlanChange(e.target.value)}
                                     >
                                         <option value="Silver">Silver</option>
-                                        <option value="Gold">Diamond</option>
-                                        <option value="Premium">Trial</option>
+                                        <option value="Diamond">Diamond</option>
+                                        <option value="Trial">Trial</option>
                                     </Select>
                                     {errors.plan && (
                                         <Text color="red.500">{errors.plan}</Text>

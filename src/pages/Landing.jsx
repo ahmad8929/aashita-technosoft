@@ -146,7 +146,6 @@ const Landing = () => {
                 },
             });
 
-
             // Open the OTP modal after a successful request
             onOpen();
 

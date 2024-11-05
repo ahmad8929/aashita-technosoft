@@ -90,7 +90,7 @@ const Policy = () => {
                     <Box borderWidth={1} borderRadius="md" p={4}>
                         
                         <Text mb={4}>
-                        This website is owned by Aashita Enterprises. Please read carefully Terms & conditions, privacy policy, Refund and cancelation policy carefully before entering. We will not be responsible or entertain any query on any matter regarding use of our website or subscription.
+                        This website is owned by Aashita Enterprises. Please read carefully Terms & conditions, privacy policy, Refund and cancelation policy before entering. We will not be responsible or entertain any query on any matter regarding use of our website or subscription.
                         </Text>
                     </Box>
 

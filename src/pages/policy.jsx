@@ -32,30 +32,31 @@ const Policy = () => {
                             We employ standard security practices to safeguard your data, although we cannot guarantee complete security during internet transmission. Users are encouraged to maintain the confidentiality of their login details to prevent unauthorized access. Your data will be retained only as long as necessary to fulfill service obligations or comply with legal standards. You can access and update your information through your account settings at any time. Continued use of our Platform after updates to this policy indicates your acceptance of the changes.
                         </Text>
                     </Box>
-                    <Box borderWidth={1} borderRadius="md" p={4}>
-                        <Heading as="h2" size="lg" mb={2}>
-                            Cancellation Policy
-                        </Heading>
-                        <Text mb={4}>
-                            Cancellations will only be considered if the request is made 5 days of placing the order. However,  cancellation requests may not be entertained if the orders have been communicated to such sellers /  merchant(s) listed on the Platform and they have initiated the process of shipping them, or the  product is out for delivery. In such an event, you may choose to reject the product at the doorstep.
-                            AASHITA ENTERPRISES does not accept cancellation requests for perishable items like  flowers, eatables, etc. However, the refund / replacement can be made if the user establishes that  the quality of the product delivered is not good.
-                            <br />
-                            In case of receipt of damaged or defective items, please report to our customer service team. The  request would be entertained once the seller/ merchant listed on the Platform, has checked and  determined the same at its own end. This should be reported within 5 days of receipt of products.  In case you feel that the product received is not as shown on the site or as per your expectations,  you must bring it to the notice of our customer service within 5 days of receiving the product. The  customer service team after looking into your complaint will take an appropriate decision.
-                            In case of complaints regarding the products that come with a warranty from the manufacturers,  please refer the issue to them.
-                            <br />
-                            <br />
-                            In case of any refunds approved by AASHITA ENTERPRISES, it will take 5 days for the refund  to be processed to you.
-                        </Text>
-                    </Box>
+                 
                     <Box borderWidth={1} borderRadius="md" p={4}>
                         <Heading as="h2" size="lg" mb={2}>
                             Refund Policy
                         </Heading>
                         <Text mb={4}>
-                            Since this is a consultation and subscription services, once you subscribe, there cannot be any refund even if you cancel the subscription. Moreover if the Serives cannot be provided due to some Government policies, Our company will not be held responsible and there will be no refund in such case.
+                        Since this is a consultation and subscription services, once you subscribe, there cannot be any refund even if you cancel the subscription. Moreover if the sevice cannot be provided due to some Government policies, Our company will not be held responsible and there will be no refund in such case.
                         </Text>
                     </Box>
-
+                    <Box borderWidth={1} borderRadius="md" p={4}>
+                        <Heading as="h2" size="lg" mb={2}>
+                            Cancellation Policy
+                        </Heading>
+                        <Text mb={4}>
+                        Subscription can not be cancelled.
+                        </Text>
+                    </Box>
+                    <Box borderWidth={1} borderRadius="md" p={4}>
+                        <Heading as="h2" size="lg" mb={2}>
+                            Period of Subscription
+                        </Heading>
+                        <Text mb={4}>
+                        12 months (One year) from the date of payment
+                        </Text>
+                    </Box>
                     {/* Contact Us */}
                     <Box borderWidth={1} borderRadius="md" p={4}>
                         <Heading as="h2" size="lg" mb={2}>
@@ -76,9 +77,20 @@ const Policy = () => {
                                 info@impexinfo.com
                             </a>
                         </Text>
+                        <Text mb={2}>
+                            <strong>Name of Office: </strong>
+                            Ayush Gupta (COO)
+                        </Text>
                         <Text mb={4}>
                             <strong>Address:</strong>
                             AASHITA ENTERPRISES, 149A, Jhotwara Industrial Area, Jaipur - 302012
+                        </Text>
+                    </Box>
+
+                    <Box borderWidth={1} borderRadius="md" p={4}>
+                        
+                        <Text mb={4}>
+                        This website is owned by Aashita Enterprises. Please read carefully Terms & conditions, privacy policy, Refund and cancelation policy carefully before entering. We will not be responsible or entertain any query on any matter regarding use of our website or subscription.
                         </Text>
                     </Box>
 

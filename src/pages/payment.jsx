@@ -1,5 +1,4 @@
-// Payment.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Box,
     Button,
@@ -13,19 +12,53 @@ import {
     Card,
     CardHeader,
     CardBody,
-    CardFooter,
     Flex,
     Divider,
 } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
+import { useSelector } from 'react-redux';
 
 const Payment = () => {
+
+    const user = useSelector((state) => state.user);
     const [paymentDetails, setPaymentDetails] = useState({
-        utnNo: "",
-        transactionId: "",
+        utrNo: "",
         paymentDate: "",
+        transactionId: "", // Mapping for UTR number
+    });
+    const [licenseData, setLicenseData] = useState({
+        LicenseType: "",
+        Amount: 0,
     });
     const navigate = useNavigate();
+    const location = useLocation();
+
+    // Fetch license details from API
+    useEffect(() => {
+        const fetchLicenseData = async () => {
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/license`, {
+                    headers: {
+                        'Session-Token': user.sessionToken,
+                    },
+                });
+                // Assuming the license data for the selected plan is available in response
+                const selectedLicense = response.data.find(
+                    (license) => license.LicenseType === location.state.licenseType
+                );
+                if (selectedLicense) {
+                    setLicenseData({
+                        LicenseType: selectedLicense.LicenseType,
+                        Amount: selectedLicense.TotalPrice,
+                    });
+                }
+            } catch (error) {
+                console.error("Error fetching license data:", error);
+            }
+        };
+        fetchLicenseData();
+    }, [location.state.licenseType]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -35,16 +68,40 @@ const Payment = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Payment Details:", paymentDetails);
-        navigate("/login"); // Redirect to the login page after submission
+
+        const payload = {
+            TransactionId: paymentDetails.utrNo,
+            LicenseType: licenseData.LicenseType,
+            Amount: licenseData.Amount,
+            PaymentDate: paymentDetails.paymentDate,
+        };
+
+        try {
+            await axios.post(`${import.meta.env.VITE_BACKEND_URL}/submit-payment`, payload, {
+                headers: {
+                    'Session-Token': user.sessionToken,
+                },
+            });
+            console.log("Payment submitted successfully:", payload);
+            alert("Your payment has been received. We will verify it and inform you shortly.");
+
+            navigate("/");
+        } catch (error) {
+            if (error.response && error.response.status === 400 && error.response.data === "Payment already submitted") {
+                // alert("This payment has already been submitted. Please check your payment status or contact support.");
+                alert("Payment already submitted");
+            } else {
+                console.error("Error submitting payment:", error);
+                alert("Payment already submitted");
+            }
+        }
     };
 
     return (
-
         <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" bg="white">
-           <Grid templateColumns="repeat(2, 1fr)" gap={6} width="80%">
+            <Grid templateColumns="repeat(2, 1fr)" gap={6} width="80%">
                 <GridItem>
                     <Card bg="white" boxShadow="lg" borderRadius="md">
                         <CardHeader>
@@ -53,8 +110,7 @@ const Payment = () => {
                         <CardBody>
                             <Flex direction="column" alignItems="center">
                                 <Text fontWeight="bold" mb={2}>QR Code</Text>
-                                {/* Use a random QR code generator for demo */}
-                                <Box 
+                                <Box
                                     as="img"
                                     src="https://api.qrserver.com/v1/create-qr-code/?data=example@upi&size=200x200"
                                     alt="QR Code"
@@ -85,30 +141,11 @@ const Payment = () => {
                             <form onSubmit={handleSubmit}>
                                 <Stack spacing={4}>
                                     <FormControl isRequired>
-                                        <FormLabel color="teal.600">Enter Your Phone No</FormLabel>
-                                        <Input
-                                            name="utnNo"
-                                            placeholder="Enter your Phone No."
-                                    
-                                            borderColor="teal.400"
-                                        />
-                                    </FormControl>
-                                    <FormControl isRequired>
                                         <FormLabel color="teal.600">UTR No.</FormLabel>
                                         <Input
-                                            name="utnNo"
+                                            name="utrNo"
                                             placeholder="Enter your UTR No."
-                                            value={paymentDetails.utnNo}
-                                            onChange={handleInputChange}
-                                            borderColor="teal.400"
-                                        />
-                                    </FormControl>
-                                    <FormControl isRequired>
-                                        <FormLabel color="teal.600">Email ID</FormLabel>
-                                        <Input
-                                            name="transactionId"
-                                            placeholder="Enter your email ID"
-                                            value={paymentDetails.transactionId}
+                                            value={paymentDetails.utrNo}
                                             onChange={handleInputChange}
                                             borderColor="teal.400"
                                         />

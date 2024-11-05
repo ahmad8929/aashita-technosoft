@@ -20,16 +20,11 @@ import {
     IconButton,
     InputGroup,
     InputRightElement,
-    ModalFooter,
-    ModalBody,
-    ModalHeader,
-    ModalOverlay, Modal,
-    ModalContent,
 } from "@chakra-ui/react";
 import { useBreakpointValue } from "@chakra-ui/media-query";
 import { useNavigate, Link } from "react-router-dom";
-import { ViewIcon, ViewOffIcon, ModalCloseButton } from "@chakra-ui/icons"; // Importing icons for password visibility
-import PlanDetails from "./PlanDetails";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"; // Importing icons for password visibility
+// import PlanDetails from "./PlanDetails";
 
 const Register = () => {
     const screens = useBreakpointValue({ base: "Mobile", md: "Desktop" });
@@ -48,8 +43,8 @@ const Register = () => {
     const [isLoading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const [selectedCountryCode, setSelectedCountryCode] = useState("+1");
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedCountryCode, setSelectedCountryCode] = useState("+91");
+    // const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
     const toast = useToast();
 
@@ -78,9 +73,9 @@ const Register = () => {
         if (name === "confirmPassword" && value !== formValues.password) {
             error = "Passwords do not match!";
         }
-        if (name === "plan" && !value) {
-            error = "Please select a plan!";
-        }
+        // if (name === "plan" && !value) {
+        //     error = "Please select a plan!";
+        // }
         return error;
     };
 
@@ -114,9 +109,9 @@ const Register = () => {
         if (formValues.password !== formValues.confirmPassword) {
             errors.confirmPassword = "Passwords do not match!";
         }
-        if (!formValues.plan) {
-            errors.plan = "Please select a plan!";
-        }
+        // if (!formValues.plan) {
+        //     errors.plan = "Please select a plan!";
+        // }
         setErrors(errors);
         return Object.keys(errors).length === 0;
     };
@@ -133,16 +128,16 @@ const Register = () => {
         });
     };
 
-    const handlePlanChange = (value) => {
-        setFormValues({
-            ...formValues,
-            plan: value,
-        });
-        setErrors({
-            ...errors,
-            plan: validateField("plan", value),
-        });
-    };
+    // const handlePlanChange = (value) => {
+    //     setFormValues({
+    //         ...formValues,
+    //         plan: value,
+    //     });
+    //     setErrors({
+    //         ...errors,
+    //         plan: validateField("plan", value),
+    //     });
+    // };
 
     const handleRegister = async () => {
         try {
@@ -151,7 +146,8 @@ const Register = () => {
                 password: formValues.password,
                 companyName: formValues.companyName,
                 phoneNumber: formValues.mobileNumber,
-                licenseType: formValues.plan,
+                CountryCode: selectedCountryCode,
+                licenseType: "TRIAL",
             });
 
             // localStorage.setItem('accessToken', createAccountResponse?.accessToken); // change this if response is wrong
@@ -163,12 +159,10 @@ const Register = () => {
                 duration: 4000,
                 isClosable: true,
             });
-            if (formValues.plan === "Trial") {
-                navigate("/login"); 
-            } else {
-                navigate("/payment");
-            }
-            
+
+            navigate("/login");
+
+
         } catch (error) {
             if (error.response && error.response.status === 400) {
                 toast({
@@ -215,8 +209,8 @@ const Register = () => {
         setSelectedCountryCode(e.target.value);
     };
 
-    const openModal = () => setIsModalOpen(true); // Open modal
-    const closeModal = () => setIsModalOpen(false); // Close modal
+    // const openModal = () => setIsModalOpen(true); // Open modal
+    // const closeModal = () => setIsModalOpen(false); // Close modal
 
     return (
         <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" overflow="hidden">
@@ -372,7 +366,7 @@ const Register = () => {
                             </HStack>
 
 
-                            <HStack spacing={4}>
+                            {/* <HStack spacing={4}>
                                 <FormControl isRequired isInvalid={!!errors.plan} flex="1">
                                     <FormLabel>Select a Plan</FormLabel>
                                     <Select
@@ -396,9 +390,9 @@ const Register = () => {
                                 >
                                     View Plan Details
                                 </Button>
-                            </HStack>
+                            </HStack> */}
 
-                            
+
                             <FormControl isRequired isInvalid={!!errors.agreeTerms} display="flex" justifyContent="Center">
                                 <Checkbox
                                     name="agreeTerms"
@@ -421,14 +415,14 @@ const Register = () => {
                                 </ChakraLink>
                             </Text>
 
-
+                            {/* 
                             <Modal isOpen={isModalOpen} onClose={closeModal}>
                                 <ModalOverlay />
                                 <ModalContent maxW="800px" maxH="700px">
                                     <ModalHeader>Plan Details</ModalHeader>
                                     <ModalCloseButton />
                                     <ModalBody>
-                                        <PlanDetails /> {/* Using PlanDetails component here */}
+                                        <PlanDetails /> 
                                     </ModalBody>
                                     <ModalFooter>
                                         <Button colorScheme="teal" mr={3} onClick={closeModal}>
@@ -436,7 +430,7 @@ const Register = () => {
                                         </Button>
                                     </ModalFooter>
                                 </ModalContent>
-                            </Modal>
+                            </Modal> */}
 
 
                         </Stack>

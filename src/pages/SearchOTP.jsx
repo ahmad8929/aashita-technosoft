@@ -84,7 +84,7 @@ const SearchOTP = ({ onClose }) => {
             if (response.status === 200 && response.data.message === "OTP verified") {
                 toast({
                     title: "OTP Verified",
-                    description: "OTP verification successful!",
+                    description: "OTP verification successful! Email will br done shortly",
                     status: "success",
                     duration: 2000,
                     isClosable: true,

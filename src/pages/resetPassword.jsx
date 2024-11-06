@@ -1,0 +1,127 @@
+import { useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import axios from 'axios';
+import {
+    Box,
+    Button,
+    Input,
+    Heading,
+    Text,
+    FormControl,
+    FormLabel,
+    VStack,
+    Spinner,
+    Flex,
+    useToast
+} from "@chakra-ui/react";
+import AppPage from "../layouts/AppPage";
+
+const ResetPassword = () => {
+    const [searchParams] = useSearchParams();
+    const token = searchParams.get('token');
+    const navigate = useNavigate();
+    const toast = useToast();
+    
+    const [formData, setFormData] = useState({
+        newPassword: "",
+        confirmPassword: "",
+    });
+    const [isLoading, setLoading] = useState(false);
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+    };
+
+    const handleResetPassword = async (e) => {
+        e.preventDefault();
+        if (formData.newPassword !== formData.confirmPassword) {
+            toast({
+                title: "Passwords do not match.",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+            return;
+        }
+
+        setLoading(true);
+        try {
+            await axios.post(`${import.meta.env.VITE_BACKEND_URL}/reset-password?token=${token}`, {
+                new_password: formData.newPassword,
+            });
+            toast({
+                title: "Password reset successful.",
+                status: "success",
+                duration: 3000,
+                isClosable: true,
+            });
+            navigate("/login");
+        } catch (error) {
+            console.error(error);
+            toast({
+                title: "Failed to reset password.",
+                description: error.response?.data?.message || "Please try again.",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <AppPage title="Reset Password" isProtected={false} includeNavbar={false}>
+            <Flex height="100vh" alignItems="center" justifyContent="center">
+                <Box
+                    w="100%"
+                    maxW="500px"
+                    p="6"
+                    boxShadow="lg"
+                    border="2px"
+                    borderColor="gray.200"
+                    borderRadius="8px"
+                >
+                    {isLoading && <Spinner size="xl" position="absolute" top="50%" left="50%" />}
+                    
+                    <Heading as="h2" size="lg" textAlign="center" mb={6}>
+                        Reset Password
+                    </Heading>
+
+                    <VStack as="form" onSubmit={handleResetPassword} spacing={4} w="100%">
+                        <FormControl id="newPassword" isRequired>
+                            <FormLabel>New Password</FormLabel>
+                            <Input
+                                name="newPassword"
+                                type="password"
+                                placeholder="Enter your new password"
+                                value={formData.newPassword}
+                                onChange={handleChange}
+                            />
+                        </FormControl>
+
+                        <FormControl id="confirmPassword" isRequired>
+                            <FormLabel>Confirm Password</FormLabel>
+                            <Input
+                                name="confirmPassword"
+                                type="password"
+                                placeholder="Confirm your new password"
+                                value={formData.confirmPassword}
+                                onChange={handleChange}
+                            />
+                        </FormControl>
+
+                        <Button type="submit" colorScheme="teal" width="100%" mt={4} isLoading={isLoading}>
+                            Reset Password
+                        </Button>
+                    </VStack>
+                </Box>
+            </Flex>
+        </AppPage>
+    );
+};
+
+export default ResetPassword;

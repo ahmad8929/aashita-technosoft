@@ -11,14 +11,17 @@ import {
     Spinner,
     Flex,
     Link as ChakraLink,
+    useToast,
 } from "@chakra-ui/react";
 import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 
 const ForgotPassword = () => {
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({ email: "" });
     const [error, setError] = useState({ email: false });
     const navigate = useNavigate();
+    const toast = useToast();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -44,12 +47,32 @@ const ForgotPassword = () => {
         if (!validateForm()) return;
 
         setLoading(true);
-        // Simulate API call
-        setTimeout(() => {
+        try {
+            // Make the API call to send the forgot password request
+            await axios.post(`${import.meta.env.VITE_BACKEND_URL}/forgot-password`, { email: formData.email });
+            
+            toast({
+                title: "Password Reset Link Sent",
+                description: "A password reset link has been sent to your email.",
+                status: "success",
+                duration: 3000,
+                isClosable: true,
+                position: "top",
+            });
+            
+            navigate("/login"); // Navigate to login page on success
+        } catch (error) {
+            toast({
+                // title: "Error",
+                description: "User not found.",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+                position: "top",
+            });
+        } finally {
             setLoading(false);
-            console.log("Password reset email sent to:", formData.email);
-            navigate("/login"); // Simulate navigation on successful password reset
-        }, 2000);
+        }
     };
 
     return (

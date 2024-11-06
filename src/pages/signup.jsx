@@ -146,7 +146,7 @@ const Register = () => {
                 password: formValues.password,
                 companyName: formValues.companyName,
                 phoneNumber: formValues.mobileNumber,
-                CountryCode: selectedCountryCode,
+                phoneNumberCountryCode: selectedCountryCode,
                 licenseType: "TRIAL",
             });
 

@@ -12,7 +12,7 @@ import SearchOTP from './SearchOTP';
 const Landing = () => {
     const navigate = useNavigate();
 
-    const toast = useToast(); // Initialize useToast
+    const toast = useToast();
     const user = useSelector((state) => state.user);
     const [tokensData, setTokensData] = useState(0);
     const [formData, setFormData] = useState({
@@ -31,7 +31,6 @@ const Landing = () => {
     });
 
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [modalMessage, setModalMessage] = useState('');
 
     // Fetch token data on component mount
     useEffect(() => {
@@ -102,7 +101,7 @@ const Landing = () => {
         if (emptyFields.length > 0) {
             toast({
                 title: "Validation Error",
-                description: `Please fill in the following fields: ${emptyFields.join(', ')}`,
+                description: `Please fill the following fields: ${emptyFields.join(', ')}`,
                 status: "error",
                 duration: 2000,
                 isClosable: true,
@@ -114,7 +113,7 @@ const Landing = () => {
         if (parseInt(formData.number_of_records) > tokensData) {
             toast({
                 title: "Token Limit Exceeded",
-                description: "Number of records cannot be more than remaining tokens.",
+                description: "Number of records cannot be more than remaining records.",
                 status: "error",
                 duration: 2000,
                 isClosable: true,
@@ -146,17 +145,7 @@ const Landing = () => {
                 },
             });
 
-            // Open the OTP modal after a successful request
             onOpen();
-
-            // toast({
-            //     title: "Request Received",
-            //     description: "You will receive an email.",
-            //     status: "success",
-            //     duration: 2000,
-            //     isClosable: true,
-            //     position: "top"
-            // });
 
         } catch (error) {
             if (error.response && error.response.status === 429) {
@@ -203,7 +192,6 @@ const Landing = () => {
     const countryOptions = countries.getData().map((country) => ({
         value: country.code,
         label: `${country.name} (${country.code})`,
-        // label: `${country.name}`,
     }));
 
     return (
@@ -405,13 +393,11 @@ const Landing = () => {
                         </FormControl>
                     </GridItem>
 
-                    {/* <GridItem colSpan={{ base: 1, md: 1 }} textAlign="center"> */}
                     <GridItem
                         colSpan={{ base: 1, md: 1 }}
                         textAlign={{ base: "center", md: "right" }}
                         alignSelf={{ base: "center", md: "end" }}
                     >
-
                         <Button
                             type="submit"
                             colorScheme="blue"
@@ -425,42 +411,18 @@ const Landing = () => {
                         </Button>
                     </GridItem>
                 </SimpleGrid>
-                {/* </Box> */}
 
             </form>
-
-            {/* <Modal isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>Request Status</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                        {modalMessage}
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button colorScheme="blue" mr={3} onClick={handleCloseModal}>
-                            Close
-                        </Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal> */}
 
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>Enter OTP</ModalHeader>
                     <ModalCloseButton />
-                    <SearchOTP onClose={handleCloseModal} /> {/* Include the OTP component here */}
+                    <SearchOTP onClose={handleCloseModal} /> 
                 </ModalContent>
             </Modal>
 
-
-            {/* </Box> */}
-
-            {/* <Flex direction="column" p={8} align="center">
-                <Box w={{ base: '100%', md: '80%' }} p={8}
-                    // boxShadow="md" borderRadius="md"
-                    bg="white"> */}
 
             <Flex direction="column" pt={2} pb={4} align="center">
                 <Box w={{ base: '100%', md: '90%', lg: '80%' }} bg="white">
@@ -498,8 +460,6 @@ const Landing = () => {
                             Our Export & Import Trade Intelligence reports are gathered from available online and offline sources. We do not guarantee the authenticity or originality of this data. Clients are advised to use our research data at their own discretion. We are not responsible for any profit or loss resulting from the use of our reports.
                         </Text>
                     </Box>
-
-
                 </Box>
             </Flex>
 
@@ -508,3 +468,4 @@ const Landing = () => {
 };
 
 export default Landing;
+

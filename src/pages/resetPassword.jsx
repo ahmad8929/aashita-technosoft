@@ -15,18 +15,29 @@ import {
     useToast
 } from "@chakra-ui/react";
 import AppPage from "../layouts/AppPage";
-
 const ResetPassword = () => {
     const [searchParams] = useSearchParams();
     const token = searchParams.get('token');
     const navigate = useNavigate();
     const toast = useToast();
-    
+
     const [formData, setFormData] = useState({
         newPassword: "",
         confirmPassword: "",
     });
     const [isLoading, setLoading] = useState(false);
+
+    // Handle case where token is not available
+    if (!token) {
+        toast({
+            title: "Invalid or expired token.",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+        });
+        navigate("/login");  // Redirect to login or show error
+        return null; // Prevent the form from rendering if token is missing
+    }
 
     const handleChange = (e) => {
         setFormData({

@@ -154,7 +154,7 @@ const Register = () => {
 
             toast({
                 title: "Account created successfully!",
-                description: `You have selected the ${formValues.plan} plan.`,
+                description: `Now check email and activate your account`,
                 status: "success",
                 duration: 4000,
                 isClosable: true,

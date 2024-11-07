@@ -95,7 +95,7 @@ const Landing = () => {
         const sessionToken = user.sessionToken;
 
         // Validate required fields
-        const requiredFields = ['from_date', 'to_date', 'country', 'buyerName', 'hsCode', 'supplierName', 'originCountry', 'number_of_records'];
+        const requiredFields = ['from_date', 'to_date', 'country', 'buyerName', 'hsCode', 'number_of_records'];
         const emptyFields = requiredFields.filter(field => !formData[field] && field !== 'proDesc');
 
         if (emptyFields.length > 0) {

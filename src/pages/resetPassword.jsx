@@ -74,7 +74,7 @@ const ResetPassword = () => {
             console.error(error);
             toast({
                 title: "Failed to reset password.",
-                description: "Please try again.",
+                description: "Invalid or expired token",
                 status: "error",
                 duration: 3000,
                 isClosable: true,
@@ -87,15 +87,10 @@ const ResetPassword = () => {
     return (
         <AppPage title="Reset Password" isProtected={false} includeNavbar={false}>
             <Flex height="100vh" alignItems="center" justifyContent="center">
-                <Box
-                    w="100%"
-                    maxW="500px"
-                    p="6"
-                    boxShadow="lg"
-                    border="2px"
-                    borderColor="gray.200"
-                    borderRadius="8px"
-                >
+
+
+                <Box w="100%" maxW="500px" p="6" boxShadow="lg" border="2px" borderColor="gray.200" borderRadius="8px" position="relative">
+
                     {/* {isLoading && <Spinner size="xl" position="absolute" top="50%" left="50%" />} */}
 
                     {isLoading && (
@@ -113,7 +108,7 @@ const ResetPassword = () => {
                             <Spinner size="xl" />
                         </Flex>
                     )}
-                    
+
                     <Heading as="h2" size="lg" textAlign="center" mb={6}>
                         Reset Password
                     </Heading>

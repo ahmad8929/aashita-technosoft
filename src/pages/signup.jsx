@@ -150,11 +150,10 @@ const Register = () => {
                 licenseType: "TRIAL",
             });
 
-            // localStorage.setItem('accessToken', createAccountResponse?.accessToken); // change this if response is wrong
 
             toast({
                 title: "Account created successfully!",
-                description: `Now check email and activate your account`,
+                description: `An email from ID an1gupta0693@gmail.com has been sent to you. Please check your email (including spam folder) and activate your account.`,
                 status: "success",
                 duration: 4000,
                 isClosable: true,
@@ -166,7 +165,7 @@ const Register = () => {
         } catch (error) {
             if (error.response && error.response.status === 400) {
                 toast({
-                    title: "Email already exists.",
+                    title: "Email or Phone No. already exists.",
                     status: "error",
                     duration: 4000,
                     isClosable: true,
@@ -308,7 +307,7 @@ const Register = () => {
                             </HStack>
 
                             <HStack spacing={4}>
-                                <FormControl isRequired flex="1">
+                                <FormControl flex="1">
                                     <FormLabel>Company Name</FormLabel>
                                     <Input
                                         name="companyName"

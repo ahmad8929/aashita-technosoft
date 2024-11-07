@@ -11,6 +11,7 @@ import {
     VStack,
     Spinner,
     Flex,
+    useToast,
     Link as ChakraLink,
 } from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
@@ -20,6 +21,7 @@ import AppPage from "../layouts/AppPage";
 import { setUser, setAuthState } from "../redux/slices/user";
 
 const Login = () => {
+    const toast = useToast();
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -67,12 +69,22 @@ const Login = () => {
 
             navigate("/");
         } catch (error) {
-            console.log(error)
+            if (error.response && error.response.status === 401) {
+                toast({
+                    title: "Invalid Login",
+                    description: "Invalid email or password. Please try again.",
+                    status: "error",
+                    duration: 2000,
+                    isClosable: true,
+                    position: "top",
+                });
+            } else {
+                console.error(error);
+            }
         } finally {
             setLoading(false);
         }
     };
-
     return (
         <AppPage title="Login" isProtected={false} includeNavbar={false}>
             <Flex height="100vh" alignItems="center" justifyContent="center">
@@ -86,7 +98,23 @@ const Login = () => {
                     borderRadius="8px"
                     position="relative"
                 >
-                    {isLoading && <Spinner size="xl" position="absolute" top="50%" left="50%" />}
+                    {/* {isLoading && <Spinner size="xl" position="absolute" top="50%" left="50%" />} */}
+
+                    {isLoading && (
+                        <Flex
+                            position="absolute"
+                            top="0"
+                            left="0"
+                            right="0"
+                            bottom="0"
+                            alignItems="center"
+                            justifyContent="center"
+                            bg="rgba(255, 255, 255, 0.7)"
+                            zIndex="10"
+                        >
+                            <Spinner size="xl" />
+                        </Flex>
+                    )}
 
                     <Heading as="h2" size="lg" textAlign="center" mb={6}>
                         LOG IN

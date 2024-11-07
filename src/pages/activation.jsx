@@ -30,7 +30,7 @@ const AccountActivation = () => {
         setStatus("error");
         toast({
           title: "Activation failed",
-          description: error?.response?.data?.message || "Invalid or expired token.",
+          description: "Invalid or expired token.",
           status: "error",
           duration: 4000,
           isClosable: true,

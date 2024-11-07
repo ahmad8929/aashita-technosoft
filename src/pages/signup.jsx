@@ -142,7 +142,7 @@ const Register = () => {
     const handleRegister = async () => {
         try {
             const { data: createAccountResponse } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/signup`, {
-                email: formValues.email,
+                email: formValues.email.toLowerCase(),
                 password: formValues.password,
                 companyName: formValues.companyName,
                 phoneNumber: formValues.mobileNumber,

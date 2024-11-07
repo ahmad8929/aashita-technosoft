@@ -74,7 +74,7 @@ const ResetPassword = () => {
             console.error(error);
             toast({
                 title: "Failed to reset password.",
-                description: error.response?.data?.message || "Please try again.",
+                description: "Please try again.",
                 status: "error",
                 duration: 3000,
                 isClosable: true,
@@ -96,7 +96,23 @@ const ResetPassword = () => {
                     borderColor="gray.200"
                     borderRadius="8px"
                 >
-                    {isLoading && <Spinner size="xl" position="absolute" top="50%" left="50%" />}
+                    {/* {isLoading && <Spinner size="xl" position="absolute" top="50%" left="50%" />} */}
+
+                    {isLoading && (
+                        <Flex
+                            position="absolute"
+                            top="0"
+                            left="0"
+                            right="0"
+                            bottom="0"
+                            alignItems="center"
+                            justifyContent="center"
+                            bg="rgba(255, 255, 255, 0.7)"
+                            zIndex="10"
+                        >
+                            <Spinner size="xl" />
+                        </Flex>
+                    )}
                     
                     <Heading as="h2" size="lg" textAlign="center" mb={6}>
                         Reset Password

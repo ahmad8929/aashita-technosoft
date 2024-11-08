@@ -53,7 +53,8 @@ const ForgotPassword = () => {
             
             toast({
                 title: "Password Reset Link Sent",
-                description: "A password reset link has been sent to your email.",
+                description: `A password reset link has been sent to your email from ID an1gupta0693@gmail.com Please check your email (including spam folder)`,
+              
                 status: "success",
                 duration: 3000,
                 isClosable: true,
@@ -86,7 +87,22 @@ const ForgotPassword = () => {
                 borderColor="gray.200"
                 borderRadius="8px"
             >
-                {loading && <Spinner size="xl" position="absolute" top="50%" left="50%" />}
+                  {loading && (
+                        <Flex
+                            position="absolute"
+                            top="0"
+                            left="0"
+                            right="0"
+                            bottom="0"
+                            alignItems="center"
+                            justifyContent="center"
+                            bg="rgba(255, 255, 255, 0.7)"
+                            zIndex="10"
+                        >
+                            <Spinner size="xl" />
+                        </Flex>
+                    )}
+
                 <Heading as="h2" size="lg" textAlign="center" mb={6}>
                     Forgot Password
                 </Heading>

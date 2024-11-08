@@ -34,6 +34,7 @@ const ResetPassword = () => {
             status: "error",
             duration: 3000,
             isClosable: true,
+               position: "top"
         });
         navigate("/login");  // Redirect to login or show error
         return null; // Prevent the form from rendering if token is missing
@@ -54,6 +55,7 @@ const ResetPassword = () => {
                 status: "error",
                 duration: 3000,
                 isClosable: true,
+                
             });
             return;
         }
@@ -68,6 +70,7 @@ const ResetPassword = () => {
                 status: "success",
                 duration: 3000,
                 isClosable: true,
+                   position: "top"
             });
             navigate("/login");
         } catch (error) {
@@ -78,6 +81,7 @@ const ResetPassword = () => {
                 status: "error",
                 duration: 3000,
                 isClosable: true,
+                   position: "top"
             });
         } finally {
             setLoading(false);

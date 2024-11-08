@@ -52,6 +52,7 @@ const Queries = () => {
         setCurrentPage(1);
     };
 
+    
     return (
         <AppPage title="Queries" description="" keywords={[]} isProtected={true}>
             <Box p={8} bg="gray.100" minH="100vh">

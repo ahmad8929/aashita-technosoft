@@ -31,6 +31,9 @@ const Landing = () => {
     });
 
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [otpVerified, setOtpVerified] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isOtpModalOpen, setIsOtpModalOpen] = useState(false);
 
     // Fetch token data on component mount
     useEffect(() => {
@@ -51,6 +54,11 @@ const Landing = () => {
 
         fetchTokenData();
     }, [user.sessionToken]);
+
+    const handleSearchClick = () => {
+        setIsOtpModalOpen(true);
+    };
+
 
     const handleFormInput = (e) => {
         const { name, value } = e.target;
@@ -74,6 +82,8 @@ const Landing = () => {
         }));
     };
 
+
+    // Trigger OTP modal after preliminary checks
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -92,8 +102,6 @@ const Landing = () => {
             return;
         }
 
-        const sessionToken = user.sessionToken;
-
         // Validate required fields
         const requiredFields = ['from_date', 'to_date', 'number_of_records'];
         const emptyFields = requiredFields.filter(field => !formData[field] && field !== 'proDesc');
@@ -110,6 +118,24 @@ const Landing = () => {
             return;
         }
 
+        // const conditionalFields = [
+        //     'destinationCountry', 'originCountry', 'supplierName', 'hsCode', 'buyerName'
+        // ];
+    
+        // const isAtLeastOneFieldFilled = conditionalFields.some(field => formData[field].trim() !== '');
+    
+        // if (!isAtLeastOneFieldFilled) {
+        //     toast({
+        //         title: "Validation Error",
+        //         description: "At least one of the following fields must be filled: Destination Country, Origin Country, Supplier Name, HS Code, or Buyer Name.",
+        //         status: "error",
+        //         duration: 2000,
+        //         isClosable: true,
+        //         position: "top"
+        //     });
+        //     return;
+        // }
+
         if (parseInt(formData.number_of_records) > tokensData) {
             toast({
                 title: "Token Limit Exceeded",
@@ -122,6 +148,15 @@ const Landing = () => {
             return;
         }
 
+        // Open OTP modal after all checks
+        onOpen();
+    };
+
+    // Call search API after OTP verification
+    const handleOtpVerified = async () => {
+        setIsOtpModalOpen(false);  // Close the modal
+
+        const sessionToken = user.sessionToken;
         const countryName = countries.getName(formData.country);
         const postData = {
             email: formData.email,
@@ -139,13 +174,15 @@ const Landing = () => {
         };
 
         try {
+            setIsSubmitting(true);
             const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/search`, postData, {
                 headers: {
                     'Session-Token': sessionToken,
                 },
             });
 
-            onOpen();
+            // Handle response (e.g., display results)
+            console.log('Search API response:', response.data);
 
         } catch (error) {
             if (error.response && error.response.status === 429) {
@@ -167,25 +204,27 @@ const Landing = () => {
                     position: "top"
                 });
             }
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
 
     const handleCloseModal = () => {
-        setFormData({
-            from_date: '',
-            to_date: '',
-            country: 'IN',
-            inOut: 'import',
-            buyerName: '',
-            hsCode: '',
-            supplierName: '',
-            originCountry: '',
-            proDesc: '',
-            billNo: '',
-            email: 'test@example.com',
-            number_of_records: ''
-        });
+        // setFormData({
+        //     from_date: '',
+        //     to_date: '',
+        //     country: 'IN',
+        //     inOut: 'import',
+        //     buyerName: '',
+        //     hsCode: '',
+        //     supplierName: '',
+        //     originCountry: '',
+        //     proDesc: '',
+        //     billNo: '',
+        //     email: 'test@example.com',
+        //     number_of_records: ''
+        // });
         onClose();
     };
 
@@ -193,6 +232,10 @@ const Landing = () => {
         value: country.code,
         label: `${country.name} (${country.code})`,
     }));
+
+
+
+
 
     return (
         <AppPage title="Home" description="" keywords={[]} isProtected={true}>
@@ -208,7 +251,7 @@ const Landing = () => {
                             <DatePicker
                                 selected={formData.from_date}
                                 onChange={handleFromDateChange}
-                                dateFormat="yyyy/MM/dd"
+                                dateFormat="dd/MM/yyyy"
                                 customInput={
                                     <Input
                                         placeholder="Select a date"
@@ -233,7 +276,7 @@ const Landing = () => {
                             <DatePicker
                                 selected={formData.to_date}
                                 onChange={handleToDateChange}
-                                dateFormat="yyyy/MM/dd"
+                                dateFormat="dd/MM/yyyy"
                                 customInput={
                                     <Input
                                         placeholder="Select a date"
@@ -264,12 +307,16 @@ const Landing = () => {
                                 _hover={{ borderColor: 'blue.400' }}
                                 fontSize="sm"
                             >
-                                {countryOptions.map(option => (
+                                <option value="IN">India (IN)</option>
+                                <option value="VN">Vietnam (VN)</option>
+
+                                {/* {countryOptions.map(option => (
                                     <option key={option.value} value={option.value}>{option.label}</option>
-                                ))}
+                                ))} */}
                             </Select>
                         </FormControl>
                     </GridItem>
+
 
                     <GridItem>
                         <FormControl>
@@ -291,7 +338,7 @@ const Landing = () => {
 
                     <GridItem>
                         <FormControl>
-                            <FormLabel fontSize="sm" fontWeight="medium">Buyer Name</FormLabel>
+                            <FormLabel fontSize="sm" fontWeight="medium">Buyer Name (Import)</FormLabel>
                             <Input
                                 type="text"
                                 name="buyerName"
@@ -325,7 +372,7 @@ const Landing = () => {
 
                     <GridItem>
                         <FormControl>
-                            <FormLabel fontSize="sm" fontWeight="medium">Supplier Name</FormLabel>
+                            <FormLabel fontSize="sm" fontWeight="medium">Supplier Name (Export)</FormLabel>
                             <Input
                                 type="text"
                                 name="supplierName"
@@ -342,7 +389,7 @@ const Landing = () => {
 
                     <GridItem>
                         <FormControl>
-                            <FormLabel fontSize="sm" fontWeight="medium">Origin Country</FormLabel>
+                            <FormLabel fontSize="sm" fontWeight="medium">Origin Country (COO)</FormLabel>
                             <Input
                                 type="text"
                                 name="originCountry"
@@ -374,7 +421,26 @@ const Landing = () => {
                         </FormControl>
                     </GridItem>
 
-                    <GridItem colSpan={{ base: 1, md: 2 }}>
+                    <GridItem>
+                        <FormControl>
+                            <FormLabel fontSize="sm" fontWeight="medium">Destination Country (COE)</FormLabel>
+                            <Input
+                                type="text"
+                                name="destinationCountry"
+                                value={formData.destinationCountry}
+                                onChange={handleFormInput}
+                                size="md"
+                                bg="gray.50"
+                                _hover={{ borderColor: 'blue.400' }}
+                                fontSize="sm"
+                                placeholder="Enter Destination Country"
+                            />
+                        </FormControl>
+                    </GridItem>
+
+                    {/* <GridItem colSpan={{ base: 1, md: 2 }}> */}
+
+                    <GridItem>
                         <FormControl>
                             <FormLabel fontSize="sm" fontWeight="medium">Product Description</FormLabel>
                             <Textarea
@@ -403,6 +469,7 @@ const Landing = () => {
                             colorScheme="blue"
                             size="lg"
                             mt={4}
+                            onClick={handleSearchClick}
                             bg="blue.500"
                             _hover={{ bg: 'blue.600' }}
                             _active={{ bg: 'blue.700' }}
@@ -413,16 +480,16 @@ const Landing = () => {
                 </SimpleGrid>
 
             </form>
-
-            <Modal isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>Enter OTP</ModalHeader>
-                    <ModalCloseButton />
-                    <SearchOTP onClose={handleCloseModal} /> 
-                </ModalContent>
-            </Modal>
-
+            {isOtpModalOpen && (
+                <Modal isOpen={isOpen} onClose={onClose}>
+                    <ModalOverlay />
+                    <ModalContent>
+                        <ModalHeader>Enter OTP</ModalHeader>
+                        <ModalCloseButton />
+                        <SearchOTP onClose={handleCloseModal} onOtpVerified={handleOtpVerified} />
+                    </ModalContent>
+                </Modal>
+            )}
 
             <Flex direction="column" pt={2} pb={4} align="center">
                 <Box w={{ base: '100%', md: '90%', lg: '80%' }} bg="white">

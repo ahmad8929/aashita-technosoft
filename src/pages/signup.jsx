@@ -10,6 +10,7 @@ import {
     FormLabel,
     Input,
     Heading,
+    Flex,
     Stack,
     Spinner,
     Select,
@@ -169,6 +170,7 @@ const Register = () => {
                     status: "error",
                     duration: 4000,
                     isClosable: true,
+                    position: "top"
                 });
             } else {
                 toast({
@@ -177,6 +179,7 @@ const Register = () => {
                     status: "error",
                     duration: 4000,
                     isClosable: true,
+                    position: "top"
                 });
             }
         } finally {
@@ -184,7 +187,8 @@ const Register = () => {
         }
     };
 
-    const onFinish = () => {
+    const onFinish = (e) => {
+        e.preventDefault();
         if (validateForm()) {
             setLoading(true);
             handleRegister(); // Call the API to register the user
@@ -214,158 +218,172 @@ const Register = () => {
     return (
         <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" overflow="hidden">
             <Card p={6} w={screens === "Mobile" ? "100%" : "700px"} boxShadow="lg">
+
+                {isLoading && (
+                    <Flex
+                        position="absolute"
+                        top="0"
+                        left="0"
+                        right="0"
+                        bottom="0"
+                        alignItems="center"
+                        justifyContent="center"
+                        bg="rgba(255, 255, 255, 0.7)"
+                        zIndex="10"
+                    >
+                        <Spinner size="xl" />
+                    </Flex>
+                )}
+
                 <Heading as="h2" size="lg" textAlign="center" mb={6}>
                     Now, tell us a bit about yourself
                 </Heading>
 
-                {isLoading ? (
-                    <Spinner size="lg" />
-                ) : (
-                    <form onSubmit={onFinish}>
-                        <Stack spacing={6}>
-                            <HStack spacing={4}>
-                                <FormControl isRequired isInvalid={!!errors.fullName} flex="1">
-                                    <FormLabel>Full Name</FormLabel>
+                <form onSubmit={onFinish}>
+                    <Stack spacing={6}>
+                        <HStack spacing={4}>
+                            <FormControl isRequired isInvalid={!!errors.fullName} flex="1">
+                                <FormLabel>Full Name</FormLabel>
+                                <Input
+                                    name="fullName"
+                                    placeholder="Enter your full name"
+                                    value={formValues.fullName}
+                                    onChange={handleInputChange}
+                                />
+                                {errors.fullName && (
+                                    <Text color="red.500">{errors.fullName}</Text>
+                                )}
+                            </FormControl>
+
+                            <FormControl isRequired isInvalid={!!errors.email} flex="1">
+                                <FormLabel>Email</FormLabel>
+                                <Input
+                                    type="email"
+                                    name="email"
+                                    placeholder="Enter your email"
+                                    value={formValues.email}
+                                    onChange={handleInputChange}
+                                />
+                                {errors.email && (
+                                    <Text color="red.500">{errors.email}</Text>
+                                )}
+                            </FormControl>
+                        </HStack>
+
+                        <HStack spacing={4}>
+
+                            <FormControl isRequired isInvalid={!!errors.mobileNumber} flex="1">
+                                <FormLabel>Mobile Number</FormLabel>
+                                <InputGroup>
+                                    <Select
+                                        w="28"
+                                        value={selectedCountryCode}
+                                        onChange={handleCountryCodeChange}
+                                    >
+                                        {countryCodes.map((country) => (
+                                            <option key={country.code} value={country.code}>
+                                                {country.code} ({country.country})
+                                            </option>
+                                        ))}
+                                    </Select>
                                     <Input
-                                        name="fullName"
-                                        placeholder="Enter your full name"
-                                        value={formValues.fullName}
+                                        type="tel"
+                                        name="mobileNumber"
+                                        placeholder="Enter your phone number"
+                                        value={formValues.mobileNumber}
+                                        onChange={handleInputChange}
+                                        ml={2}
+                                    />
+                                </InputGroup>
+                                {errors.mobileNumber && <Text color="red.500">{errors.mobileNumber}</Text>}
+                            </FormControl>
+
+
+                            <FormControl isRequired isInvalid={!!errors.password} flex="1">
+                                <FormLabel>Password</FormLabel>
+                                <InputGroup>
+                                    <Input
+                                        type={showPassword ? "text" : "password"}
+                                        name="password"
+                                        placeholder="Enter your password"
+                                        value={formValues.password}
                                         onChange={handleInputChange}
                                     />
-                                    {errors.fullName && (
-                                        <Text color="red.500">{errors.fullName}</Text>
-                                    )}
-                                </FormControl>
-
-                                <FormControl isRequired isInvalid={!!errors.email} flex="1">
-                                    <FormLabel>Email</FormLabel>
-                                    <Input
-                                        type="email"
-                                        name="email"
-                                        placeholder="Enter your email"
-                                        value={formValues.email}
-                                        onChange={handleInputChange}
-                                    />
-                                    {errors.email && (
-                                        <Text color="red.500">{errors.email}</Text>
-                                    )}
-                                </FormControl>
-                            </HStack>
-
-                            <HStack spacing={4}>
-
-                                <FormControl isRequired isInvalid={!!errors.mobileNumber} flex="1">
-                                    <FormLabel>Mobile Number</FormLabel>
-                                    <InputGroup>
-                                        <Select
-                                            w="28"
-                                            value={selectedCountryCode}
-                                            onChange={handleCountryCodeChange}
-                                        >
-                                            {countryCodes.map((country) => (
-                                                <option key={country.code} value={country.code}>
-                                                    {country.code} ({country.country})
-                                                </option>
-                                            ))}
-                                        </Select>
-                                        <Input
-                                            type="tel"
-                                            name="mobileNumber"
-                                            placeholder="Enter your phone number"
-                                            value={formValues.mobileNumber}
-                                            onChange={handleInputChange}
-                                            ml={2}
+                                    <InputRightElement>
+                                        <IconButton
+                                            variant="link"
+                                            aria-label={showPassword ? "Hide password" : "Show password"}
+                                            icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
+                                            onClick={() => setShowPassword(!showPassword)}
                                         />
-                                    </InputGroup>
-                                    {errors.mobileNumber && <Text color="red.500">{errors.mobileNumber}</Text>}
-                                </FormControl>
+                                    </InputRightElement>
+                                </InputGroup>
+                                {errors.password && (
+                                    <Text color="red.500">{errors.password}</Text>
+                                )}
+                            </FormControl>
+                        </HStack>
 
+                        <HStack spacing={4}>
+                            <FormControl flex="1">
+                                <FormLabel>Company Name</FormLabel>
+                                <Input
+                                    name="companyName"
+                                    placeholder="Enter your company name"
+                                    value={formValues.companyName}
+                                    onChange={handleInputChange}
+                                />
+                            </FormControl>
 
-                                <FormControl isRequired isInvalid={!!errors.password} flex="1">
-                                    <FormLabel>Password</FormLabel>
-                                    <InputGroup>
-                                        <Input
-                                            type={showPassword ? "text" : "password"}
-                                            name="password"
-                                            placeholder="Enter your password"
-                                            value={formValues.password}
-                                            onChange={handleInputChange}
+                            <FormControl isRequired isInvalid={!!errors.confirmPassword} flex="1">
+                                <FormLabel>Confirm Password</FormLabel>
+                                <InputGroup>
+                                    <Input
+                                        type={showConfirmPassword ? "text" : "password"}
+                                        name="confirmPassword"
+                                        placeholder="Confirm your password"
+                                        value={formValues.confirmPassword}
+                                        onChange={handleInputChange}
+                                    />
+                                    <InputRightElement>
+                                        <IconButton
+                                            variant="link"
+                                            aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                                            icon={showConfirmPassword ? <ViewOffIcon /> : <ViewIcon />}
+                                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                                         />
-                                        <InputRightElement>
-                                            <IconButton
-                                                variant="link"
-                                                aria-label={showPassword ? "Hide password" : "Show password"}
-                                                icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
-                                                onClick={() => setShowPassword(!showPassword)}
-                                            />
-                                        </InputRightElement>
-                                    </InputGroup>
-                                    {errors.password && (
-                                        <Text color="red.500">{errors.password}</Text>
-                                    )}
-                                </FormControl>
-                            </HStack>
+                                    </InputRightElement>
+                                </InputGroup>
+                                {errors.confirmPassword && (
+                                    <Text color="red.500">{errors.confirmPassword}</Text>
+                                )}
+                            </FormControl>
+                        </HStack>
 
-                            <HStack spacing={4}>
-                                <FormControl flex="1">
-                                    <FormLabel>Company Name</FormLabel>
-                                    <Input
-                                        name="companyName"
-                                        placeholder="Enter your company name"
-                                        value={formValues.companyName}
-                                        onChange={handleInputChange}
-                                    />
-                                </FormControl>
+                        <HStack spacing={4}>
+                            <FormControl flex="1">
+                                <FormLabel>GST Number</FormLabel>
+                                <Input
+                                    name="gstNumber"
+                                    placeholder="Enter your GST number"
+                                    value={formValues.gstNumber}
+                                    onChange={handleInputChange}
+                                />
+                            </FormControl>
+                            <FormControl flex="1">
+                                <FormLabel>Address</FormLabel>
+                                <Input
+                                    name="address"
+                                    placeholder="Enter your address"
+                                    value={formValues.address}
+                                    onChange={handleInputChange}
+                                />
+                            </FormControl>
 
-                                <FormControl isRequired isInvalid={!!errors.confirmPassword} flex="1">
-                                    <FormLabel>Confirm Password</FormLabel>
-                                    <InputGroup>
-                                        <Input
-                                            type={showConfirmPassword ? "text" : "password"}
-                                            name="confirmPassword"
-                                            placeholder="Confirm your password"
-                                            value={formValues.confirmPassword}
-                                            onChange={handleInputChange}
-                                        />
-                                        <InputRightElement>
-                                            <IconButton
-                                                variant="link"
-                                                aria-label={showConfirmPassword ? "Hide password" : "Show password"}
-                                                icon={showConfirmPassword ? <ViewOffIcon /> : <ViewIcon />}
-                                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                            />
-                                        </InputRightElement>
-                                    </InputGroup>
-                                    {errors.confirmPassword && (
-                                        <Text color="red.500">{errors.confirmPassword}</Text>
-                                    )}
-                                </FormControl>
-                            </HStack>
-
-                            <HStack spacing={4}>
-                                <FormControl flex="1">
-                                    <FormLabel>GST Number</FormLabel>
-                                    <Input
-                                        name="gstNumber"
-                                        placeholder="Enter your GST number"
-                                        value={formValues.gstNumber}
-                                        onChange={handleInputChange}
-                                    />
-                                </FormControl>
-                                <FormControl flex="1">
-                                    <FormLabel>Address</FormLabel>
-                                    <Input
-                                        name="address"
-                                        placeholder="Enter your address"
-                                        value={formValues.address}
-                                        onChange={handleInputChange}
-                                    />
-                                </FormControl>
-
-                            </HStack>
+                        </HStack>
 
 
-                            {/* <HStack spacing={4}>
+                        {/* <HStack spacing={4}>
                                 <FormControl isRequired isInvalid={!!errors.plan} flex="1">
                                     <FormLabel>Select a Plan</FormLabel>
                                     <Select
@@ -392,29 +410,29 @@ const Register = () => {
                             </HStack> */}
 
 
-                            <FormControl isRequired isInvalid={!!errors.agreeTerms} display="flex" justifyContent="Center">
-                                <Checkbox
-                                    name="agreeTerms"
-                                    isChecked={formValues.agreeTerms}
-                                    onChange={(e) => setFormValues({ ...formValues, agreeTerms: e.target.checked })}
-                                >
-                                    I agree to the terms and conditions
-                                </Checkbox>
-                                {errors.agreeTerms && <Text color="red.500">{errors.agreeTerms}</Text>}
-                            </FormControl>
+                        <FormControl isRequired isInvalid={!!errors.agreeTerms} display="flex" justifyContent="Center">
+                            <Checkbox
+                                name="agreeTerms"
+                                isChecked={formValues.agreeTerms}
+                                onChange={(e) => setFormValues({ ...formValues, agreeTerms: e.target.checked })}
+                            >
+                                I agree to the terms and conditions
+                            </Checkbox>
+                            {errors.agreeTerms && <Text color="red.500">{errors.agreeTerms}</Text>}
+                        </FormControl>
 
-                            <Button colorScheme="teal" type="submit">
-                                Submit
-                            </Button>
+                        <Button colorScheme="teal" type="submit">
+                            Submit
+                        </Button>
 
-                            <Text mt={4} textAlign="center">
-                                Already have an account?{" "}
-                                <ChakraLink as={Link} to="/login" color="blue.500" fontWeight="bold">
-                                    Log In
-                                </ChakraLink>
-                            </Text>
+                        <Text mt={4} textAlign="center">
+                            Already have an account?{" "}
+                            <ChakraLink as={Link} to="/login" color="blue.500" fontWeight="bold">
+                                Log In
+                            </ChakraLink>
+                        </Text>
 
-                            {/* 
+                        {/* 
                             <Modal isOpen={isModalOpen} onClose={closeModal}>
                                 <ModalOverlay />
                                 <ModalContent maxW="800px" maxH="700px">
@@ -432,9 +450,9 @@ const Register = () => {
                             </Modal> */}
 
 
-                        </Stack>
-                    </form>
-                )}
+                    </Stack>
+                </form>
+
             </Card>
         </Box>
     );

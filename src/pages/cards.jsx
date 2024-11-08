@@ -95,13 +95,18 @@ const Cards = () => {
 
             <Box p={8} bg="gray.100" minH="calc(100vh - 14vh)" display="flex" alignItems="center" justifyContent="center">
                 <VStack spacing={10} align="stretch" maxW="800px" width="100%">
-                    <SimpleGrid spacing={8} templateColumns="repeat(3, 1fr)"> 
-      
+                    <SimpleGrid spacing={8} templateColumns="repeat(3, 1fr)">
+
                         {cards
-                            .filter((card) =>
-                                (currentPlan === "TRIAL" && card.LicenseType === "TRIAL") ||
-                                (currentPlan !== "TRIAL" && card.LicenseType !== "TRIAL")
-                            )
+                            .filter((card) => {
+                                // If current plan is "TRIAL", show all cards
+                                if (currentPlan === "TRIAL") {
+                                    return true;  // show all cards
+                                }
+
+                                // If current plan is not "TRIAL", hide the "TRIAL" card
+                                return card.LicenseType !== "TRIAL";  // show only non-TRIAL cards
+                            })
                             .map((card) => (
                                 <Card
                                     key={card.LicenseType}
@@ -119,12 +124,12 @@ const Cards = () => {
                                         )}
                                     </CardHeader>
                                     <CardBody textAlign="center">
-                                    {card.LicenseType === "TRIAL" ? (
-                                        <CardBody textAlign="center" display="flex" alignItems="center" justifyContent="center" height="150px">
-                                            <Text>No. of Records: {card.NumberOfRowsPerPeriod}</Text>
-                                        </CardBody>
-                                    ) : (
-                                        <>
+                                        {card.LicenseType === "TRIAL" ? (
+                                            <CardBody textAlign="center" display="flex" alignItems="center" justifyContent="center" height="150px">
+                                                <Text>No. of Records: {card.NumberOfRowsPerPeriod}</Text>
+                                            </CardBody>
+                                        ) : (
+                                            <>
                                                 <Text>Base Price: {card.BasePrice}</Text>
                                                 <Text>GST: {card.Gst}%</Text>
                                                 <Text>Records Per Day: {card.NumberOfRowsPerPeriod}</Text>

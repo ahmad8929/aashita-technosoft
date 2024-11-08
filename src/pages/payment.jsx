@@ -92,7 +92,7 @@ const Payment = () => {
             });
             toast({
                 title: "Payment Submitted",
-                description: "Your message has been received. We will verify your payment and activate you account shortly.",
+                description: "Your message has been received. We will verify your payment and activate you plan shortly.",
                 status: "success",
                 duration: 2000,
                 isClosable: true,

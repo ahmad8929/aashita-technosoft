@@ -24,6 +24,7 @@ const Landing = () => {
         hsCode: '',
         supplierName: '',
         originCountry: '',
+        destination_Country:'',
         proDesc: '',
         billNo: '',
         email: 'test@example.com',
@@ -168,6 +169,7 @@ const Landing = () => {
             hs_code: formData.hsCode,
             supplier_name: formData.supplierName,
             origin_country: formData.originCountry,
+            destination_Country: formData.destination_Country,
             pro_desc: formData.proDesc,
             bill_no: formData.billNo,
             number_of_records: formData.number_of_records,
@@ -426,8 +428,8 @@ const Landing = () => {
                             <FormLabel fontSize="sm" fontWeight="medium">Destination Country (COE)</FormLabel>
                             <Input
                                 type="text"
-                                name="destinationCountry"
-                                value={formData.destinationCountry}
+                                name="destination_Country"
+                                value={formData.destination_Country}
                                 onChange={handleFormInput}
                                 size="md"
                                 bg="gray.50"

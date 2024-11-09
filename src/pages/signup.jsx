@@ -24,8 +24,7 @@ import {
 } from "@chakra-ui/react";
 import { useBreakpointValue } from "@chakra-ui/media-query";
 import { useNavigate, Link } from "react-router-dom";
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"; // Importing icons for password visibility
-// import PlanDetails from "./PlanDetails";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"; 
 
 const Register = () => {
     const screens = useBreakpointValue({ base: "Mobile", md: "Desktop" });
@@ -45,7 +44,6 @@ const Register = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [selectedCountryCode, setSelectedCountryCode] = useState("+91");
-    // const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
     const toast = useToast();
 
@@ -93,9 +91,9 @@ const Register = () => {
         if (!formValues.agreeTerms) {
             errors.agreeTerms = "You must agree to the terms and conditions.";
         }
-        if (!formValues.mobileNumber || !/^\d{10}$/.test(formValues.mobileNumber)) {
-            errors.mobileNumber = "Please enter a valid 10-digit phone number!";
-        }
+        // if (!formValues.mobileNumber || !/^\d{10}$/.test(formValues.mobileNumber)) {
+        //     errors.mobileNumber = "Please enter a valid 10-digit phone number!";
+        // }
         // if (
         //     !formValues.password ||
         //     formValues.password.length < 8 ||
@@ -129,22 +127,14 @@ const Register = () => {
         });
     };
 
-    // const handlePlanChange = (value) => {
-    //     setFormValues({
-    //         ...formValues,
-    //         plan: value,
-    //     });
-    //     setErrors({
-    //         ...errors,
-    //         plan: validateField("plan", value),
-    //     });
-    // };
 
     const handleRegister = async () => {
         try {
+            
             const { data: createAccountResponse } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/signup`, {
                 email: formValues.email.toLowerCase(),
                 password: formValues.password,
+                name: formValues.fullName,
                 companyName: formValues.companyName,
                 phoneNumber: formValues.mobileNumber,
                 phoneNumberCountryCode: selectedCountryCode,
@@ -197,14 +187,16 @@ const Register = () => {
 
     const countryCodes = [
         { code: "+91", country: "India" },
+        { code: "+84", country: "Vietnam" },
         { code: "+86", country: "China" },
+        { code: "+66", country: "Thailand" },
         { code: "+81", country: "Japan" },
         { code: "+44", country: "UK" },
         { code: "+82", country: "South Korea" },
         { code: "+49", country: "Germany" },
         { code: "+33", country: "France" },
         { code: "+55", country: "Brazil" },
-        { code: "+61", country: "Australia" }
+        { code: "+61", country: "Australia" },
     ];
 
 

@@ -119,23 +119,31 @@ const Landing = () => {
             return;
         }
 
-        // const conditionalFields = [
-        //     'destinationCountry', 'originCountry', 'supplierName', 'hsCode', 'buyerName'
-        // ];
-    
-        // const isAtLeastOneFieldFilled = conditionalFields.some(field => formData[field].trim() !== '');
-    
-        // if (!isAtLeastOneFieldFilled) {
-        //     toast({
-        //         title: "Validation Error",
-        //         description: "At least one of the following fields must be filled: Destination Country, Origin Country, Supplier Name, HS Code, or Buyer Name.",
-        //         status: "error",
-        //         duration: 2000,
-        //         isClosable: true,
-        //         position: "top"
-        //     });
-        //     return;
-        // }
+        const conditionalFields = [
+            'destination_Country', 'originCountry', 'supplierName', 'hsCode', 'buyerName'
+        ];
+        
+        // Log formData to ensure fields are present
+        console.log("Form Data:", formData);
+        
+        const isAtLeastOneFieldFilled = conditionalFields.some(field => {
+            const value = formData[field]?.trim();
+            console.log(`${field}:`, value); // Log each field value for debugging
+            return value !== '';
+        });
+        
+        if (!isAtLeastOneFieldFilled) {
+            toast({
+                title: "Validation Error",
+                description: "At least one of the following fields must be filled: Destination Country, Origin Country, Supplier Name, HS Code, or Buyer Name.",
+                status: "error",
+                duration: 2000,
+                isClosable: true,
+                position: "top"
+            });
+            return;
+        }
+        
 
         if (parseInt(formData.number_of_records) > tokensData) {
             toast({

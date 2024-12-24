@@ -1,15 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
+<<<<<<< HEAD
 import { Box, Button, Spinner, Text, useToast, Input, VStack } from "@chakra-ui/react";
+=======
+import { Box, Button, Spinner, Text, useToast } from "@chakra-ui/react";
+
+>>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
 
 const AccountActivation = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const toast = useToast();
   const [status, setStatus] = useState("loading");
+<<<<<<< HEAD
   const [email, setEmail] = useState("");
   const [isResending, setIsResending] = useState(false);
+=======
+>>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
 
   // Extract the token from the URL's query parameters
   const query = new URLSearchParams(location.search);
@@ -46,6 +54,7 @@ const AccountActivation = () => {
     navigate("/login");
   };
 
+<<<<<<< HEAD
   const handleResendActivation = async () => {
     if (!email) {
       toast({
@@ -81,12 +90,15 @@ const AccountActivation = () => {
     }
   };
 
+=======
+>>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
   return (
     <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
       {status === "loading" ? (
         <Spinner size="lg" />
       ) : (
         <Box textAlign="center">
+<<<<<<< HEAD
           {status === "success" ? (
             <>
               <Text fontSize="2xl" mb={4}>Your account has been activated!</Text>
@@ -111,6 +123,16 @@ const AccountActivation = () => {
               </Button>
             </VStack>
           )}
+=======
+          <Text fontSize="2xl" mb={4}>
+            {status === "success"
+              ? "Your account has been activated!"
+              : "Activation failed"}
+          </Text>
+          <Button colorScheme="teal" onClick={handleLoginRedirect}>
+            Go to Login
+          </Button>
+>>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
         </Box>
       )}
     </Box>

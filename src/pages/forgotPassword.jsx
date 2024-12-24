@@ -53,7 +53,11 @@ const ForgotPassword = () => {
             
             toast({
                 title: "Password Reset Link Sent",
+<<<<<<< HEAD
                 description: `A password reset link has been sent to your email from ID "info@aashitaenterprises.com" Please check your email (including spam folder)`,
+=======
+                description: `A password reset link has been sent to your email from ID an1gupta0693@gmail.com Please check your email (including spam folder)`,
+>>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
               
                 status: "success",
                 duration: 3000,

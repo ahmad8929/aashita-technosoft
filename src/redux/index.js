@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+<<<<<<< HEAD
 import userReducer, { clearUser, setAuthState } from "./slices/user";
 
 const sessionMiddleware = (store) => (next) => (action) => {
@@ -39,3 +40,22 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(sessionMiddleware),
 });
+=======
+// import { setupListeners } from "@reduxjs/toolkit/query";
+
+// slices
+import userReducer from "./slices/user";
+
+// api slices
+// import rtkQuery from "./api";
+
+export const store = configureStore({
+  reducer: {
+    user: userReducer, // Set the user reducer to handle user state
+    // ...rtkQuery.apiSlices,
+  },
+  // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(rtkQuery.apiSliceMiddlewares)
+});
+
+// setupListeners(store.dispatch)
+>>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29

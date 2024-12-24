@@ -1,13 +1,18 @@
 import { Fragment } from "react";
 import { Routes, Route } from "react-router-dom";
+<<<<<<< HEAD
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setUser, setAuthState, clearUser } from "./redux/slices/user";
 import { getAccessToken } from "./utils/session";
+=======
+
+>>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
 // routes
 import routes from "./routes";
 
 function App() {
+<<<<<<< HEAD
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -54,14 +59,23 @@ function App() {
 // }, [dispatch]);
 
 
+=======
+>>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
   return (
     <Routes>
       {/* Public Routes */}
       {routes.publicRoutes.map((route) => (
+<<<<<<< HEAD
         <Route
           key={route.title}
           path={route.path}
           element={<route.component />}
+=======
+        <Route 
+          key={route.title} 
+          path={route.path} 
+          element={<route.component />} 
+>>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
         />
       ))}
 
@@ -69,6 +83,7 @@ function App() {
       {routes.protectedRoute && routes.protectedRoute.map((route) => (
         <Fragment key={route.title}>
           {route.title === "Home" ? (
+<<<<<<< HEAD
             <Route
               index
               path={route.path}
@@ -78,6 +93,17 @@ function App() {
             <Route
               path={route.path}
               element={<route.component />}
+=======
+            <Route 
+              index 
+              path={route.path} 
+              element={<route.component />} 
+            />
+          ) : (
+            <Route 
+              path={route.path} 
+              element={<route.component />} 
+>>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
             />
           )}
         </Fragment>

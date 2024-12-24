@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { useState, useEffect } from "react";
+=======
+import { useState } from "react";
+>>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
 import axios from 'axios';
 import {
     Box,
@@ -14,6 +18,7 @@ import {
     useToast,
     Link as ChakraLink,
 } from "@chakra-ui/react";
+<<<<<<< HEAD
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import AppPage from "../layouts/AppPage";
@@ -37,6 +42,33 @@ const Login = () => {
             window.location.href = '/';
         }
     }, [isLoggedIn]);
+=======
+import { useDispatch } from "react-redux";
+import { useNavigate, Link } from "react-router-dom";
+import AppPage from "../layouts/AppPage";
+
+import { setUser, setAuthState } from "../redux/slices/user";
+
+const Login = () => {
+    const toast = useToast();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    // const [handleLogin, { isLoading }] = useLoginMutation();
+    const [isLoading, setLoading] = useState(false);
+
+    // Form state
+    const [formData, setFormData] = useState({
+        email: "",
+        password: "",
+    });
+
+    // Error and loading state
+    const [error, setError] = useState({
+        email: false,
+        password: false,
+    });
+>>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
 
     const handleChange = (e) => {
         setFormData({
@@ -45,6 +77,7 @@ const Login = () => {
         });
     };
 
+<<<<<<< HEAD
     const handleLogin = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -76,6 +109,29 @@ const Login = () => {
 
             window.localStorage.setItem('session', JSON.stringify(response.data));
 
+=======
+    const handleLoginClick = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            const { data: responseData } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/login`, {
+                ...formData,
+            });
+
+            console.log({ responseData })
+
+            if (!responseData) {
+                console.error(error);
+                return;
+            }
+
+            window.localStorage.setItem('session', JSON.stringify(responseData));
+
+            dispatch(setUser(responseData));
+            dispatch(setAuthState(true));
+
+            navigate("/");
+>>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
         } catch (error) {
             if (error.response && error.response.status === 401) {
                 toast({
@@ -87,13 +143,20 @@ const Login = () => {
                     position: "top",
                 });
             } else {
+<<<<<<< HEAD
                 console.error("Login API Error:", error);
+=======
+                console.error(error);
+>>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
             }
         } finally {
             setLoading(false);
         }
     };
+<<<<<<< HEAD
 
+=======
+>>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
     return (
         <AppPage title="Login" isProtected={false} includeNavbar={false}>
             <Flex height="100vh" alignItems="center" justifyContent="center">
@@ -107,6 +170,11 @@ const Login = () => {
                     borderRadius="8px"
                     position="relative"
                 >
+<<<<<<< HEAD
+=======
+                    {/* {isLoading && <Spinner size="xl" position="absolute" top="50%" left="50%" />} */}
+
+>>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
                     {isLoading && (
                         <Flex
                             position="absolute"
@@ -127,7 +195,11 @@ const Login = () => {
                         LOG IN
                     </Heading>
 
+<<<<<<< HEAD
                     <VStack as="form" onSubmit={handleLogin} spacing={4} w="100%">
+=======
+                    <VStack as="form" onSubmit={handleLoginClick} spacing={4} w="100%">
+>>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
                         <FormControl id="email" isRequired isInvalid={error.email}>
                             <FormLabel>Email ID</FormLabel>
                             <Input
@@ -170,6 +242,10 @@ const Login = () => {
                             Log In
                         </Button>
                     </VStack>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
                     <Text textAlign="center" mt={4}>
                         Don&apos;t have an account?{" "}
                         <ChakraLink as={Link} to="/signup" color="blue.500" fontWeight="bold">

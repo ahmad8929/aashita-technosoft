@@ -20,15 +20,21 @@ import {
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from 'react-redux';
+<<<<<<< HEAD
 import qrImage from '../assets/image.png';
 
+=======
+>>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
 
 import AppPage from '../layouts/AppPage';
 
 const Payment = () => {
 
     const user = useSelector((state) => state.user);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
     const [paymentDetails, setPaymentDetails] = useState({
         utrNo: "",
         paymentDate: "",
@@ -49,7 +55,11 @@ const Payment = () => {
             try {
                 const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/license`, {
                     headers: {
+<<<<<<< HEAD
                         'Session-Token': user.session_token,
+=======
+                        'Session-Token': user.sessionToken,
+>>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
                     },
                 });
                 // Assuming the license data for the selected plan is available in response
@@ -90,7 +100,11 @@ const Payment = () => {
         try {
             await axios.post(`${import.meta.env.VITE_BACKEND_URL}/submit-payment`, payload, {
                 headers: {
+<<<<<<< HEAD
                     'Session-Token': user.session_token,
+=======
+                    'Session-Token': user.sessionToken,
+>>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
                 },
             });
             toast({
@@ -113,7 +127,11 @@ const Payment = () => {
             ) {
                 toast({
                     title: "Payment Already Submitted",
+<<<<<<< HEAD
                     description: "Please wait while we verify it.",
+=======
+                    description: "This payment has already been submitted. Please check your payment status or contact support.",
+>>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
                     status: "warning",
                     duration: 2000,
                     isClosable: true,
@@ -148,8 +166,12 @@ const Payment = () => {
                                     <Text fontWeight="bold" mb={2}>QR Code</Text>
                                     <Box
                                         as="img"
+<<<<<<< HEAD
                                         // src="/assets/image.png"
                                         src={qrImage}
+=======
+                                        src="https://api.qrserver.com/v1/create-qr-code/?data=example@upi&size=200x200"
+>>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
                                         alt="QR Code"
                                         width="200px"
                                         height="200px"
@@ -157,11 +179,18 @@ const Payment = () => {
                                         borderWidth="1px"
                                         borderRadius="md"
                                     />
+<<<<<<< HEAD
                                     <Text fontWeight="bold" mb={2}>UPI ID: <span style={{ color: 'teal.500' }}>pos.11351145@indus</span></Text>
                                     <Divider />
                                     <Text fontWeight="bold" mt={4}>Bank Details</Text>
                                     <Box borderWidth="1px" borderRadius="md" p={4} mt={2} bg="gray.50">
                                         <Text fontWeight="medium">Beneficiary: <strong>Aashita Enterprises</strong></Text>
+=======
+                                    <Text fontWeight="bold" mb={2}>UPI ID: <span style={{ color: 'teal.500' }}>example@upi</span></Text>
+                                    <Divider />
+                                    <Text fontWeight="bold" mt={4}>Bank Details</Text>
+                                    <Box borderWidth="1px" borderRadius="md" p={4} mt={2} bg="gray.50">
+>>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
                                         <Text fontWeight="medium">Account No: <strong>650014159285</strong></Text>
                                         <Text fontWeight="medium">IFSC Code: <strong>INDB0000562</strong></Text>
                                         <Text fontWeight="medium">Bank: <strong>INDUSIND BANK LTD</strong></Text>

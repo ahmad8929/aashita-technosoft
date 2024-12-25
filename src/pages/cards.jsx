@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-<<<<<<< HEAD
 import { Box, VStack, SimpleGrid, Card, CardHeader, Flex, Skeleton, CardBody, CardFooter, Heading, Text, Button, Spinner, useToast } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import AppPage from '../layouts/AppPage';
@@ -11,16 +10,6 @@ const Cards = () => {
     const navigate = useNavigate();
     
     const dispatch = useDispatch();
-=======
-import { Box, VStack, SimpleGrid, Card, CardHeader, Flex, CardBody, CardFooter, Heading, Text, Button, Spinner, useToast } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
-import AppPage from '../layouts/AppPage';
-import axios from 'axios';
-import { useSelector } from 'react-redux';
-
-const Cards = () => {
-    const navigate = useNavigate();
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
     const user = useSelector((state) => state.user);
     const [cards, setCards] = useState([]);
     const [currentPlan, setCurrentPlan] = useState(null);
@@ -31,7 +20,6 @@ const Cards = () => {
     // Fetching card data from the license API and userInfo API
     const fetchData = async () => {
 
-<<<<<<< HEAD
         // if (!user.isLoggedIn && !hasShownToast) {
         //     toast({
         //         title: "Login Required",
@@ -53,31 +41,6 @@ const Cards = () => {
             // Fetching card data from the license API
             const licenseResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/license`, {
                 headers: { 'Session-Token': user.session_token, },
-=======
-        if (!user.isLoggedIn && !hasShownToast) {
-            toast({
-                title: "Login Required",
-                description: "You must be logged in to view the cards.",
-                status: "error",
-                duration: 1000,
-                isClosable: true,
-                position: "top"
-            });
-            setHasShownToast(true);
-            setTimeout(() => {
-                navigate("/login");
-            }, 1000);
-            return;
-        }
-
-
-        try {
-            const sessionToken = user.sessionToken;
-
-            // Fetching card data from the license API
-            const licenseResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/license`, {
-                headers: { 'Session-Token': sessionToken },
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
             });
 
             // Sort cards to show "TRIAL" first, followed by "Silver" and "Gold"
@@ -87,7 +50,6 @@ const Cards = () => {
             });
             setCards(sortedCards);
 
-<<<<<<< HEAD
 
             const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/userInfo`, {
                 headers: {
@@ -115,16 +77,6 @@ const Cards = () => {
             }
 
 
-=======
-            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/userInfo`, {
-                headers: {
-                    'Session-Token': user.sessionToken,
-                },
-            });
-            setCurrentPlan(response.data.user_details.LicenseType);
-        } catch (error) {
-            console.error('Error fetching data:', error);
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
         } finally {
             setLoading(false);
         }
@@ -132,17 +84,12 @@ const Cards = () => {
 
     useEffect(() => {
         fetchData();
-<<<<<<< HEAD
     }, [user.sessionToken,dispatch]);
-=======
-    }, [user.sessionToken]);
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
 
     const handleChoosePlan = (licenseType) => {
         navigate('/payment', { state: { licenseType } });
     };
 
-<<<<<<< HEAD
     const handleChoosePlanLogin = (licenseType) => {
         navigate('/login', { state: { licenseType } });
     };
@@ -244,76 +191,6 @@ const Cards = () => {
                                             )}
                                         </CardBody>
                                         {/* <CardFooter justifyContent="center">
-=======
-    // if (loading) {
-    //      <Spinner size="xl" />;
-    // }
-
-    return (
-        <AppPage title="Cards" description="" keywords={[]} isProtected={true}>
-
-            {isLoading && (
-                <Flex
-                    position="absolute"
-                    top="0"
-                    left="0"
-                    right="0"
-                    bottom="0"
-                    alignItems="center"
-                    justifyContent="center"
-                    bg="rgba(255, 255, 255, 0.7)"
-                    zIndex="10"
-                >
-                    <Spinner size="xl" />
-                </Flex>
-            )}
-
-            <Box p={8} bg="gray.100" minH="calc(100vh - 14vh)" display="flex" alignItems="center" justifyContent="center">
-                <VStack spacing={10} align="stretch" maxW="800px" width="100%">
-                    <SimpleGrid spacing={8} templateColumns="repeat(3, 1fr)">
-
-                        {cards
-                            .filter((card) => {
-                                // If current plan is "TRIAL", show all cards
-                                if (currentPlan === "TRIAL") {
-                                    return true;  // show all cards
-                                }
-
-                                // If current plan is not "TRIAL", hide the "TRIAL" card
-                                return card.LicenseType !== "TRIAL";  // show only non-TRIAL cards
-                            })
-                            .map((card) => (
-                                <Card
-                                    key={card.LicenseType}
-                                    p={6}
-                                    width="300px"
-                                    borderRadius="md"
-                                    boxShadow="md"
-                                    transition="transform 0.3s, box-shadow 0.3s"
-                                    _hover={{ transform: 'scale(1.05)', boxShadow: 'lg' }}
-                                >
-                                    <CardHeader textAlign="center">
-                                        <Heading size='lg'>{card.LicenseType}</Heading>
-                                        {card.LicenseType !== "TRIAL" && (
-                                            <Text fontSize="2xl" color="blue.500" mt={2}>Total Price: {card.TotalPrice}</Text>
-                                        )}
-                                    </CardHeader>
-                                    <CardBody textAlign="center">
-                                        {card.LicenseType === "TRIAL" ? (
-                                            <CardBody textAlign="center" display="flex" alignItems="center" justifyContent="center" height="150px">
-                                                <Text>No. of Records: {card.NumberOfRowsPerPeriod}</Text>
-                                            </CardBody>
-                                        ) : (
-                                            <>
-                                                <Text>Base Price: {card.BasePrice}</Text>
-                                                <Text>GST: {card.Gst}%</Text>
-                                                <Text>Records Per Day: {card.NumberOfRowsPerPeriod}</Text>
-                                                <Text>Validity: 12 Months from the date of payment</Text>
-                                            </>
-                                        )}
-                                    </CardBody>
-                                    <CardFooter justifyContent="center">
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
                                         {currentPlan === card.LicenseType ? (
                                             <Text color="green.500" fontWeight="bold">Active Plan</Text>
                                         ) : (
@@ -321,7 +198,6 @@ const Cards = () => {
                                                 Choose {card.LicenseType}
                                             </Button>
                                         )}
-<<<<<<< HEAD
                                     </CardFooter> */}
 
                                         <CardFooter justifyContent="center">
@@ -396,13 +272,6 @@ const Cards = () => {
                                 ))}
                         </SimpleGrid>
                     )}
-=======
-                                    </CardFooter>
-                                </Card>
-                            ))}
-
-                    </SimpleGrid>
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
                 </VStack>
             </Box>
         </AppPage>

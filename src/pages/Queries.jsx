@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-<<<<<<< HEAD
 import {Box, Text, VStack, Heading, Divider, Button, Thead, Tbody, Tr, Th, Td, Select, Table, Spinner} from '@chakra-ui/react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
@@ -12,17 +11,6 @@ const Queries = () => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
-=======
-import {
-    Box, Text, VStack, Heading, Divider, Button, Thead, Tbody, Tr, Th, Td, Select, Table, Spinner,
-} from '@chakra-ui/react';
-import axios from 'axios';
-import toast from 'react-hot-toast';
-import AppPage from '../layouts/AppPage';
-import { useSelector } from 'react-redux';
-
-const Queries = () => {
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
     const user = useSelector((state) => state.user);
     const [queries, setQueries] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -32,19 +20,10 @@ const Queries = () => {
 
     useEffect(() => {
         const fetchQueryData = async () => {
-<<<<<<< HEAD
             try {
                 const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/requests`, {
                     headers: {
                         'Session-Token': user.session_token,
-=======
-            const sessionToken = user.sessionToken;
-
-            try {
-                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/requests`, {
-                    headers: {
-                        'Session-Token': sessionToken,
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
                     },
                 });
 
@@ -52,7 +31,6 @@ const Queries = () => {
                 setQueries(queriesData);
 
             } catch (error) {
-<<<<<<< HEAD
                 if (error.response && error.response.data && error.response.data.code === "SESSION_ABSENT") {
 
                     console.log("------User Data before clear-------", user);
@@ -71,21 +49,13 @@ const Queries = () => {
                     console.error("Error fetching :", error);
                 }
 
-=======
-                toast.error("Failed to fetch queries");
-                setError("Could not load queries");
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
             } finally {
                 setLoading(false);
             }
         };
 
         fetchQueryData();
-<<<<<<< HEAD
     }, [user.sessionToken, dispatch]);
-=======
-    }, [user.sessionToken]);
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
 
     // Slice queries for pagination
     const currentQueries = queries.slice((currentPage - 1) * pageSize, currentPage * pageSize);
@@ -99,11 +69,7 @@ const Queries = () => {
         setCurrentPage(1);
     };
 
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
     return (
         <AppPage title="Queries" description="" keywords={[]} isProtected={true}>
             <Box p={8} bg="gray.100" minH="100vh">
@@ -149,10 +115,7 @@ const Queries = () => {
                                             <Th>Country</Th>
                                             <Th>No. of Records</Th>
                                             <Th>Product Description</Th>
-<<<<<<< HEAD
                                             <Th>Status</Th>
-=======
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
                                         </Tr>
                                     </Thead>
                                     <Tbody>
@@ -178,10 +141,7 @@ const Queries = () => {
                                                     <Td>{params.country || "--"}</Td>
                                                     <Td>{params.number_of_records || "--"}</Td>
                                                     <Td>{params.pro_desc || "--"}</Td>
-<<<<<<< HEAD
                                                     <Td>{query.Status || "--"}</Td>
-=======
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
                                                 </Tr>
                                             );
                                         })}

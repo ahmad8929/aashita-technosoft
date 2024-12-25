@@ -4,7 +4,6 @@ import axios from 'axios';
 
 import AppPage from '../layouts/AppPage';
 
-<<<<<<< HEAD
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 // import { useSelector } from 'react-redux';
@@ -15,11 +14,6 @@ const Tokens = () => {
     const navigate = useNavigate();
     
         const dispatch = useDispatch();
-=======
-import { useSelector } from 'react-redux';
-
-const Tokens = () => {
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
     const user = useSelector((state) => state.user);
     const [totalTokens, setTotalTokens] = useState(0);
     const [userLicenseType, setUserLicenseType] = useState("");
@@ -39,11 +33,7 @@ const Tokens = () => {
 
             // Fetching user information first
             const userInfoResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/userInfo`, {
-<<<<<<< HEAD
                 headers: {   'Session-Token': user.session_token, },
-=======
-                headers: { 'Session-Token': sessionToken },
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
             });
 
             const userLicenseType = userInfoResponse.data.user_details.LicenseType;
@@ -51,11 +41,7 @@ const Tokens = () => {
 
             // Fetching license data based on user's LicenseType
             const licenseResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/license`, {
-<<<<<<< HEAD
                 headers: {   'Session-Token': user.session_token, },
-=======
-                headers: { 'Session-Token': sessionToken },
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
             });
 
             // Filter license data to match the user's LicenseType and set total tokens
@@ -67,7 +53,6 @@ const Tokens = () => {
             }
 
             setLoading(false);
-<<<<<<< HEAD
         // } catch (error) {
         //     console.error('Error fetching data:', error);
         //     setLoading(false);
@@ -89,21 +74,11 @@ const Tokens = () => {
                             console.error("Error fetching :", error);
                         }
                     }
-=======
-        } catch (error) {
-            console.error('Error fetching data:', error);
-            setLoading(false);
-        }
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
     };
 
     useEffect(() => {
         fetchData();
-<<<<<<< HEAD
     }, [user.sessionToken,dispatch]);
-=======
-    }, [user.sessionToken]);
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
 
 
     // Fetch token data from API
@@ -114,11 +89,7 @@ const Tokens = () => {
             try {
                 const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/tokens`, {
                     headers: {
-<<<<<<< HEAD
                         'Session-Token': user.session_token,
-=======
-                        'Session-Token': sessionToken,
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
                     },
                 });
 

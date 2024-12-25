@@ -24,12 +24,8 @@ import {
 } from "@chakra-ui/react";
 import { useBreakpointValue } from "@chakra-ui/media-query";
 import { useNavigate, Link } from "react-router-dom";
-<<<<<<< HEAD
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import TermsAndCondition from "./termsAndConsition";
-=======
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"; 
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
 
 const Register = () => {
     const screens = useBreakpointValue({ base: "Mobile", md: "Desktop" });
@@ -43,20 +39,14 @@ const Register = () => {
         gstNumber: "",
         address: "",
         plan: "",
-<<<<<<< HEAD
         agreeTerms: false,
-=======
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
     });
     const [errors, setErrors] = useState({});
     const [isLoading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [selectedCountryCode, setSelectedCountryCode] = useState("+91");
-<<<<<<< HEAD
     const [isModalOpen, setIsModalOpen] = useState(false);
-=======
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
     const navigate = useNavigate();
     const toast = useToast();
 
@@ -68,35 +58,12 @@ const Register = () => {
         if (name === "email" && !value) {
             error = "Please enter your email!";
         }
-<<<<<<< HEAD
         if (name === "mobileNumber" && !value) {
             error = "Please enter your phone number";
         }
         if (name === "confirmPassword" && value !== formValues.password) {
             error = "Passwords do not match!";
         }
-=======
-        // if (name === "mobileNumber" && (!value || !/^\d{10}$/.test(value))) {
-        //     error = "Please enter a valid 10-digit phone number!";
-        // }
-        // if (
-        //     name === "password" &&
-        //     (value.length < 8 ||
-        //         !/[A-Z]/.test(value) ||
-        //         !/[a-z]/.test(value) ||
-        //         !/\d/.test(value) ||
-        //         !/[!@#$%^&*]/.test(value))
-        // ) {
-        //     error =
-        //         "Password must be at least 8 characters long and contain an uppercase letter, a lowercase letter, a number, and a special character!";
-        // }
-        if (name === "confirmPassword" && value !== formValues.password) {
-            error = "Passwords do not match!";
-        }
-        // if (name === "plan" && !value) {
-        //     error = "Please select a plan!";
-        // }
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
         return error;
     };
 
@@ -113,32 +80,9 @@ const Register = () => {
         if (!formValues.agreeTerms) {
             errors.agreeTerms = "You must agree to the terms and conditions.";
         }
-<<<<<<< HEAD
         if (formValues.password !== formValues.confirmPassword) {
             errors.confirmPassword = "Passwords do not match!";
         }
-=======
-        // if (!formValues.mobileNumber || !/^\d{10}$/.test(formValues.mobileNumber)) {
-        //     errors.mobileNumber = "Please enter a valid 10-digit phone number!";
-        // }
-        // if (
-        //     !formValues.password ||
-        //     formValues.password.length < 8 ||
-        //     !/[A-Z]/.test(formValues.password) ||
-        //     !/[a-z]/.test(formValues.password) ||
-        //     !/\d/.test(formValues.password) ||
-        //     !/[!@#$%^&*]/.test(formValues.password)
-        // ) {
-        //     errors.password =
-        //         "Password must be at least 8 characters long and contain an uppercase letter, a lowercase letter, a number, and a special character!";
-        // }
-        if (formValues.password !== formValues.confirmPassword) {
-            errors.confirmPassword = "Passwords do not match!";
-        }
-        // if (!formValues.plan) {
-        //     errors.plan = "Please select a plan!";
-        // }
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
         setErrors(errors);
         return Object.keys(errors).length === 0;
     };
@@ -155,16 +99,9 @@ const Register = () => {
         });
     };
 
-<<<<<<< HEAD
     const handleRegister = async () => {
         try {
 
-=======
-
-    const handleRegister = async () => {
-        try {
-            
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
             const { data: createAccountResponse } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/signup`, {
                 email: formValues.email.toLowerCase(),
                 password: formValues.password,
@@ -175,16 +112,9 @@ const Register = () => {
                 licenseType: "TRIAL",
             });
 
-<<<<<<< HEAD
             toast({
                 title: "Account created successfully!",
                 description: `An email from ID "info@aashitaenterprises.com" has been sent to you. Please check your email (including spam folder) and activate your account.`,
-=======
-
-            toast({
-                title: "Account created successfully!",
-                description: `An email from ID an1gupta0693@gmail.com has been sent to you. Please check your email (including spam folder) and activate your account.`,
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
                 status: "success",
                 duration: 4000,
                 isClosable: true,
@@ -192,10 +122,6 @@ const Register = () => {
 
             navigate("/login");
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
         } catch (error) {
             if (error.response && error.response.status === 400) {
                 toast({
@@ -224,30 +150,14 @@ const Register = () => {
         e.preventDefault();
         if (validateForm()) {
             setLoading(true);
-<<<<<<< HEAD
             handleRegister();
-=======
-            handleRegister(); // Call the API to register the user
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
         }
     };
 
     const countryCodes = [
         { code: "+91", country: "India" },
         { code: "+84", country: "Vietnam" },
-<<<<<<< HEAD
         { code: "+62", country: "Indonesia" },
-=======
-        { code: "+86", country: "China" },
-        { code: "+66", country: "Thailand" },
-        { code: "+81", country: "Japan" },
-        { code: "+44", country: "UK" },
-        { code: "+82", country: "South Korea" },
-        { code: "+49", country: "Germany" },
-        { code: "+33", country: "France" },
-        { code: "+55", country: "Brazil" },
-        { code: "+61", country: "Australia" },
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
     ];
 
 
@@ -255,12 +165,6 @@ const Register = () => {
         setSelectedCountryCode(e.target.value);
     };
 
-<<<<<<< HEAD
-=======
-    // const openModal = () => setIsModalOpen(true); // Open modal
-    // const closeModal = () => setIsModalOpen(false); // Close modal
-
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
     return (
         <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" overflow="hidden">
             <Card p={6} w={screens === "Mobile" ? "100%" : "700px"} boxShadow="lg">
@@ -333,11 +237,7 @@ const Register = () => {
                                         ))}
                                     </Select>
                                     <Input
-<<<<<<< HEAD
                                         type="number"
-=======
-                                        type="tel"
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
                                         name="mobileNumber"
                                         placeholder="Enter your phone number"
                                         value={formValues.mobileNumber}
@@ -432,7 +332,6 @@ const Register = () => {
 
                         </HStack>
 
-<<<<<<< HEAD
                         <FormControl isRequired isInvalid={!!errors.agreeTerms} display="flex" justifyContent="center">
                             <Checkbox
                                 name="agreeTerms"
@@ -454,51 +353,11 @@ const Register = () => {
                                 >
                                     terms and conditions
                                 </Text>
-=======
-
-                        {/* <HStack spacing={4}>
-                                <FormControl isRequired isInvalid={!!errors.plan} flex="1">
-                                    <FormLabel>Select a Plan</FormLabel>
-                                    <Select
-                                        name="plan"
-                                        placeholder="Select a plan"
-                                        value={formValues.plan}
-                                        onChange={(e) => handlePlanChange(e.target.value)}
-                                    >
-                                        <option value="Silver">Silver</option>
-                                        <option value="Diamond">Diamond</option>
-                                        <option value="Trial">Trial</option>
-                                    </Select>
-                                    {errors.plan && (
-                                        <Text color="red.500">{errors.plan}</Text>
-                                    )}
-                                </FormControl>
-                                <Button
-                                    colorScheme="teal"
-                                    variant="outline"
-                                    onClick={openModal} // Open modal on click
-                                >
-                                    View Plan Details
-                                </Button>
-                            </HStack> */}
-
-
-                        <FormControl isRequired isInvalid={!!errors.agreeTerms} display="flex" justifyContent="Center">
-                            <Checkbox
-                                name="agreeTerms"
-                                isChecked={formValues.agreeTerms}
-                                onChange={(e) => setFormValues({ ...formValues, agreeTerms: e.target.checked })}
-                            >
-                                I agree to the terms and conditions
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
                             </Checkbox>
                             {errors.agreeTerms && <Text color="red.500">{errors.agreeTerms}</Text>}
                         </FormControl>
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
                         <Button colorScheme="teal" type="submit">
                             Submit
                         </Button>
@@ -510,33 +369,9 @@ const Register = () => {
                             </ChakraLink>
                         </Text>
 
-<<<<<<< HEAD
                         <TermsAndCondition isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
                     </Stack>
                 </form>
-=======
-                        {/* 
-                            <Modal isOpen={isModalOpen} onClose={closeModal}>
-                                <ModalOverlay />
-                                <ModalContent maxW="800px" maxH="700px">
-                                    <ModalHeader>Plan Details</ModalHeader>
-                                    <ModalCloseButton />
-                                    <ModalBody>
-                                        <PlanDetails /> 
-                                    </ModalBody>
-                                    <ModalFooter>
-                                        <Button colorScheme="teal" mr={3} onClick={closeModal}>
-                                            Close
-                                        </Button>
-                                    </ModalFooter>
-                                </ModalContent>
-                            </Modal> */}
-
-
-                    </Stack>
-                </form>
-
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
             </Card>
         </Box>
     );

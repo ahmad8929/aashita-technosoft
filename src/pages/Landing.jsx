@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-<<<<<<< HEAD
 import { Button, Select, FormLabel, FormControl, Spinner, useToast, Flex, SimpleGrid, GridItem, Textarea, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input } from '@chakra-ui/react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -9,22 +8,10 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import SearchOTP from './SearchOTP';
 import { clearUser } from '../redux/slices/user/index';
-=======
-import { Box, Button, Select, FormLabel, FormControl, useToast, Flex, Text, Heading, List, ListItem, SimpleGrid, GridItem, Textarea, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input } from '@chakra-ui/react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import AppPage from '../layouts/AppPage';
-import { useSelector } from 'react-redux';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import countries from 'country-list';
-import SearchOTP from './SearchOTP';
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
 
 const Landing = () => {
     const navigate = useNavigate();
 
-<<<<<<< HEAD
     const dispatch = useDispatch();
     const toast = useToast();
 
@@ -33,40 +20,25 @@ const Landing = () => {
     const [isLoading, setLoading] = useState(false);
     const [tokensData, setTokensData] = useState(0);
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [countries, setCountries] = useState([]);
+
     const [formData, setFormData] = useState({
         from_date: '',
         to_date: '',
         country: 'india',
-=======
-    const toast = useToast();
-    const user = useSelector((state) => state.user);
-    const [tokensData, setTokensData] = useState(0);
-    const [formData, setFormData] = useState({
-        from_date: '',
-        to_date: '',
-        country: 'IN',
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
         inOut: 'import',
         buyerName: '',
         hsCode: '',
         supplierName: '',
         originCountry: '',
-<<<<<<< HEAD
         destinationCountry: '',
         proDesc: '',
         billNo: '',
         email: user.user_id,
-=======
-        destination_Country:'',
-        proDesc: '',
-        billNo: '',
-        email: 'test@example.com',
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
         number_of_records: ''
     });
 
     const { isOpen, onOpen, onClose } = useDisclosure();
-<<<<<<< HEAD
     const [postData, setPostData] = useState(null);
 
     // Fetch token data on component mount
@@ -83,32 +55,36 @@ const Landing = () => {
                 });
                 setTokensData(response.data.tokens);
                 // console.log("Remaining Tokens:", response.data.tokens);
-=======
-    const [otpVerified, setOtpVerified] = useState(false);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isOtpModalOpen, setIsOtpModalOpen] = useState(false);
-
-    // Fetch token data on component mount
-    useEffect(() => {
-        const fetchTokenData = async () => {
-            const sessionToken = user.sessionToken;
-            try {
-                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/tokens`, {
-                    headers: {
-                        'Session-Token': sessionToken,
-                    },
-                });
-                setTokensData(response.data.tokens); // Update remaining tokens
-                console.log("Remaining Tokens:", response.data.tokens);
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
             } catch (error) {
                 console.error("Error fetching token data:", error);
             }
         };
 
         fetchTokenData();
-<<<<<<< HEAD
     }, [user.session_token]);
+
+    useEffect(() => {
+        const countries = async () => {
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/country`, {
+                    headers: {
+                        'Session-Token': user.session_token, // Ensure this matches the Redux key
+                    },
+                });
+                const formattedCountries = response.data.map((country) => ({
+                    label: country,
+                    value: country.toLowerCase(), // Convert country names to lowercase for the value
+                }));
+                setCountries(formattedCountries);
+            } catch (error) {
+                console.error("Error fetching token data:", error);
+            }
+        };
+
+        countries();
+    }, [user.session_token]);
+
+    console.log("Countries from API", countries);
 
     useEffect(() => {
         const fetchPhoneNumber = async () => {
@@ -141,14 +117,6 @@ const Landing = () => {
 
         fetchPhoneNumber();
     }, [user.session_token, dispatch, toast]);
-=======
-    }, [user.sessionToken]);
-
-    const handleSearchClick = () => {
-        setIsOtpModalOpen(true);
-    };
-
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
 
     const handleFormInput = (e) => {
         const { name, value } = e.target;
@@ -173,19 +141,12 @@ const Landing = () => {
     };
 
 
-<<<<<<< HEAD
 
     // Trigger OTP modal after preliminary checks
     const handleSubmit = async (e) => {
 
         e.preventDefault();
         console.log("Form submitted");
-=======
-    // Trigger OTP modal after preliminary checks
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
         if (!user.isLoggedIn) {
             toast({
                 title: "Login Required",
@@ -203,7 +164,6 @@ const Landing = () => {
 
         // Validate required fields
         const requiredFields = ['from_date', 'to_date', 'number_of_records'];
-<<<<<<< HEAD
         const fieldLabels = {
             from_date: "From Date",
             to_date: "To Date",
@@ -218,14 +178,6 @@ const Landing = () => {
             toast({
                 title: "Validation Error",
                 description: `Please fill the following fields: ${emptyFieldNames.join(', ')}`,
-=======
-        const emptyFields = requiredFields.filter(field => !formData[field] && field !== 'proDesc');
-
-        if (emptyFields.length > 0) {
-            toast({
-                title: "Validation Error",
-                description: `Please fill the following fields: ${emptyFields.join(', ')}`,
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
                 status: "error",
                 duration: 2000,
                 isClosable: true,
@@ -234,7 +186,6 @@ const Landing = () => {
             return;
         }
 
-<<<<<<< HEAD
 
         const conditionalFields = [
             'destinationCountry', 'originCountry', 'supplierName', 'hsCode', 'buyerName'
@@ -243,25 +194,12 @@ const Landing = () => {
         // Log formData to ensure fields are present
         console.log("Form Data:", formData);
 
-=======
-        const conditionalFields = [
-            'destination_Country', 'originCountry', 'supplierName', 'hsCode', 'buyerName'
-        ];
-        
-        // Log formData to ensure fields are present
-        console.log("Form Data:", formData);
-        
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
         const isAtLeastOneFieldFilled = conditionalFields.some(field => {
             const value = formData[field]?.trim();
             console.log(`${field}:`, value); // Log each field value for debugging
             return value !== '';
         });
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
         if (!isAtLeastOneFieldFilled) {
             toast({
                 title: "Validation Error",
@@ -273,11 +211,7 @@ const Landing = () => {
             });
             return;
         }
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
 
         if (parseInt(formData.number_of_records) > tokensData) {
             toast({
@@ -291,46 +225,24 @@ const Landing = () => {
             return;
         }
 
-<<<<<<< HEAD
 
 
-=======
-        // Open OTP modal after all checks
-        onOpen();
-    };
-
-    // Call search API after OTP verification
-    const handleOtpVerified = async () => {
-        setIsOtpModalOpen(false);  // Close the modal
-
-        const sessionToken = user.sessionToken;
-        const countryName = countries.getName(formData.country);
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
         const postData = {
             email: formData.email,
             from_date: formData.from_date ? formData.from_date.toISOString().split('T')[0] : '',
             to_date: formData.to_date ? formData.to_date.toISOString().split('T')[0] : '',
-<<<<<<< HEAD
             country: formData.country,
-=======
-            country: countryName,
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
             is_export: formData.inOut === 'export',
             buyer_name: formData.buyerName,
             hs_code: formData.hsCode,
             supplier_name: formData.supplierName,
             origin_country: formData.originCountry,
-<<<<<<< HEAD
             destination_country: formData.destinationCountry,
-=======
-            destination_Country: formData.destination_Country,
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
             pro_desc: formData.proDesc,
             bill_no: formData.billNo,
             number_of_records: formData.number_of_records,
         };
 
-<<<<<<< HEAD
 
         setLoading(true);
 
@@ -392,71 +304,6 @@ const Landing = () => {
     //     { label: "Vietnam", value: "vietnam" },
     //     { label: "Indonesia", value: "indonesia" },
     // ];
-=======
-        try {
-            setIsSubmitting(true);
-            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/search`, postData, {
-                headers: {
-                    'Session-Token': sessionToken,
-                },
-            });
-
-            // Handle response (e.g., display results)
-            console.log('Search API response:', response.data);
-
-        } catch (error) {
-            if (error.response && error.response.status === 429) {
-                toast({
-                    title: "Request Limit Reached",
-                    description: "You have reached the limit of requests. Please try again later.",
-                    status: "error",
-                    duration: 2000,
-                    isClosable: true,
-                    position: "top"
-                });
-            } else {
-                toast({
-                    title: "Unexpected Error",
-                    description: "An unexpected error occurred. Please try again.",
-                    status: "error",
-                    duration: 2000,
-                    isClosable: true,
-                    position: "top"
-                });
-            }
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
-
-
-    const handleCloseModal = () => {
-        // setFormData({
-        //     from_date: '',
-        //     to_date: '',
-        //     country: 'IN',
-        //     inOut: 'import',
-        //     buyerName: '',
-        //     hsCode: '',
-        //     supplierName: '',
-        //     originCountry: '',
-        //     proDesc: '',
-        //     billNo: '',
-        //     email: 'test@example.com',
-        //     number_of_records: ''
-        // });
-        onClose();
-    };
-
-    const countryOptions = countries.getData().map((country) => ({
-        value: country.code,
-        label: `${country.name} (${country.code})`,
-    }));
-
-
-
-
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
 
     return (
         <AppPage title="Home" description="" keywords={[]} isProtected={true}>
@@ -465,7 +312,6 @@ const Landing = () => {
                 width: '100%', maxWidth: '5xl', padding: '1rem', backgroundColor: 'white', borderRadius: '0.5rem',
                 paddingBottom: '0.5rem', marginBottom: '1rem', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
             }}>
-<<<<<<< HEAD
 
                 {/* <form onSubmit={handleSubmit} style={{
                 width: '100%', maxWidth: '5xl', padding: '1rem', backgroundColor: 'white', borderRadius: '0.5rem',
@@ -487,8 +333,6 @@ const Landing = () => {
                     </Flex>
                 )}
 
-=======
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
                 <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} m={0} spacing={4} spacingX={2}>
                     <GridItem >
                         <FormControl>
@@ -546,33 +390,27 @@ const Landing = () => {
                             <Select
                                 name="country"
                                 value={formData.country}
-<<<<<<< HEAD
                                 // onChange={(e) => handleFormInput({ target: { name: 'country', value: e.target.value } })}
                                 onChange={handleFormInput}
-=======
-                                onChange={(e) => handleFormInput({ target: { name: 'country', value: e.target.value } })}
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
                                 size="md"
                                 bg="gray.50"
                                 _hover={{ borderColor: 'blue.400' }}
                                 fontSize="sm"
                             >
-<<<<<<< HEAD
-                                <option value="india">India</option>
+                                {/* <option value="india">India</option>
                                 <option value="vietnam">Vietnam</option>
-                                <option value="indonesia">Indonesia</option>
-=======
-                                <option value="IN">India (IN)</option>
-                                <option value="VN">Vietnam (VN)</option>
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
+                                <option value="indonesia">Indonesia</option> */}
 
                                 {/* {countryOptions.map(option => (
                                     <option key={option.value} value={option.value}>{option.label}</option>
                                 ))} */}
-<<<<<<< HEAD
 
-=======
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
+                                {countries.map(option => (
+                                    <option key={option.value} value={option.value}>
+                                        {option.label}
+                                    </option>
+                                ))}
+
                             </Select>
                         </FormControl>
                     </GridItem>
@@ -667,18 +505,16 @@ const Landing = () => {
                     <GridItem>
                         <FormControl>
                             <FormLabel fontSize="sm" fontWeight="medium">Number of Records</FormLabel>
-<<<<<<< HEAD
                             {user.licenseType === "TRIAL" ? (
                                 <Input
                                     type="text"
                                     name="number_of_records"
                                     value={formData.number_of_records}
-                                    // onChange={handleFormInput}
                                     onChange={(e) => {
                                         const value = e.target.value;
-                                        // Allow only numbers and ensure the value is between 0 and 10
-                                        if (/^\d*$/.test(value) && value >= 0 && value <= 10) {
-                                            handleFormInput(e); // Call your existing handler
+                                        // Allow only numeric input between 0 and 10
+                                        if (/^\d*$/.test(value) && Number(value) >= 0 && Number(value) <= 10) {
+                                            handleFormInput(e);
                                         }
                                     }}
                                     size="md"
@@ -698,44 +534,40 @@ const Landing = () => {
                                     fontSize="sm"
                                     placeholder="Number of Records"
                                 >
-                                    <option value="100">100</option>
-                                    <option value="200">200</option>
-                                    <option value="300">300</option>
-                                    <option value="400">400</option>
-                                    <option value="500">500</option>
+                                    {/* Options based on license type */}
+                                    {user.licenseType === "ADMIN" ? (
+                                        <>
+                                            <option value="10">10</option>
+                                            <option value="50">50</option>
+                                            <option value="100">100</option>
+                                            <option value="200">200</option>
+                                            <option value="300">300</option>
+                                            <option value="400">400</option>
+                                            <option value="500">500</option>
+                                            <option value="1000">1000</option>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <option value="100">100</option>
+                                            <option value="200">200</option>
+                                            <option value="300">300</option>
+                                            <option value="400">400</option>
+                                            <option value="500">500</option>
+                                        </>
+                                    )}
                                 </Select>
                             )}
                         </FormControl>
-
-
-=======
-                            <Input
-                                type="text"
-                                name="number_of_records"
-                                value={formData.number_of_records}
-                                onChange={handleFormInput}
-                                size="md"
-                                bg="gray.50"
-                                _hover={{ borderColor: 'blue.400' }}
-                                fontSize="sm"
-                                placeholder="Number of Records"
-                            />
-                        </FormControl>
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
                     </GridItem>
+
 
                     <GridItem>
                         <FormControl>
                             <FormLabel fontSize="sm" fontWeight="medium">Destination Country (COE)</FormLabel>
                             <Input
                                 type="text"
-<<<<<<< HEAD
                                 name="destinationCountry"
                                 value={formData.destinationCountry}
-=======
-                                name="destination_Country"
-                                value={formData.destination_Country}
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
                                 onChange={handleFormInput}
                                 size="md"
                                 bg="gray.50"
@@ -777,13 +609,8 @@ const Landing = () => {
                             colorScheme="blue"
                             size="lg"
                             mt={4}
-<<<<<<< HEAD
                             bg="blue.500"
                             // isLoading={isLoading}
-=======
-                            onClick={handleSearchClick}
-                            bg="blue.500"
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
                             _hover={{ bg: 'blue.600' }}
                             _active={{ bg: 'blue.700' }}
                         >
@@ -793,7 +620,6 @@ const Landing = () => {
                 </SimpleGrid>
 
             </form>
-<<<<<<< HEAD
             <Modal isOpen={isOpen} onClose={handleCloseModal}>
                 <ModalOverlay />
                 <ModalContent>
@@ -805,57 +631,6 @@ const Landing = () => {
                 </ModalContent>
             </Modal>
 
-=======
-            {isOtpModalOpen && (
-                <Modal isOpen={isOpen} onClose={onClose}>
-                    <ModalOverlay />
-                    <ModalContent>
-                        <ModalHeader>Enter OTP</ModalHeader>
-                        <ModalCloseButton />
-                        <SearchOTP onClose={handleCloseModal} onOtpVerified={handleOtpVerified} />
-                    </ModalContent>
-                </Modal>
-            )}
-
-            <Flex direction="column" pt={2} pb={4} align="center">
-                <Box w={{ base: '100%', md: '90%', lg: '80%' }} bg="white">
-
-                    <Heading as="h1" size="xl" mb={6} textAlign="center" bg="gray.100">
-                        About ImpexInfo.com
-                    </Heading>
-
-                    <Text fontSize="lg" mb={6} textAlign="center">
-                        We are part of Aashita Enterprises, a B2B consultancy firm dedicated to helping organizations grow their business by analyzing data to optimize purchase prices for buyers and sales prices for sellers.
-                    </Text>
-
-                    <Text fontSize="md" mb={4}>
-                        ImpexInfo.com provides deeper insights into export-import business and supply chain opportunities. With our research data, you can:
-                    </Text>
-
-                    <List spacing={3} pl={6} fontSize="md">
-                        <ListItem>1. Transform export-import intelligence data into actionable insights and knowledge.</ListItem>
-                        <ListItem>2. Make confident business decisions with our ready-to-use reports, which uniquely include accurate Customs Duty and IGST details separately for imports, along with landed prices.</ListItem>
-                        <ListItem>3. Uncover new insights such as:</ListItem>
-                        <List pl={4} styleType="disc" fontSize="md">
-                            <ListItem> Finding reliable buyers and suppliers</ListItem>
-                            <ListItem> Discovering new markets and promising products</ListItem>
-                            <ListItem> Tracking competitors  moves</ListItem>
-                            <ListItem> Analyzing demand and supply trends</ListItem>
-                            <ListItem> Determining optimal product prices</ListItem>
-                            <ListItem> Saving on custom duties</ListItem>
-                            <ListItem> Gaining strategic information for a competitive edge</ListItem>
-                        </List>
-                    </List>
-
-                    <Box mt={8}>
-                        <Text fontSize="md" fontWeight="bold" mb={2}>Disclaimer</Text>
-                        <Text fontSize="md">
-                            Our Export & Import Trade Intelligence reports are gathered from available online and offline sources. We do not guarantee the authenticity or originality of this data. Clients are advised to use our research data at their own discretion. We are not responsible for any profit or loss resulting from the use of our reports.
-                        </Text>
-                    </Box>
-                </Box>
-            </Flex>
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29
 
         </AppPage>
     );

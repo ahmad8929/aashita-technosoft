@@ -1,6 +1,5 @@
 const config = {
     accessTokenFieldName: 'session',
-<<<<<<< HEAD
   };
   
   // Getter function to retrieve the access token from localStorage
@@ -22,21 +21,3 @@ const config = {
   };
   
   
-=======
-}
-
-const getAccessToken = () => {
-    return localStorage.getItem(config.accessTokenFieldName);
-}
-
-const setAccessToken = (token) => {
-    return localStorage.setItem(config.accessTokenFieldName, token);
-}
-
-export default {
-    sessionToken: {
-        getter: getAccessToken,
-        setter: setAccessToken
-    }
-}
->>>>>>> 61e73cf33923b5216a5e5b6e8f4d7e55c638be29

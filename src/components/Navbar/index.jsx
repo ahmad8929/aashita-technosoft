@@ -82,6 +82,7 @@ const Navbar = () => {
                         <MenuList>
                             <MenuItem as={Link} to="/queries">Past Requests</MenuItem>
                             <MenuItem as={Link} to="/tokens">My Tokens</MenuItem>
+                            <MenuItem as={Link} to="/myPlan">My Plan</MenuItem>
                             <MenuItem as={Link} to="/upgrade">Upgrade</MenuItem>
                             <MenuItem onClick={handleLogout}>Sign Out</MenuItem>
                         </MenuList>

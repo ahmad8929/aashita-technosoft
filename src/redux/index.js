@@ -25,7 +25,7 @@ const sessionMiddleware = (store) => (next) => (action) => {
     if (currentTimestamp >= sessionExpirationTimestamp) {
       console.log("Session Expired");
       window.localStorage.removeItem('session');
-      alert("Session expired. Please log ");     
+      // alert("Session expired. Please log in again");     
       window.location.href = '/login';    // Redirect to login
     }
   }

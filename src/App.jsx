@@ -25,7 +25,7 @@ function App() {
           dispatch(clearUser());
           // dispatch(setAuthState(false));
           localStorage.removeItem("session");
-          alert("Session expired. Please log in again.");
+          // alert("Session expired. Please log in again.");
           // navigate("/login");
         }
       }

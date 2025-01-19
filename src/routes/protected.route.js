@@ -6,6 +6,7 @@ import Contact from "../pages/Contact";
 import Upgrade from "../pages/cards";
 import Payments from "../pages/payment";
 import Policy from "../pages/policy";
+import MyPlan from "../pages/myPlan.jsx";
 
 export const protectedRoute = [
   {
@@ -42,5 +43,10 @@ export const protectedRoute = [
     title: "policy",
     path: "/policy",
     component: Policy,
+  },
+  {
+    title: "myPlan",
+    path: "/myPlan",
+    component: MyPlan,
   },
 ];

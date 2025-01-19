@@ -31,7 +31,9 @@ const Queries = () => {
                 setQueries(queriesData);
 
             } catch (error) {
-                if (error.response && error.response.data && error.response.data.code === "SESSION_ABSENT") {
+                if (error.response.data.code === "SESSION_ABSENT" || error.response.data.code === "SESSION_EXPIRED" || error.response.data.code === "SESSION_TOKEN_MISSING") {
+            
+                // if (error.response && error.response.data && error.response.data.code === "SESSION_ABSENT") {
 
                     console.log("------User Data before clear-------", user);
 

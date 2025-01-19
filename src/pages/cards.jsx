@@ -127,9 +127,11 @@ const Cards = () => {
     const handleChooseTrial = () => {
         navigate('/');  // Navigate to the home page
     };
+
+    console.log(currentPlan, "currentPlan");
     return (
         <AppPage title="Cards" description="" keywords={[]} isProtected={true}>
-            <Box p={8} bg="gray.100" minH="calc(100vh - 14vh)" display="flex" alignItems="center" justifyContent="center">
+            <Box p={8} bg="gray.100" minH="calc(100vh - 9vh)" display="flex" alignItems="center" justifyContent="center">
                 <VStack spacing={10} align="stretch" maxW="800px" width="100%" display="flex" alignItems="center" justifyContent="center">
 
                     {isLoading ? (
@@ -146,16 +148,19 @@ const Cards = () => {
                         >
                             <Spinner size="xl" />
                         </Flex>
-                    ) : user.isLoggedIn ? (
+                    ) : 
+                    // user.isLoggedIn ? 
+                    (
 
                         <SimpleGrid spacing={8} templateColumns="repeat(3, 1fr)">
 
                             {cards
                                 .filter((card) => {
                                     // If current plan is "TRIAL", show all cards
-                                    if (currentPlan === "TRIAL") {
+                                    if (currentPlan === "TRIAL" || currentPlan === null) {
                                         return true;  // show all cards
                                     }
+                            
 
                                     // If current plan is not "TRIAL", hide the "TRIAL" card
                                     return card.LicenseType !== "TRIAL";  // show only non-TRIAL cards
@@ -226,51 +231,51 @@ const Cards = () => {
                                 ))}
 
                         </SimpleGrid>
-                    ) : (
-                        <SimpleGrid spacing={8} templateColumns="repeat(3, 1fr)">
-                            {plans()
-                                .flat() // Flatten the nested array
-                                .map((card) => (
-                                    <Card
-                                        key={card.LicenseType}
-                                        p={6}
-                                        width="300px"
-                                        borderRadius="md"
-                                        boxShadow="md"
-                                        transition="transform 0.3s, box-shadow 0.3s"
-                                        _hover={{ transform: 'scale(1.05)', boxShadow: 'lg' }}
-                                    >
-                                        <CardHeader textAlign="center">
-                                            <Heading size="lg">{card.LicenseType}</Heading>
-                                            {card.LicenseType !== "TRIAL" && (
-                                                <Text fontSize="2xl" color="blue.500" mt={2}>
-                                                    Total Price: {card.TotalPrice}
-                                                </Text>
-                                            )}
-                                        </CardHeader>
-                                        <CardBody textAlign="center">
-                                            {card.LicenseType === "TRIAL" ? (
-                                                <Flex alignItems="center" justifyContent="center" height="150px">
-                                                    <Text>No. of Records: {card.NumberOfRowsPerPeriod}</Text>
-                                                </Flex>
-                                            ) : (
-                                                <>
-                                                    {/* <Text>Base Price: {card.BasePrice || "N/A"}</Text> */}
-                                                    <Text>GST: {card.GST || "0%"}</Text>
-                                                    <Text>Base Price: {card.BasePrice}</Text>
-                                                    <Text>No. of Records: {card.NumberOfRowsPerPeriod}</Text>
-                                                    <Text>Validity: {card.Validity || "N/A"}</Text>
-                                                </>
-                                            )}
-                                        </CardBody>
-                                        <CardFooter justifyContent="center">
-                                            <Button colorScheme="blue" onClick={() => handleChoosePlanLogin(card.LicenseType)}>
-                                                Choose {card.LicenseType}
-                                            </Button>
-                                        </CardFooter>
-                                    </Card>
-                                ))}
-                        </SimpleGrid>
+                    // ) : (
+                    //     <SimpleGrid spacing={8} templateColumns="repeat(3, 1fr)">
+                    //         {plans()
+                    //             .flat() // Flatten the nested array
+                    //             .map((card) => (
+                    //                 <Card
+                    //                     key={card.LicenseType}
+                    //                     p={6}
+                    //                     width="300px"
+                    //                     borderRadius="md"
+                    //                     boxShadow="md"
+                    //                     transition="transform 0.3s, box-shadow 0.3s"
+                    //                     _hover={{ transform: 'scale(1.05)', boxShadow: 'lg' }}
+                    //                 >
+                    //                     <CardHeader textAlign="center">
+                    //                         <Heading size="lg">{card.LicenseType}</Heading>
+                    //                         {card.LicenseType !== "TRIAL" && (
+                    //                             <Text fontSize="2xl" color="blue.500" mt={2}>
+                    //                                 Total Price: {card.TotalPrice}
+                    //                             </Text>
+                    //                         )}
+                    //                     </CardHeader>
+                    //                     <CardBody textAlign="center">
+                    //                         {card.LicenseType === "TRIAL" ? (
+                    //                             <Flex alignItems="center" justifyContent="center" height="150px">
+                    //                                 <Text>No. of Records: {card.NumberOfRowsPerPeriod}</Text>
+                    //                             </Flex>
+                    //                         ) : (
+                    //                             <>
+                    //                                 {/* <Text>Base Price: {card.BasePrice || "N/A"}</Text> */}
+                    //                                 <Text>GST: {card.GST || "0%"}</Text>
+                    //                                 <Text>Base Price: {card.BasePrice}</Text>
+                    //                                 <Text>No. of Records: {card.NumberOfRowsPerPeriod}</Text>
+                    //                                 <Text>Validity: {card.Validity || "N/A"}</Text>
+                    //                             </>
+                    //                         )}
+                    //                     </CardBody>
+                    //                     <CardFooter justifyContent="center">
+                    //                         <Button colorScheme="blue" onClick={() => handleChoosePlanLogin(card.LicenseType)}>
+                    //                             Choose {card.LicenseType}
+                    //                         </Button>
+                    //                     </CardFooter>
+                    //                 </Card>
+                    //             ))}
+                    //     </SimpleGrid>
                     )}
                 </VStack>
             </Box>

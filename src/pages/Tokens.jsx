@@ -12,8 +12,8 @@ import { clearUser } from '../redux/slices/user/index';
 
 const Tokens = () => {
     const navigate = useNavigate();
-    
-        const dispatch = useDispatch();
+
+    const dispatch = useDispatch();
     const user = useSelector((state) => state.user);
     const [totalTokens, setTotalTokens] = useState(0);
     const [userLicenseType, setUserLicenseType] = useState("");
@@ -33,7 +33,7 @@ const Tokens = () => {
 
             // Fetching user information first
             const userInfoResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/userInfo`, {
-                headers: {   'Session-Token': user.session_token, },
+                headers: { 'Session-Token': user.session_token, },
             });
 
             const userLicenseType = userInfoResponse.data.user_details.LicenseType;
@@ -41,7 +41,7 @@ const Tokens = () => {
 
             // Fetching license data based on user's LicenseType
             const licenseResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/license`, {
-                headers: {   'Session-Token': user.session_token, },
+                headers: { 'Session-Token': user.session_token, },
             });
 
             // Filter license data to match the user's LicenseType and set total tokens
@@ -53,32 +53,35 @@ const Tokens = () => {
             }
 
             setLoading(false);
-        // } catch (error) {
-        //     console.error('Error fetching data:', error);
-        //     setLoading(false);
-        // }
-         } catch (error) {
-                        if (error.response && error.response.data && error.response.data.code === "SESSION_ABSENT") {
-        
-                            console.log("------User Data before clear-------", user);
-        
-                            dispatch(clearUser());
-                            console.log("------User Data after clear-------", user);
-        
-                            // alert("Something went wrong. Please log in again.");
-                            dispatch(clearUser());
-                            navigate("/login");
-                            dispatch(clearUser());
-        
-                        } else {
-                            console.error("Error fetching :", error);
-                        }
-                    }
+            // } catch (error) {
+            //     console.error('Error fetching data:', error);
+            //     setLoading(false);
+            // }
+        } catch (error) {
+
+            if (error.response.data.code === "SESSION_ABSENT" || error.response.data.code === "SESSION_EXPIRED" || error.response.data.code === "SESSION_TOKEN_MISSING") {
+                // if (error.response && error.response.data && error.response.data.code === "SESSION_ABSENT") {
+                    setLoading(false);
+                console.log("------User Data before clear-------", user);
+
+                dispatch(clearUser());
+                console.log("------User Data after clear-------", user);
+
+                // alert("Something went wrong. Please log in again.");
+                dispatch(clearUser());
+                navigate("/login");
+                dispatch(clearUser());
+
+            } else {
+                setLoading(false);
+                console.error("Error fetching :", error);
+            }
+        }
     };
 
     useEffect(() => {
         fetchData();
-    }, [user.sessionToken,dispatch]);
+    }, [user.sessionToken, dispatch]);
 
 
     // Fetch token data from API

@@ -6,7 +6,7 @@ import AppPage from '../layouts/AppPage';
 import { useSelector, useDispatch } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import SearchOTP from './SearchOTP';
+// import SearchOTP from './SearchOTP';
 import { clearUser } from '../redux/slices/user/index';
 
 const Landing = () => {
@@ -21,6 +21,7 @@ const Landing = () => {
     const [tokensData, setTokensData] = useState(0);
     const [phoneNumber, setPhoneNumber] = useState('');
     const [countries, setCountries] = useState([]);
+    const [licenseData, setLicenseData] = useState([]);
 
     const [formData, setFormData] = useState({
         from_date: '',
@@ -35,11 +36,14 @@ const Landing = () => {
         proDesc: '',
         billNo: '',
         email: user.user_id,
-        number_of_records: ''
+        number_of_records: '',
+        otp: '',
     });
 
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const [postData, setPostData] = useState(null);
+    console.log("==-=-=-=", licenseData);
+
+    // const { isOpen, onOpen, onClose } = useDisclosure();
+    // const [postData, setPostData] = useState(null);
 
     // Fetch token data on component mount
 
@@ -64,6 +68,42 @@ const Landing = () => {
     }, [user.session_token]);
 
     useEffect(() => {
+        fetchLicenceData();
+    }, [user.session_token]);
+
+    const fetchLicenceData = async () => {
+        try {
+            // Fetching card data from the license API
+            const licenseResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/license`, {
+                headers: { 'Session-Token': user.session_token, },
+            });
+            console.log("licenseResponse", licenseResponse);
+            const userLicenseType = user.licenseType;
+
+            // Finding the matching license data
+            const matchingLicense = licenseResponse.data.find(
+                (license) => license.LicenseType === userLicenseType
+            );
+    
+            if (matchingLicense) {
+                // Setting the license data if a match is found
+                setLicenseData(matchingLicense);
+            } else {
+                console.warn("No matching license type found.");
+            }
+            
+        } catch (error) {
+            console.error("Error fetching :", error);
+        }
+    }
+
+    useEffect(() => {
+        console.log("User from Redux:", user);
+        console.log("License Data:", licenseData);
+    }, [user, licenseData]);
+
+    
+    useEffect(() => {
         const countries = async () => {
             try {
                 const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/country`, {
@@ -84,7 +124,7 @@ const Landing = () => {
         countries();
     }, [user.session_token]);
 
-    console.log("Countries from API", countries);
+    // console.log("Countries from API", countries);
 
     useEffect(() => {
         const fetchPhoneNumber = async () => {
@@ -97,7 +137,7 @@ const Landing = () => {
 
                 setPhoneNumber(response.data.phoneNumber);
             } catch (error) {
-                if (error.response && error.response.data && error.response.data.code === "SESSION_ABSENT") {
+                if (error.response.data.code === "SESSION_ABSENT" || error.response.data.code === "SESSION_EXPIRED") {
 
                     console.log("------User Data before clear-------", user);
 
@@ -106,7 +146,7 @@ const Landing = () => {
 
                     // alert("Something went wrong. Please log in again.");
                     dispatch(clearUser());
-                    // navigate("/login");
+                    navigate("/login");
                     dispatch(clearUser());
 
                 } else {
@@ -240,6 +280,7 @@ const Landing = () => {
             destination_country: formData.destinationCountry,
             pro_desc: formData.proDesc,
             bill_no: formData.billNo,
+            otp: formData.otp,
             number_of_records: formData.number_of_records,
         };
 
@@ -247,31 +288,54 @@ const Landing = () => {
         setLoading(true);
 
         try {
-            await axios.post(`${import.meta.env.VITE_BACKEND_URL}/generate-otp`, { phoneNumber }, {
+            // await axios.post(`${import.meta.env.VITE_BACKEND_URL}/generate-otp`, { phoneNumber }, {
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/search`, { ...postData }, {
                 headers: {
                     'Session-Token': user.session_token,
                 },
             });
+
             setLoading(false);
+            setFormData({
+                from_date: '',
+                to_date: '',
+                country: 'india',
+                inOut: 'import',
+                buyerName: '',
+                hsCode: '',
+                supplierName: '',
+                originCountry: '',
+                proDesc: '',
+                billNo: '',
+                email: user.user_id,
+                number_of_records: '',
+                destinationCountry: '',
+                otp: ''
+            });
             toast({
-                title: "OTP Sent",
-                description: "An OTP has been sent to your registered email.",
+                title: "Report Sent",
+                description: "Your report is being prepared and will be sent to your email shortly",
                 status: "success",
                 duration: 2000,
                 isClosable: true,
                 position: "top"
             });
-            console.log("opened------00000-")
-            setPostData(postData); // Prepare postData for OTP modal
-            onOpen(); // Open OTP modal after sending OTP
 
-            console.log("opened-------")
+            // toast({
+            //     title: "OTP Sent",
+            //     description: "An OTP has been sent to your registered email.",
+            //     status: "success",
+            //     duration: 2000,
+            //     isClosable: true,
+            //     position: "top"
+            // });
+            // setPostData(postData); // Prepare postData for OTP modal
+            // onOpen(); // Open OTP modal after sending OTP
         } catch (error) {
             setLoading(false);
             console.error("Error sending OTP:", error);
             toast({
-                title: "Error Sending OTP",
-                description: "Failed to send OTP. Please try again.",
+                title: "Bad Reqest",
                 status: "error",
                 duration: 2000,
                 isClosable: true,
@@ -280,24 +344,24 @@ const Landing = () => {
         }
     };
 
-    const handleCloseModal = () => {
-        setFormData({
-            from_date: '',
-            to_date: '',
-            country: 'india',
-            inOut: 'import',
-            buyerName: '',
-            hsCode: '',
-            supplierName: '',
-            originCountry: '',
-            proDesc: '',
-            billNo: '',
-            email: user.user_id,
-            number_of_records: '',
-            destinationCountry: ''
-        });
-        onClose();
-    };
+    // const handleCloseModal = () => {
+    //     setFormData({
+    //         from_date: '',
+    //         to_date: '',
+    //         country: 'india',
+    //         inOut: 'import',
+    //         buyerName: '',
+    //         hsCode: '',
+    //         supplierName: '',
+    //         originCountry: '',
+    //         proDesc: '',
+    //         billNo: '',
+    //         email: user.user_id,
+    //         number_of_records: '',
+    //         destinationCountry: ''
+    //     });
+    //     onClose();
+    // };
 
     // const countryOptions = [
     //     { label: "India", value: "india" },
@@ -390,21 +454,12 @@ const Landing = () => {
                             <Select
                                 name="country"
                                 value={formData.country}
-                                // onChange={(e) => handleFormInput({ target: { name: 'country', value: e.target.value } })}
                                 onChange={handleFormInput}
                                 size="md"
                                 bg="gray.50"
                                 _hover={{ borderColor: 'blue.400' }}
                                 fontSize="sm"
                             >
-                                {/* <option value="india">India</option>
-                                <option value="vietnam">Vietnam</option>
-                                <option value="indonesia">Indonesia</option> */}
-
-                                {/* {countryOptions.map(option => (
-                                    <option key={option.value} value={option.value}>{option.label}</option>
-                                ))} */}
-
                                 {countries.map(option => (
                                     <option key={option.value} value={option.value}>
                                         {option.label}
@@ -414,7 +469,6 @@ const Landing = () => {
                             </Select>
                         </FormControl>
                     </GridItem>
-
 
                     <GridItem>
                         <FormControl>
@@ -447,7 +501,16 @@ const Landing = () => {
                                 _hover={{ borderColor: 'blue.400' }}
                                 fontSize="sm"
                                 placeholder="Enter buyer name"
-                            />
+                                isDisabled={(() => {
+                                    // if (!licenseData.IsBuyersNonConfidential) {
+                                        if (user.isBuyersNonConfidential === "false") {
+                                        if (formData.country === "india" && formData.inOut === "import") {
+                                            return true; // Disable if the conditions match
+                                        }
+                                    }
+                                    return false; // Otherwise, keep it enabled
+                                })()}
+                           />
                         </FormControl>
                     </GridItem>
 
@@ -481,6 +544,14 @@ const Landing = () => {
                                 _hover={{ borderColor: 'blue.400' }}
                                 fontSize="sm"
                                 placeholder="Enter supplier name"
+                                isDisabled={(() => {
+                                    if (user.isBuyersNonConfidential === "false") {
+                                        if (formData.country === "india" && formData.inOut === "export") {
+                                            return true; // Disable if the conditions match
+                                        }
+                                    }
+                                    return false; // Otherwise, keep it enabled
+                                })()}
                             />
                         </FormControl>
                     </GridItem>
@@ -620,7 +691,7 @@ const Landing = () => {
                 </SimpleGrid>
 
             </form>
-            <Modal isOpen={isOpen} onClose={handleCloseModal}>
+            {/* <Modal isOpen={isOpen} onClose={handleCloseModal}>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>Please check your spam folder if not received email in inbox</ModalHeader>
@@ -629,7 +700,7 @@ const Landing = () => {
                         <SearchOTP onClose={handleCloseModal} formFields={postData} />
                     </ModalBody>
                 </ModalContent>
-            </Modal>
+            </Modal> */}
 
 
         </AppPage>

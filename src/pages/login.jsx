@@ -51,13 +51,14 @@ const Login = () => {
         try {
             const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/login`, formData);
             console.log({ response })
-            const { session_token, session_expiration_time, user_id, user_details } = response.data;
+            const { session_token, session_expiration_time, user_id, user_details, license } = response.data;
 
 
             if (!response.data) {
                 console.error(error);
                 return;
             }
+            console.log("API Response Data:", response);
             console.log("API Response Data:", response.data);
             if (!session_token || !session_expiration_time) {
                 console.error("Invalid response data:", response.data);
@@ -70,7 +71,7 @@ const Login = () => {
                 user_id,
                 name: user_details.Name,
                 licenseType: user_details.LicenseType,
-
+                isBuyersNonConfidential: license.IsBuyersNonConfidential,
             }));
             dispatch(setAuthState(true));
 

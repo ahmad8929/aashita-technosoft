@@ -1,16 +1,15 @@
 import React from 'react'
-import { Box, Button, Select, FormLabel, FormControl, useToast, Flex, Text, Heading, List, ListItem, SimpleGrid, GridItem, Textarea, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input } from '@chakra-ui/react';
+import { Box, Flex, Text, Heading, List, ListItem } from '@chakra-ui/react';
 import AppPage from '../layouts/AppPage';
 
 const AboutUs = () => {
     return (
-
         <AppPage title="About Us" description="" keywords={[]} isProtected={true}>
 
-            <Flex direction="column" pt={8} pb={4} align="center">
+            <Flex direction="column" pt={6} pb={4} align="center">
                 <Box w={{ base: '100%', md: '90%', lg: '80%' }} bg="white">
 
-                    <Heading as="h1" size="xl" mb={6} textAlign="center" bg="gray.100">
+                    <Heading as="h1" size="xl" mb={4} textAlign="center" bg="gray.100">
                         About ImpexInfo.com
                     </Heading>
 
@@ -37,7 +36,7 @@ const AboutUs = () => {
                         </List>
                     </List>
 
-                    <Box mt={8}>
+                    <Box mt={6}>
                         <Text fontSize="md" fontWeight="bold" mb={2}>Disclaimer</Text>
                         <Text fontSize="md">
                             Our Export & Import Trade Intelligence reports are gathered from available online and offline sources. We do not guarantee the authenticity or originality of this data. Clients are advised to use our research data at their own discretion. We are not responsible for any matter related to use of our reports. Further no one will recirculate or publicise these reports in any form online or offline.
